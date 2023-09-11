@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Whisker Analysis - Fur Masking</title>
+<title>Whisker Analysis - Curvature</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./discretization.html">Whisker Parameterization</a></li><li class="breadcrumb-item"><a href="./mask.html">Fur Masking</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./angle.html">Kinematics</a></li><li class="breadcrumb-item"><a href="./curvature.html">Curvature</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -132,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mask.html" class="sidebar-item-text sidebar-link active">
+  <a href="./mask.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Fur Masking</span></a>
   </div>
 </li>
@@ -179,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./curvature.html" class="sidebar-item-text sidebar-link">
+  <a href="./curvature.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Curvature</span></a>
   </div>
 </li>
@@ -220,14 +220,27 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#nd-order-polynomial" id="toc-nd-order-polynomial" class="nav-link" data-scroll-target="#nd-order-polynomial">2nd Order Polynomial</a></li>
+  <li><a href="#bezier-curve" id="toc-bezier-curve" class="nav-link" data-scroll-target="#bezier-curve">Bezier Curve</a></li>
+  <li><a href="#radius-of-curvature-of-circle" id="toc-radius-of-curvature-of-circle" class="nav-link" data-scroll-target="#radius-of-curvature-of-circle">Radius of Curvature of Circle</a></li>
+  </ul></li>
+  <li><a href="#intrinsic-curvature-and-delta_kappa" id="toc-intrinsic-curvature-and-delta_kappa" class="nav-link" data-scroll-target="#intrinsic-curvature-and-delta_kappa">Intrinsic Curvature and delta_Kappa</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Fur Masking</h1>
+<h1 class="title">Curvature</h1>
 </div>
 
 
@@ -242,8 +255,26 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="nd-order-polynomial" class="level3">
+<h3 class="anchored" data-anchor-id="nd-order-polynomial">2nd Order Polynomial</h3>
+</section>
+<section id="bezier-curve" class="level3">
+<h3 class="anchored" data-anchor-id="bezier-curve">Bezier Curve</h3>
+</section>
+<section id="radius-of-curvature-of-circle" class="level3">
+<h3 class="anchored" data-anchor-id="radius-of-curvature-of-circle">Radius of Curvature of Circle</h3>
+</section>
+</section>
+<section id="intrinsic-curvature-and-delta_kappa" class="level2">
+<h2 class="anchored" data-anchor-id="intrinsic-curvature-and-delta_kappa">Intrinsic Curvature and delta_Kappa</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

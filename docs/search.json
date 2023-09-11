@@ -1,9 +1,37 @@
 [
   {
+    "objectID": "point.html#whisker-length",
+    "href": "point.html#whisker-length",
+    "title": "Position Along Whisker",
+    "section": "Whisker Length",
+    "text": "Whisker Length"
+  },
+  {
+    "objectID": "point.html#whisker-point",
+    "href": "point.html#whisker-point",
+    "title": "Position Along Whisker",
+    "section": "Whisker Point",
+    "text": "Whisker Point"
+  },
+  {
     "objectID": "angle.html#angle-at-arbitrary-point",
     "href": "angle.html#angle-at-arbitrary-point",
     "title": "Whisker Angle",
     "section": "Angle at Arbitrary Point",
     "text": "Angle at Arbitrary Point"
+  },
+  {
+    "objectID": "curvature.html#methods",
+    "href": "curvature.html#methods",
+    "title": "Curvature",
+    "section": "Methods",
+    "text": "Methods\n\n2nd Order Polynomial\n\n\nBezier Curve\n\n\nRadius of Curvature of Circle"
+  },
+  {
+    "objectID": "curvature.html#intrinsic-curvature-and-delta_kappa",
+    "href": "curvature.html#intrinsic-curvature-and-delta_kappa",
+    "title": "Curvature",
+    "section": "Intrinsic Curvature and delta_Kappa",
+    "text": "Intrinsic Curvature and delta_Kappa"
   }
 ]

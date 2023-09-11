@@ -11,14 +11,26 @@ website:
       - section: "Introduction"
         contents:
         - index.qmd
+        
       - section: "Whisker Parameterization"
         contents:
         - discretization.qmd
         - mask.qmd
         - follicle.qmd
+        - point.qmd
+        - quality_parameters.qmd
+        - beam_parameters.qmd
+        
       - section: "Kinematics"
         contents:
         - angle.qmd
+        - curvature.qmd
+        - phase.qmd
+        - velocity.qmd
+        
+      - section: "Mechanics"
+        contents: 
+        - mechanics_overview.qmd
      
 format:
   html:

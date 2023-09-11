@@ -1,0 +1,11 @@
+---
+title: "Velocity"
+---
+
+## Methods
+
+### Central Difference
+
+### Backward Difference
+
+### Forward Difference
