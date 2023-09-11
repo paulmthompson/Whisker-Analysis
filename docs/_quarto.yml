@@ -14,15 +14,17 @@ website:
         
       - section: "Whisker Parameterization"
         contents:
-        - discretization.qmd
-        - mask.qmd
-        - follicle.qmd
-        - point.qmd
-        - quality_parameters.qmd
-        - beam_parameters.qmd
+        - parameterization/parameter_overview.qmd
+        - parameterization/discretization.qmd
+        - parameterization/mask.qmd
+        - parameterization/follicle.qmd
+        - parameterization/point.qmd
+        - parameterization/quality_parameters.qmd
+        - parameterization/beam_parameters.qmd
         
       - section: "Kinematics"
         contents:
+        - kinematics_overview.qmd
         - angle.qmd
         - curvature.qmd
         - phase.qmd
