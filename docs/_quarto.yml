@@ -5,11 +5,19 @@ project:
 
 website: 
   title: "Whisker Analysis"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-        
+  sidebar:
+    style: docked
+    contents: 
+      - section: "Introduction"
+        contents:
+        - index.qmd
+      - section: "Whisker Parameterization"
+        contents:
+        - discretization.qmd
+        - mask.qmd
+        - follicle.qmd
+      
+     
 format:
   html:
     theme: cosmo
