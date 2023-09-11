@@ -16,7 +16,9 @@ website:
         - discretization.qmd
         - mask.qmd
         - follicle.qmd
-      
+      - section: "Kinematics"
+        contents:
+        - angle.qmd
      
 format:
   html:
