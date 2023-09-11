@@ -1,24 +1,24 @@
 [
   {
-    "objectID": "curvature.html#methods",
-    "href": "curvature.html#methods",
+    "objectID": "kinematics/angle.html#angle-at-arbitrary-point",
+    "href": "kinematics/angle.html#angle-at-arbitrary-point",
+    "title": "Whisker Angle",
+    "section": "Angle at Arbitrary Point",
+    "text": "Angle at Arbitrary Point"
+  },
+  {
+    "objectID": "kinematics/curvature.html#methods",
+    "href": "kinematics/curvature.html#methods",
     "title": "Curvature",
     "section": "Methods",
     "text": "Methods\n\n2nd Order Polynomial\n\n\nBezier Curve\n\n\nRadius of Curvature of Circle"
   },
   {
-    "objectID": "curvature.html#intrinsic-curvature-and-delta_kappa",
-    "href": "curvature.html#intrinsic-curvature-and-delta_kappa",
+    "objectID": "kinematics/curvature.html#intrinsic-curvature-and-delta_kappa",
+    "href": "kinematics/curvature.html#intrinsic-curvature-and-delta_kappa",
     "title": "Curvature",
     "section": "Intrinsic Curvature and delta_Kappa",
     "text": "Intrinsic Curvature and delta_Kappa"
-  },
-  {
-    "objectID": "angle.html#angle-at-arbitrary-point",
-    "href": "angle.html#angle-at-arbitrary-point",
-    "title": "Whisker Angle",
-    "section": "Angle at Arbitrary Point",
-    "text": "Angle at Arbitrary Point"
   },
   {
     "objectID": "parameterization/point.html#whisker-length",

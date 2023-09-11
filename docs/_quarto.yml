@@ -24,15 +24,15 @@ website:
         
       - section: "Kinematics"
         contents:
-        - kinematics_overview.qmd
-        - angle.qmd
-        - curvature.qmd
-        - phase.qmd
-        - velocity.qmd
+        - kinematics/kinematics_overview.qmd
+        - kinematics/angle.qmd
+        - kinematics/curvature.qmd
+        - kinematics/phase.qmd
+        - kinematics/velocity.qmd
         
       - section: "Mechanics"
         contents: 
-        - mechanics_overview.qmd
+        - mechanics/mechanics_overview.qmd
      
 format:
   html:
