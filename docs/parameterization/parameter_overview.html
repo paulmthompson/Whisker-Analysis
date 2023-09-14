@@ -60,6 +60,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -232,7 +234,22 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#whisker-pad" id="toc-whisker-pad" class="nav-link active" data-scroll-target="#whisker-pad">Whisker Pad</a></li>
+  <li><a href="#whisker-structure" id="toc-whisker-structure" class="nav-link" data-scroll-target="#whisker-structure">Whisker Structure</a></li>
+  <li><a href="#d-whisker-imaging" id="toc-d-whisker-imaging" class="nav-link" data-scroll-target="#d-whisker-imaging">2D Whisker Imaging</a></li>
+  <li><a href="#converting-whisker-masks-to-paths" id="toc-converting-whisker-masks-to-paths" class="nav-link" data-scroll-target="#converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</a></li>
+  <li><a href="#whisker-data-structure" id="toc-whisker-data-structure" class="nav-link" data-scroll-target="#whisker-data-structure">Whisker Data Structure</a>
+  <ul class="collapse">
+  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a></li>
+  <li><a href="#julia" id="toc-julia" class="nav-link" data-scroll-target="#julia">Julia</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c">C++</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -254,8 +271,60 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="whisker-pad" class="level2">
+<h2 class="anchored" data-anchor-id="whisker-pad">Whisker Pad</h2>
+<p>Rodent whiskers (vibrissa) are specialized hair follicles on the face. The position of these whiskers are organized in a highly stereotyped grid with rows and columns. The most posterior whiskers are slightly offset from the rest of the grid and are labeled with Greek letters from dorsal to ventral: alpha, beta, gamma, delta. The remaining whiskers are labeled with rows A-E, with A the most dorsal, and columns numbered starting from the most posterior.</p>
+<p>Figure: side profile of whiskers</p>
+</section>
+<section id="whisker-structure" class="level2">
+<h2 class="anchored" data-anchor-id="whisker-structure">Whisker Structure</h2>
+<p>Whiskers are truncated cones. More posterior whiskers are generally longer and greater in diameter than more anterior whiskers.</p>
+<p>Figure: 3d structure of whisker</p>
+</section>
+<section id="d-whisker-imaging" class="level2">
+<h2 class="anchored" data-anchor-id="d-whisker-imaging">2D Whisker Imaging</h2>
+<p>Whiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.</p>
+<p>Figure: Cartoon of whisker from top view</p>
+<p>Whisker is defined as a collection of points</p>
+<p><span class="math inline">\((x_1,y_1), (x_2,y_2), ... (x_n,y_n)\)</span></p>
+<p>These points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.</p>
+<p>The spacing between these points may not be uniform, and segments of the whisker may be missing.</p>
+</section>
+<section id="converting-whisker-masks-to-paths" class="level2">
+<h2 class="anchored" data-anchor-id="converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</h2>
+<p>Spline fit</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Beware when paths are not monotonically increasing in x/y
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Figure: Demonstration of problematic whisker</p>
+</div>
+</div>
+</section>
+<section id="whisker-data-structure" class="level2">
+<h2 class="anchored" data-anchor-id="whisker-data-structure">Whisker Data Structure</h2>
+<p>Whiskers are an array of 2D points</p>
+<p>Whiskers can correspond to to whisker IDs</p>
+<p>Whiskers can correspond to certain frames</p>
+<p>HDF5 for saving / loading</p>
+<section id="python" class="level3">
+<h3 class="anchored" data-anchor-id="python">Python</h3>
+</section>
+<section id="julia" class="level3">
+<h3 class="anchored" data-anchor-id="julia">Julia</h3>
+</section>
+<section id="c" class="level3">
+<h3 class="anchored" data-anchor-id="c">C++</h3>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

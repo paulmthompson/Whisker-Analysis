@@ -1,3 +1,19 @@
 ---
 title: "Discretization"
 ---
+
+## Density of Points
+
+Minimum points to specify shape
+
+Reducing points -\> how do we know if fit is preserved?
+
+## Interpolation Methods
+
+### Linear Interpolation
+
+### Quadratic Interpolation
+
+## Extrapolation
+
+Figure: Whisker shorter than contact point

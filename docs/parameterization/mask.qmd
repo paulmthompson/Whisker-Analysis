@@ -2,3 +2,10 @@
 title: "Fur Masking"
 ---
 
+## Mask Generation
+
+If the animal is head-fixed, probably easiest to just make a mask quickly in photoshop
+
+## Extending Mask
+
+## Mask Intersection

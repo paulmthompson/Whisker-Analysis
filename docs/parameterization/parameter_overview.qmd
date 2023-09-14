@@ -1,3 +1,55 @@
 ---
 title: "Parameterization Overview"
 ---
+
+## Whisker Pad
+
+Rodent whiskers (vibrissa) are specialized hair follicles on the face. The position of these whiskers are organized in a highly stereotyped grid with rows and columns. The most posterior whiskers are slightly offset from the rest of the grid and are labeled with Greek letters from dorsal to ventral: alpha, beta, gamma, delta. The remaining whiskers are labeled with rows A-E, with A the most dorsal, and columns numbered starting from the most posterior.
+
+Figure: side profile of whiskers
+
+## Whisker Structure
+
+Whiskers are truncated cones. More posterior whiskers are generally longer and greater in diameter than more anterior whiskers.
+
+Figure: 3d structure of whisker
+
+## 2D Whisker Imaging
+
+Whiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.
+
+Figure: Cartoon of whisker from top view
+
+Whisker is defined as a collection of points
+
+$(x_1,y_1), (x_2,y_2), ... (x_n,y_n)$
+
+These points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.
+
+The spacing between these points may not be uniform, and segments of the whisker may be missing.
+
+## Converting Whisker Masks to Paths
+
+Spline fit
+
+::: callout-caution
+## Beware when paths are not monotonically increasing in x/y
+
+Figure: Demonstration of problematic whisker
+:::
+
+## Whisker Data Structure
+
+Whiskers are an array of 2D points
+
+Whiskers can correspond to to whisker IDs
+
+Whiskers can correspond to certain frames
+
+HDF5 for saving / loading
+
+### Python
+
+### Julia
+
+### C++

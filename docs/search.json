@@ -1,5 +1,75 @@
 [
   {
+    "objectID": "parameterization/parameter_overview.html",
+    "href": "parameterization/parameter_overview.html",
+    "title": "Parameterization Overview",
+    "section": "",
+    "text": "Rodent whiskers (vibrissa) are specialized hair follicles on the face. The position of these whiskers are organized in a highly stereotyped grid with rows and columns. The most posterior whiskers are slightly offset from the rest of the grid and are labeled with Greek letters from dorsal to ventral: alpha, beta, gamma, delta. The remaining whiskers are labeled with rows A-E, with A the most dorsal, and columns numbered starting from the most posterior.\nFigure: side profile of whiskers"
+  },
+  {
+    "objectID": "parameterization/parameter_overview.html#whisker-pad",
+    "href": "parameterization/parameter_overview.html#whisker-pad",
+    "title": "Parameterization Overview",
+    "section": "",
+    "text": "Rodent whiskers (vibrissa) are specialized hair follicles on the face. The position of these whiskers are organized in a highly stereotyped grid with rows and columns. The most posterior whiskers are slightly offset from the rest of the grid and are labeled with Greek letters from dorsal to ventral: alpha, beta, gamma, delta. The remaining whiskers are labeled with rows A-E, with A the most dorsal, and columns numbered starting from the most posterior.\nFigure: side profile of whiskers"
+  },
+  {
+    "objectID": "parameterization/parameter_overview.html#whisker-structure",
+    "href": "parameterization/parameter_overview.html#whisker-structure",
+    "title": "Parameterization Overview",
+    "section": "Whisker Structure",
+    "text": "Whisker Structure\nWhiskers are truncated cones. More posterior whiskers are generally longer and greater in diameter than more anterior whiskers.\nFigure: 3d structure of whisker"
+  },
+  {
+    "objectID": "parameterization/parameter_overview.html#d-whisker-imaging",
+    "href": "parameterization/parameter_overview.html#d-whisker-imaging",
+    "title": "Parameterization Overview",
+    "section": "2D Whisker Imaging",
+    "text": "2D Whisker Imaging\nWhiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.\nFigure: Cartoon of whisker from top view\nWhisker is defined as a collection of points\n\\((x_1,y_1), (x_2,y_2), ... (x_n,y_n)\\)\nThese points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.\nThe spacing between these points may not be uniform, and segments of the whisker may be missing."
+  },
+  {
+    "objectID": "parameterization/parameter_overview.html#converting-whisker-masks-to-paths",
+    "href": "parameterization/parameter_overview.html#converting-whisker-masks-to-paths",
+    "title": "Parameterization Overview",
+    "section": "Converting Whisker Masks to Paths",
+    "text": "Converting Whisker Masks to Paths\nSpline fit\n\n\n\n\n\n\nBeware when paths are not monotonically increasing in x/y\n\n\n\nFigure: Demonstration of problematic whisker"
+  },
+  {
+    "objectID": "parameterization/parameter_overview.html#whisker-data-structure",
+    "href": "parameterization/parameter_overview.html#whisker-data-structure",
+    "title": "Parameterization Overview",
+    "section": "Whisker Data Structure",
+    "text": "Whisker Data Structure\nWhiskers are an array of 2D points\nWhiskers can correspond to to whisker IDs\nWhiskers can correspond to certain frames\nHDF5 for saving / loading\n\nPython\n\n\nJulia\n\n\nC++"
+  },
+  {
+    "objectID": "parameterization/follicle.html#base-of-whisker-path",
+    "href": "parameterization/follicle.html#base-of-whisker-path",
+    "title": "Follicle",
+    "section": "Base of Whisker Path",
+    "text": "Base of Whisker Path"
+  },
+  {
+    "objectID": "parameterization/follicle.html#mask-intersection",
+    "href": "parameterization/follicle.html#mask-intersection",
+    "title": "Follicle",
+    "section": "Mask Intersection",
+    "text": "Mask Intersection"
+  },
+  {
+    "objectID": "parameterization/follicle.html#fixed-distance-from-extended-mask-intersection",
+    "href": "parameterization/follicle.html#fixed-distance-from-extended-mask-intersection",
+    "title": "Follicle",
+    "section": "Fixed Distance from Extended Mask Intersection",
+    "text": "Fixed Distance from Extended Mask Intersection"
+  },
+  {
+    "objectID": "parameterization/beam_parameters.html#displacement-from-normal-line",
+    "href": "parameterization/beam_parameters.html#displacement-from-normal-line",
+    "title": "Beam Parameterization",
+    "section": "Displacement from normal line",
+    "text": "Displacement from normal line\n\nStraight Beam\n\n\nIncorporating Curvature"
+  },
+  {
     "objectID": "kinematics/angle.html#angle-at-arbitrary-point",
     "href": "kinematics/angle.html#angle-at-arbitrary-point",
     "title": "Whisker Angle",
@@ -21,6 +91,55 @@
     "text": "Intrinsic Curvature and delta_Kappa"
   },
   {
+    "objectID": "parameterization/discretization.html",
+    "href": "parameterization/discretization.html",
+    "title": "Discretization",
+    "section": "",
+    "text": "Minimum points to specify shape\nReducing points -&gt; how do we know if fit is preserved?"
+  },
+  {
+    "objectID": "parameterization/discretization.html#density-of-points",
+    "href": "parameterization/discretization.html#density-of-points",
+    "title": "Discretization",
+    "section": "",
+    "text": "Minimum points to specify shape\nReducing points -&gt; how do we know if fit is preserved?"
+  },
+  {
+    "objectID": "parameterization/discretization.html#interpolation-methods",
+    "href": "parameterization/discretization.html#interpolation-methods",
+    "title": "Discretization",
+    "section": "Interpolation Methods",
+    "text": "Interpolation Methods\n\nLinear Interpolation\n\n\nQuadratic Interpolation"
+  },
+  {
+    "objectID": "parameterization/mask.html",
+    "href": "parameterization/mask.html",
+    "title": "Fur Masking",
+    "section": "",
+    "text": "If the animal is head-fixed, probably easiest to just make a mask quickly in photoshop"
+  },
+  {
+    "objectID": "parameterization/mask.html#mask-generation",
+    "href": "parameterization/mask.html#mask-generation",
+    "title": "Fur Masking",
+    "section": "",
+    "text": "If the animal is head-fixed, probably easiest to just make a mask quickly in photoshop"
+  },
+  {
+    "objectID": "parameterization/mask.html#extending-mask",
+    "href": "parameterization/mask.html#extending-mask",
+    "title": "Fur Masking",
+    "section": "Extending Mask",
+    "text": "Extending Mask"
+  },
+  {
+    "objectID": "parameterization/mask.html#mask-intersection",
+    "href": "parameterization/mask.html#mask-intersection",
+    "title": "Fur Masking",
+    "section": "Mask Intersection",
+    "text": "Mask Intersection"
+  },
+  {
     "objectID": "parameterization/point.html#whisker-length",
     "href": "parameterization/point.html#whisker-length",
     "title": "Position Along Whisker",
@@ -33,5 +152,12 @@
     "title": "Position Along Whisker",
     "section": "Whisker Point",
     "text": "Whisker Point"
+  },
+  {
+    "objectID": "parameterization/discretization.html#extrapolation",
+    "href": "parameterization/discretization.html#extrapolation",
+    "title": "Discretization",
+    "section": "Extrapolation",
+    "text": "Extrapolation\nFigure: Whisker shorter than contact point"
   }
 ]

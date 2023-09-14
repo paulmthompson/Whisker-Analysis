@@ -2,3 +2,10 @@
 title: "Follicle"
 ---
 
+## Fixed Point
+
+## Base of Whisker Path
+
+## Mask Intersection
+
+## Fixed Distance from Extended Mask Intersection

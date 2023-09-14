@@ -2,3 +2,10 @@
 title: "Beam Parameterization"
 ---
 
+## Elastic Beam
+
+## Displacement from normal line
+
+### Straight Beam
+
+### Incorporating Curvature
