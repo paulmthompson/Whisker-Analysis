@@ -1,4 +1,6 @@
 
+add_subdirectory(WhiskerTracking/JaneliaWhiskerTracker)
+
 add_library(Whisker-Analysis SHARED
         WhiskerTracking/whiskertracker.cpp
         WhiskerTracking/whiskertracker.hpp
