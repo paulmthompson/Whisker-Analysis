@@ -10,9 +10,8 @@ add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
 target_link_libraries(Whisker-Analysis PRIVATE janelia)
 
-target_include_directories(Whisker-Analysis PRIVATE
+target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
-        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
