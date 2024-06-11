@@ -32,7 +32,7 @@
     "href": "parameterization/parameter_overview.html#converting-whisker-masks-to-paths",
     "title": "Parameterization Overview",
     "section": "Converting Whisker Masks to Paths",
-    "text": "Converting Whisker Masks to Paths\nSpline fit\n\n\n\n\n\n\nBeware when paths are not monotonically increasing in x/y\n\n\n\nFigure: Demonstration of problematic whisker"
+    "text": "Converting Whisker Masks to Paths\nTraditional whisker tracing algorithms will result in a path of points, where increasing indices correspond to either increasing or decreasing distance along the whisker. However, some image processing algorithms, including deep learning, will result in a collection of pixels corresponding to the pixels likely to correspond to a whisker in a picture. These will not be ordered as a path. Consequently,\n\nRegression Fit\n\n\n\n\n\n\nBeware when paths are not monotonically increasing in x/y\n\n\n\nFigure: Demonstration of problematic whisker\n\n\n\n\nNearest Neighbors"
   },
   {
     "objectID": "parameterization/parameter_overview.html#whisker-data-structure",
@@ -81,7 +81,7 @@
     "href": "kinematics/curvature.html#methods",
     "title": "Curvature",
     "section": "Methods",
-    "text": "Methods\n\n2nd Order Polynomial\n\n\nBezier Curve\n\n\nRadius of Curvature of Circle"
+    "text": "Methods\n\n2nd Order Polynomial\nCurvature is well defined for a parabola at any position x according to the following equation:\n\\(k(x) = \\frac{2a}{(1 + (2ax + b)^2)^\\frac{3}{2})}\\)\nhttps://en.wikipedia.org/wiki/Curvature#Local_expressions\n\n\nBezier Curve\n\n\nRadius of Curvature of Circle"
   },
   {
     "objectID": "kinematics/curvature.html#intrinsic-curvature-and-delta_kappa",
@@ -110,6 +110,13 @@
     "title": "Discretization",
     "section": "Interpolation Methods",
     "text": "Interpolation Methods\n\nLinear Interpolation\n\n\nQuadratic Interpolation"
+  },
+  {
+    "objectID": "parameterization/discretization.html#extrapolation",
+    "href": "parameterization/discretization.html#extrapolation",
+    "title": "Discretization",
+    "section": "Extrapolation",
+    "text": "Extrapolation\nFigure: Whisker shorter than contact point"
   },
   {
     "objectID": "parameterization/mask.html",
@@ -154,10 +161,10 @@
     "text": "Whisker Point"
   },
   {
-    "objectID": "parameterization/discretization.html#extrapolation",
-    "href": "parameterization/discretization.html#extrapolation",
-    "title": "Discretization",
-    "section": "Extrapolation",
-    "text": "Extrapolation\nFigure: Whisker shorter than contact point"
+    "objectID": "kinematics/curvature.html#intrinsic-curvature-and-𝝙𝛋",
+    "href": "kinematics/curvature.html#intrinsic-curvature-and-𝝙𝛋",
+    "title": "Curvature",
+    "section": "Intrinsic Curvature and 𝝙𝛋",
+    "text": "Intrinsic Curvature and 𝝙𝛋\nWhiskers are not straight, and generally have some natural bending at rest. Consequently, forces and moments generated in the follicular complex occur not because of the existance of curvature, but because of changes from the inherent curvature."
   }
 ]

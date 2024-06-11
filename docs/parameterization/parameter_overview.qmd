@@ -30,13 +30,17 @@ The spacing between these points may not be uniform, and segments of the whisker
 
 ## Converting Whisker Masks to Paths
 
-Spline fit
+Traditional whisker tracing algorithms will result in a path of points, where increasing indices correspond to either increasing or decreasing distance along the whisker. However, some image processing algorithms, including deep learning, will result in a collection of pixels corresponding to the pixels likely to correspond to a whisker in a picture. *These will not be ordered as a path*. Consequently,
+
+### Regression Fit
 
 ::: callout-caution
 ## Beware when paths are not monotonically increasing in x/y
 
 Figure: Demonstration of problematic whisker
 :::
+
+### Nearest Neighbors
 
 ## Whisker Data Structure
 

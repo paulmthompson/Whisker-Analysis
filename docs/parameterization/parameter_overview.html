@@ -241,7 +241,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#whisker-pad" id="toc-whisker-pad" class="nav-link active" data-scroll-target="#whisker-pad">Whisker Pad</a></li>
   <li><a href="#whisker-structure" id="toc-whisker-structure" class="nav-link" data-scroll-target="#whisker-structure">Whisker Structure</a></li>
   <li><a href="#d-whisker-imaging" id="toc-d-whisker-imaging" class="nav-link" data-scroll-target="#d-whisker-imaging">2D Whisker Imaging</a></li>
-  <li><a href="#converting-whisker-masks-to-paths" id="toc-converting-whisker-masks-to-paths" class="nav-link" data-scroll-target="#converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</a></li>
+  <li><a href="#converting-whisker-masks-to-paths" id="toc-converting-whisker-masks-to-paths" class="nav-link" data-scroll-target="#converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</a>
+  <ul class="collapse">
+  <li><a href="#regression-fit" id="toc-regression-fit" class="nav-link" data-scroll-target="#regression-fit">Regression Fit</a></li>
+  <li><a href="#nearest-neighbors" id="toc-nearest-neighbors" class="nav-link" data-scroll-target="#nearest-neighbors">Nearest Neighbors</a></li>
+  </ul></li>
   <li><a href="#whisker-data-structure" id="toc-whisker-data-structure" class="nav-link" data-scroll-target="#whisker-data-structure">Whisker Data Structure</a>
   <ul class="collapse">
   <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a></li>
@@ -292,7 +296,9 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="converting-whisker-masks-to-paths" class="level2">
 <h2 class="anchored" data-anchor-id="converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</h2>
-<p>Spline fit</p>
+<p>Traditional whisker tracing algorithms will result in a path of points, where increasing indices correspond to either increasing or decreasing distance along the whisker. However, some image processing algorithms, including deep learning, will result in a collection of pixels corresponding to the pixels likely to correspond to a whisker in a picture. <em>These will not be ordered as a path</em>. Consequently,</p>
+<section id="regression-fit" class="level3">
+<h3 class="anchored" data-anchor-id="regression-fit">Regression Fit</h3>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -306,6 +312,10 @@ Beware when paths are not monotonically increasing in x/y
 <p>Figure: Demonstration of problematic whisker</p>
 </div>
 </div>
+</section>
+<section id="nearest-neighbors" class="level3">
+<h3 class="anchored" data-anchor-id="nearest-neighbors">Nearest Neighbors</h3>
+</section>
 </section>
 <section id="whisker-data-structure" class="level2">
 <h2 class="anchored" data-anchor-id="whisker-data-structure">Whisker Data Structure</h2>

@@ -8,8 +8,16 @@ title: "Curvature"
 
 ### 2nd Order Polynomial
 
+Curvature is well defined for a parabola at any position x according to the following equation:
+
+$k(x) = \frac{2a}{(1 + (2ax + b)^2)^\frac{3}{2})}$
+
+https://en.wikipedia.org/wiki/Curvature#Local_expressions
+
 ### Bezier Curve
 
 ### Radius of Curvature of Circle
 
-## Intrinsic Curvature and delta_Kappa
+## Intrinsic Curvature and 𝝙𝛋
+
+Whiskers are not straight, and generally have some natural bending at rest. Consequently, forces and moments generated in the follicular complex occur not because of the existance of curvature, but because of changes from the inherent curvature.
