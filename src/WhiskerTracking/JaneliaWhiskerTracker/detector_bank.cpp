@@ -360,9 +360,9 @@ void Sum_Pixel_Overlap(std::array<point,N>& xy, const float gain, float *grid, i
 
     auto[minx,maxx,miny,maxy] = f32_min_max(xy,strides);
 
-            for( ix = minx; ix <= maxx; ix++ )
-    { for( iy = miny; iy <= maxy; iy ++ )
-        { px = iy*strides[1] + ix;
+    for(ix = minx; ix <= maxx; ix++ ) {
+        for (iy = miny; iy <= maxy; iy ++ ) {
+            px = iy*strides[1] + ix;
             pixel_to_vertex_array( px, strides[1], pxverts );
             *(grid+px) += gain * inter(xy, pxverts);
         }
