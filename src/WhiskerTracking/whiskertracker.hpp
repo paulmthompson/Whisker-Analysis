@@ -73,17 +73,22 @@ public:
    std::vector<Whisker> whiskers;
 
 private:
-   JaneliaTracker _janelia;
+    JaneliaTracker _janelia;
     bool _janelia_init;
-   float _whisker_length_threshold;
+    float _whisker_length_threshold;
     float _whisker_pad_radius;
-    std::tuple<float,float> _whisker_pad;
+    std::tuple<float, float> _whisker_pad;
 
-   void _removeDuplicates(std::vector<float>& scores);
-    void _alignWhiskerToFollicle(Whisker& whisker);
-   float _calculateWhiskerLength(const Whisker& whisker);
+    void _removeDuplicates(std::vector<float> &scores);
+
+    void _alignWhiskerToFollicle(Whisker &whisker);
+
+    float _calculateWhiskerLength(const Whisker &whisker);
+
     void _removeWhiskersByWhiskerPadRadius();
-   void _eraseWhiskers(std::vector<int>& erase_inds);
+
+    void _eraseWhiskers(std::vector<int> &erase_inds);
+
     void _reinitializeJanelia();
 
 };
