@@ -15,3 +15,30 @@ auto p2 = whisker::Point2D{0.0f, 10.0f};
 
 REQUIRE_FALSE(whisker::distance(p1,p2) == 9.0f);
 }
+
+TEST_CASE("LengthTest - 1", "[Distance]") {
+auto p1 = whisker::Point2D{0.0f, 0.0f};
+auto p2 = whisker::Point2D{0.0f, 10.0f};
+
+auto line = whisker::Line2D{p1, p2};
+
+REQUIRE(whisker::length(line) == 10.0f);
+}
+
+TEST_CASE("LengthTest - 2", "[Distance]") {
+auto p1 = whisker::Point2D{0.0f, 0.0f};
+
+auto line = whisker::Line2D{p1};
+
+REQUIRE(whisker::length(line) == 0.0f);
+}
+
+TEST_CASE("LengthTest - 3", "[Distance]") {
+auto p1 = whisker::Point2D{0.0f, 0.0f};
+auto p2 = whisker::Point2D{0.0f, 10.0f};
+auto p3 = whisker::Point2D{10.0f, 10.0f};
+
+auto line = whisker::Line2D{p1, p2, p3};
+
+REQUIRE(whisker::length(line) == 20.0f);
+}
