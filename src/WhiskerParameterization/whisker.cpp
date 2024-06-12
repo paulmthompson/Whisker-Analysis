@@ -105,4 +105,21 @@ std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points)
     return s;
 }
 
+float calculate_overlap_iou(Line2D const& line, Line2D const& line2)
+{
+    auto l1_set = create_set(line);
+    auto l2_set = create_set(line2);
+
+    std::vector<whisker::Point2D<int>> v_intersection;
+    std::vector<whisker::Point2D<int>> v_union;
+
+    std::set_intersection(l1_set.begin(), l1_set.end(), l2_set.begin(), l2_set.end(),
+                          std::back_inserter(v_intersection));
+
+    std::set_union(l1_set.begin(), l1_set.end(), l2_set.begin(), l2_set.end(),
+                          std::back_inserter(v_union));
+
+    return static_cast<float>(v_intersection.size()) / static_cast<float>(v_union.size());
+}
+
 }

@@ -3,6 +3,8 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include "whisker.hpp"
 
+#include <iostream>
+
 #include "test_constants.hpp"
 
 TEST_CASE("CreateSet - 1", "[Set]") {
@@ -42,4 +44,17 @@ TEST_CASE("CreateSet - 4", "[Set]") {
         std::back_inserter(v_intersection));
 
     REQUIRE(v_intersection.size() == 51);
+}
+
+TEST_CASE("IoU - 1", "[Set]") {
+
+    auto IoU = calculate_overlap_iou(line100_2, line100_3);
+
+    std::cout << "IoU calculated as " << IoU << std::endl;
+
+    REQUIRE(IoU > 0.2);
+
+    BENCHMARK("IoU Calculation") {
+        return calculate_overlap_iou(line100_2, line100_3);
+    };
 }
