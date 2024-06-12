@@ -12,7 +12,7 @@ inline auto p4 = whisker::Point2D{6.0f, 8.0f};
 inline auto p1_int = whisker::Point2D<int>{0, 0};
 inline auto p2_int = whisker::Point2D<int>{1, 1};
 
-auto create_line = [](float scaling){
+inline auto create_line = [](float scaling){
     auto line = whisker::Line2D();
     for (int i = 0; i < 101; i ++) {
         line.push_back(whisker::Point2D<float>{0.0f, i / scaling});
