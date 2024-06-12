@@ -98,15 +98,12 @@ std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(const s
  * @param whisker whisker to be checked
  */
 void WhiskerTracker::_alignWhiskerToFollicle(Line2D &whisker) {
-    auto follicle_x = _whisker_pad.x;
-    auto follicle_y = _whisker_pad.y;
 
-    auto start_distance = sqrt(pow((whisker[0].x - follicle_x), 2) + pow((whisker[0].y - follicle_y), 2));
+    auto start_distance = distance(whisker[0], _whisker_pad);
 
-    auto end_distance = sqrt(pow((whisker.back().x - follicle_x), 2) + pow((whisker.back().y - follicle_y), 2));
+    auto end_distance = distance(whisker.back(), _whisker_pad);
 
     if (start_distance > end_distance) {
-        std::reverse(whisker.begin(), whisker.end());
         std::reverse(whisker.begin(), whisker.end());
     }
 }
@@ -262,12 +259,9 @@ void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
 
     std::vector<int> erase_inds = std::vector<int>();
-    auto follicle_x = _whisker_pad.x;
-    auto follicle_y = _whisker_pad.y;
 
     for (int i = 0; i < whiskers.size(); i++) {
-        auto distance_to_follicle = sqrt(pow(whiskers[i][0].x - follicle_x, 2) +
-                                         pow(whiskers[i][0].y - follicle_y, 2));
+        auto distance_to_follicle = distance(whiskers[i][0], _whisker_pad);
 
         if (distance_to_follicle > _whisker_pad_radius) {
             erase_inds.push_back(i);
