@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 namespace whisker
 {
@@ -120,6 +121,22 @@ float calculate_overlap_iou(Line2D const& line, Line2D const& line2)
                           std::back_inserter(v_union));
 
     return static_cast<float>(v_intersection.size()) / static_cast<float>(v_union.size());
+}
+
+float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2)
+{
+    auto l1_set = create_set(line);
+    auto l2_set = create_set(line2);
+
+    std::vector<whisker::Point2D<int>> v_intersection;
+
+    std::set_intersection(l1_set.begin(), l1_set.end(), l2_set.begin(), l2_set.end(),
+                          std::back_inserter(v_intersection));
+
+    float iou_1 = static_cast<float>(v_intersection.size()) / static_cast<float>(l1_set.size());
+    float iou_2 = static_cast<float>(v_intersection.size()) / static_cast<float>(l2_set.size());
+
+    return std::max(iou_1, iou_2);
 }
 
 }

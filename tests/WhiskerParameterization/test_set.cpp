@@ -58,3 +58,16 @@ TEST_CASE("IoU - 1", "[Set]") {
         return calculate_overlap_iou(line100_2, line100_3);
     };
 }
+
+TEST_CASE("IoU - 2", "[Set]") {
+
+auto IoU = calculate_overlap_iou_relative(line100_2, line100_3);
+
+std::cout << "IoU calculated as " << IoU << std::endl;
+
+REQUIRE(IoU == 1.0);
+
+BENCHMARK("IoU Calculation") {
+return calculate_overlap_iou_relative(line100_2, line100_3);
+};
+}
