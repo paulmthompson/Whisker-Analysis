@@ -107,8 +107,8 @@ float WhiskerTracker::_calculateWhiskerLength(const Whisker &whisker) {
  * @param whisker whisker to be checked
  */
 void WhiskerTracker::_alignWhiskerToFollicle(Whisker &whisker) {
-    auto follicle_x = std::get<0>(_whisker_pad);
-    auto follicle_y = std::get<1>(_whisker_pad);
+    auto follicle_x = _whisker_pad.x;
+    auto follicle_y = _whisker_pad.y;
 
     auto start_distance = sqrt(pow((whisker.x[0] - follicle_x), 2) + pow((whisker.y[0] - follicle_y), 2));
 
@@ -269,8 +269,8 @@ void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
 
     std::vector<int> erase_inds = std::vector<int>();
-    auto follicle_x = std::get<0>(_whisker_pad);
-    auto follicle_y = std::get<1>(_whisker_pad);
+    auto follicle_x = _whisker_pad.x;
+    auto follicle_y = _whisker_pad.y;
 
     for (int i = 0; i < whiskers.size(); i++) {
         auto distance_to_follicle = sqrt(pow(whiskers[i].x[0] - follicle_x, 2) +

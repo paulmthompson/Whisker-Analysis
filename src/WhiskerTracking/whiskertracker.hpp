@@ -7,6 +7,7 @@
 #include <map>
 
 #include "JaneliaWhiskerTracker/janelia.hpp"
+#include "whisker.hpp"
 
 namespace whisker {
 
@@ -48,9 +49,9 @@ public:
 
     void setWhiskerPadRadius(float whisker_pad_radius) { _whisker_pad_radius = whisker_pad_radius; };
 
-    std::tuple<float, float> getWhiskerPad() const { return _whisker_pad; };
+    Point2D<float> getWhiskerPad() const { return _whisker_pad; };
 
-    void setWhiskerPad(float w_x, float w_y) { _whisker_pad = std::make_tuple(w_x, w_y); };
+    void setWhiskerPad(float w_x, float w_y) { _whisker_pad = Point2D<float>{w_x, w_y}; };
 
     enum JaneliaParameter {
         SEED_ON_GRID_LATTICE_SPACING,
@@ -85,7 +86,7 @@ private:
     bool _janelia_init;
     float _whisker_length_threshold;
     float _whisker_pad_radius;
-    std::tuple<float, float> _whisker_pad;
+    Point2D<float> _whisker_pad;
 
     void _removeDuplicates(std::vector<float> &scores);
 
