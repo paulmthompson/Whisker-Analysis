@@ -8,6 +8,16 @@ auto p2 = whisker::Point2D{0.0f, 10.0f};
 auto p3 = whisker::Point2D{10.0f, 10.0f};
 auto p4 = whisker::Point2D{6.0f, 8.0f};
 
+auto create_line = [](){
+    auto line = whisker::Line2D();
+    for (int i = 0; i < 101; i ++) {
+        line.push_back(whisker::Point2D<float>{0.0f, i / 100.0f});
+    }
+    return line;
+};
+
+auto line100 = create_line();
+
 TEST_CASE("DistanceTest - 1", "[Distance]") {
 
     REQUIRE(whisker::distance(p1,p2) == 10.0f);
@@ -41,6 +51,15 @@ TEST_CASE("LengthTest - 3", "[Distance]") {
 auto line = whisker::Line2D{p1, p2, p3};
 
 REQUIRE(whisker::length(line) == 20.0f);
+}
+
+TEST_CASE("LengthTest - 4", "[Distance]") {
+
+REQUIRE(whisker::length(line100) == 1.0f);
+
+BENCHMARK("length Calculation") {
+    return whisker::length(line100);
+};
 }
 
 TEST_CASE("Intermediate Point - 1", "[Distance]") {
@@ -88,6 +107,18 @@ REQUIRE(index == 1);
 REQUIRE(dist == 10.0f);
 }
 
+TEST_CASE("Nearest Preceding - 3", "[Distance]") {
+
+auto [index, dist] = nearest_preceding_index_along_path(line100, 0.905f);
+
+REQUIRE(index == 90);
+REQUIRE(dist == 0.9f);
+
+BENCHMARK("Nearest Preceding Calculation") {
+    return nearest_preceding_index_along_path(line100, 0.905f);
+};
+}
+
 TEST_CASE("Nearest Interpolated - 1", "[Distance]") {
 
 auto line = whisker::Line2D{p1, p2, p3};
@@ -96,4 +127,16 @@ auto intermediate_point = point_at_pathlength(line, 15.0);
 
 REQUIRE(intermediate_point.x == 5.0f);
 REQUIRE(intermediate_point.y == 10.0f);
+}
+
+TEST_CASE("Nearest Interpolated - 2", "[Distance]") {
+
+auto intermediate_point = point_at_pathlength(line100, 0.905f);
+
+REQUIRE(intermediate_point.x == 0.0f);
+REQUIRE(intermediate_point.y == 0.905f);
+
+BENCHMARK("Nearest Interpolated Calculation") {
+return point_at_pathlength(line100, 0.905f);
+};
 }

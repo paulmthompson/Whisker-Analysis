@@ -23,7 +23,7 @@ float length(Line2D const & line)
     return s;
 }
 
-Point2D<float> point_along_path(Point2D<float> p1, Point2D<float> p2, float const pathlength)
+Point2D<float> point_along_path(Point2D<float> const p1, Point2D<float> const p2, float const pathlength)
 {
 
     auto dist = distance(p1,p2);
@@ -92,9 +92,9 @@ Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength)
         return line.back();
     }
 
-    auto [closest_pre_ind, dist] = nearest_preceding_index_along_path(line, pathlength);
+    auto const [closest_pre_ind, dist] = nearest_preceding_index_along_path(line, pathlength);
 
-    auto final_segment_dist = distance(line[closest_pre_ind],line[closest_pre_ind+1]);
+    //auto final_segment_dist = distance(line[closest_pre_ind],line[closest_pre_ind+1]);
 
     return point_along_path(line[closest_pre_ind],line[closest_pre_ind+1], pathlength - dist);
 }
