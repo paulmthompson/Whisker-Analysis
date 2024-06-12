@@ -15,7 +15,7 @@ WhiskerTracker::WhiskerTracker() :
         _janelia_init{false},
         _whisker_pad{0.0f, 0.0f} {
     _janelia = janelia::JaneliaTracker();
-    whiskers = std::vector<Whisker>{};
+    whiskers = std::vector<Line2D>{};
 }
 
 void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_height, const int image_width) {
@@ -34,8 +34,8 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     std::vector<float> scores = std::vector<float>();
     int whisker_count = 1;
     for (auto &w_seg: j_segs) {
-        auto whisker = Whisker(whisker_count++, std::move(w_seg.x), std::move(w_seg.y));
-        if (_calculateWhiskerLength(whisker) > _whisker_length_threshold) {
+        auto whisker = create_line(std::move(w_seg.x), std::move(w_seg.y));
+        if (length(whisker) > _whisker_length_threshold) {
             _alignWhiskerToFollicle(whisker);
             whiskers.push_back(whisker);
             scores.push_back(std::accumulate(w_seg.scores.begin(), w_seg.scores.end(), 0.0) /
@@ -50,50 +50,41 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
 std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p) {
 
     float nearest_distance = 1000.0;
-    int whisker_id = 1;
+    int whisker_id = 0;
 
     float current_d = 0.0f;
     int current_whisker_id = 0;
 
     for (auto &w: this->whiskers) {
-        for (int i = 0; i < w.x.size(); i++) {
-            current_d = sqrt(pow(x_p - w.x[i], 2) + pow(y_p - w.y[i], 2));
+        for (int i = 0; i < w.size(); i++) {
+            current_d = sqrt(pow(x_p - w[i].x, 2) + pow(y_p - w[i].y, 2));
             if (current_d < nearest_distance) {
                 nearest_distance = current_d;
-                whisker_id = w.id;
+                whisker_id = current_whisker_id;
             }
         }
+        current_whisker_id += 1;
     }
 
     return std::make_tuple(nearest_distance, whisker_id);
 }
 
-std::map<int, std::vector<Whisker>> WhiskerTracker::load_janelia_whiskers(const std::string filename) {
+std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(const std::string filename) {
     auto j_segs = janelia::load_binary_data(filename);
 
-    auto output_whiskers = std::map<int, std::vector<Whisker>>();
+    auto output_whiskers = std::map<int, std::vector<Line2D>>();
 
     for (auto &w_seg: j_segs) {
 
         if (output_whiskers.find(w_seg.time) == output_whiskers.end()) { // Key doesn't exist
-            output_whiskers[w_seg.time] = std::vector<Whisker>();
+            output_whiskers[w_seg.time] = std::vector<Line2D>();
         }
 
-        output_whiskers[w_seg.time].push_back(Whisker(w_seg.id, std::move(w_seg.x), std::move(w_seg.y)));
+        output_whiskers[w_seg.time].push_back(create_line(std::move(w_seg.x), std::move(w_seg.y)));
 
     }
 
     return output_whiskers;
-}
-
-float WhiskerTracker::_calculateWhiskerLength(const Whisker &whisker) {
-    float length = 0.0;
-
-    for (int i = 1; i < whisker.x.size(); i++) {
-        length += sqrt(pow((whisker.x[i] - whisker.x[i - 1]), 2) + pow((whisker.y[i] - whisker.y[i - 1]), 2));
-    }
-
-    return length;
 }
 
 /**
@@ -106,17 +97,17 @@ float WhiskerTracker::_calculateWhiskerLength(const Whisker &whisker) {
  *
  * @param whisker whisker to be checked
  */
-void WhiskerTracker::_alignWhiskerToFollicle(Whisker &whisker) {
+void WhiskerTracker::_alignWhiskerToFollicle(Line2D &whisker) {
     auto follicle_x = _whisker_pad.x;
     auto follicle_y = _whisker_pad.y;
 
-    auto start_distance = sqrt(pow((whisker.x[0] - follicle_x), 2) + pow((whisker.y[0] - follicle_y), 2));
+    auto start_distance = sqrt(pow((whisker[0].x - follicle_x), 2) + pow((whisker[0].y - follicle_y), 2));
 
-    auto end_distance = sqrt(pow((whisker.x.back() - follicle_x), 2) + pow((whisker.y.back() - follicle_y), 2));
+    auto end_distance = sqrt(pow((whisker.back().x - follicle_x), 2) + pow((whisker.back().y - follicle_y), 2));
 
     if (start_distance > end_distance) {
-        std::reverse(whisker.x.begin(), whisker.x.end());
-        std::reverse(whisker.y.begin(), whisker.y.end());
+        std::reverse(whisker.begin(), whisker.end());
+        std::reverse(whisker.begin(), whisker.end());
     }
 }
 
@@ -220,6 +211,7 @@ void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float va
 
 void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
 
+    /*
     struct correlation_matrix {
         int i;
         int j;
@@ -264,6 +256,7 @@ void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
     }
 
     _eraseWhiskers(erase_inds);
+     */
 }
 
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
@@ -273,8 +266,8 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
     auto follicle_y = _whisker_pad.y;
 
     for (int i = 0; i < whiskers.size(); i++) {
-        auto distance_to_follicle = sqrt(pow(whiskers[i].x[0] - follicle_x, 2) +
-                                         pow(whiskers[i].y[0] - follicle_y, 2));
+        auto distance_to_follicle = sqrt(pow(whiskers[i][0].x - follicle_x, 2) +
+                                         pow(whiskers[i][0].y - follicle_y, 2));
 
         if (distance_to_follicle > _whisker_pad_radius) {
             erase_inds.push_back(i);

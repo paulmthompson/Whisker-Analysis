@@ -11,24 +11,6 @@
 
 namespace whisker {
 
-struct Whisker {
-    int id; // unique identifier for whisker in frame, starting at 1
-    std::vector<float> x;
-    std::vector<float> y;
-
-    Whisker() {
-        id = 0;
-        x = std::vector<float>();
-        y = std::vector<float>();
-    }
-
-    Whisker(int idd, std::vector<float> xx, std::vector<float> yy) {
-        id = idd;
-        x = xx;
-        y = yy;
-    }
-};
-
 class WhiskerTracker {
 
 public:
@@ -38,8 +20,7 @@ public:
 
     std::tuple<float, int> get_nearest_whisker(float x_p, float y_p);
 
-    std::map<int, std::vector<Whisker>> load_janelia_whiskers(const std::string filename);
-
+    std::map<int, std::vector<Line2D>> load_janelia_whiskers(const std::string filename);
 
     float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 
@@ -79,7 +60,7 @@ public:
 
     void changeJaneliaParameter(JaneliaParameter parameter, float value);
 
-    std::vector<Whisker> whiskers;
+    std::vector<Line2D> whiskers;
 
 private:
     janelia::JaneliaTracker _janelia;
@@ -90,9 +71,7 @@ private:
 
     void _removeDuplicates(std::vector<float> &scores);
 
-    void _alignWhiskerToFollicle(Whisker &whisker);
-
-    float _calculateWhiskerLength(const Whisker &whisker);
+    void _alignWhiskerToFollicle(Line2D &whisker);
 
     void _removeWhiskersByWhiskerPadRadius();
 

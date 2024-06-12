@@ -32,6 +32,11 @@ float length(Line2D const & line)
     return s;
 }
 
+float minimum_distance(Line2D const &line, Point2D<float> const p)
+{
+
+}
+
 Point2D<float> point_along_path(Point2D<float> const p1, Point2D<float> const p2, float const pathlength)
 {
 

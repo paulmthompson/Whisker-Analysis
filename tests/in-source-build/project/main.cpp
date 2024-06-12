@@ -11,7 +11,6 @@
 int main() {
 
     auto wt = whisker::WhiskerTracker();
-    auto whisker = whisker::Whisker();
 
     std::cout << "Whisker Tracker Created" << std::endl;
 
