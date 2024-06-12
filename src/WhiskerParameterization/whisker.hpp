@@ -24,6 +24,8 @@ struct Point2D {
 
 using Line2D = std::vector<Point2D<float>>;
 
+Line2D create_line(std::vector<float> const & x, std::vector<float> const & y);
+
 float distance(Point2D<float> const p1, Point2D<float> const p2);
 
 float length(Line2D const & line);

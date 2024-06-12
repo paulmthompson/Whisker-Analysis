@@ -7,7 +7,15 @@
 namespace whisker
 {
 
+Line2D create_line(std::vector<float> const & x, std::vector<float> const & y)
+{
+    auto line = Line2D();
 
+    for (int i = 0; i < x.size(); i++) {
+        line.push_back(Point2D<float>{x[i],y[i]});
+    }
+    return line;
+}
 
 float distance(Point2D<float> const p1, Point2D<float> const p2) {
     return std::sqrt(std::pow(p1.x - p2.x,2) + std::pow(p1.y - p2.y,2));
