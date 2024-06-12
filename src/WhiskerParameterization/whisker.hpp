@@ -22,7 +22,7 @@ Point2D<float> point_along_path(Point2D<float> p1, Point2D<float> p2, float cons
 
 std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, float const pathlength);
 
-//Point2D<float> point_at_pathlength(line2D const & line, float const pathlength);
+Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength);
 
 }
 #endif //WHISKER_ANALYSIS_WHISKER_HPP

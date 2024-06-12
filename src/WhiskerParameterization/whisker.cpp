@@ -78,8 +78,8 @@ std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, fl
     return std::make_tuple(closest_pre_ind, s);
 }
 
-/*
-Point2D<float> point_at_pathlength(line2D const & line, float const pathlength)
+
+Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength)
 {
     if (line.size() < 2)
     {
@@ -92,22 +92,11 @@ Point2D<float> point_at_pathlength(line2D const & line, float const pathlength)
         return line.back();
     }
 
-    float s = 0.0f;
-    int closest_pre_ind = 0;
-
-    for (int i = 1; i < line.size(); i ++) {
-        auto dist = distance(line[i],line[i-1]);
-        if (s + dist > pathlength) {
-            break;
-        } else {
-            s = s + dist;
-            closest_pre_ind += 1;
-        }
-    }
+    auto [closest_pre_ind, dist] = nearest_preceding_index_along_path(line, pathlength);
 
     auto final_segment_dist = distance(line[closest_pre_ind],line[closest_pre_ind+1]);
 
-
+    return point_along_path(line[closest_pre_ind],line[closest_pre_ind+1], pathlength - dist);
 }
-*/
+
 }
