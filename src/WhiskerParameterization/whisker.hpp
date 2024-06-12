@@ -3,8 +3,8 @@
 
 namespace whisker {
 
-template<typename T>
-struct Point2D<T> {
+template <typename T>
+struct Point2D {
     T x;
     T y;
 };
