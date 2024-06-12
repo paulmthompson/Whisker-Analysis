@@ -91,4 +91,18 @@ Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength)
     return point_along_path(line[closest_pre_ind],line[closest_pre_ind+1], pathlength - dist);
 }
 
+std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points)
+{
+    return std::set<Point2D<int>>{points.begin(), points.end()};
+}
+
+std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points)
+{
+    std::set<Point2D<int>> s;
+    for (auto const & p : points) {
+        s.insert(Point2D<int>{std::lround(p.x),std::lround(p.y)});
+    }
+    return s;
+}
+
 }

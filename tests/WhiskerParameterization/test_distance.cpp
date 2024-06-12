@@ -1,22 +1,10 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/benchmark/catch_benchmark.hpp>
+
 #include "whisker.hpp"
+#include "test_constants.hpp"
 
-auto p1 = whisker::Point2D{0.0f, 0.0f};
-auto p2 = whisker::Point2D{0.0f, 10.0f};
-auto p3 = whisker::Point2D{10.0f, 10.0f};
-auto p4 = whisker::Point2D{6.0f, 8.0f};
-
-auto create_line = [](){
-    auto line = whisker::Line2D();
-    for (int i = 0; i < 101; i ++) {
-        line.push_back(whisker::Point2D<float>{0.0f, i / 100.0f});
-    }
-    return line;
-};
-
-auto line100 = create_line();
 
 TEST_CASE("DistanceTest - 1", "[Distance]") {
 
