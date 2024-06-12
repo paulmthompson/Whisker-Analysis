@@ -42,3 +42,33 @@ auto line = whisker::Line2D{p1, p2, p3};
 
 REQUIRE(whisker::length(line) == 20.0f);
 }
+
+TEST_CASE("Intermediate Point - 1", "[Distance]") {
+auto p1 = whisker::Point2D{0.0f, 0.0f};
+auto p2 = whisker::Point2D{0.0f, 10.0f};
+
+auto p3 = point_along_path(p1, p2, 5.0f);
+
+REQUIRE(p3.x == 0.0f);
+REQUIRE(p3.y == 5.0f);
+}
+
+TEST_CASE("Intermediate Point - 2", "[Distance]") {
+auto p1 = whisker::Point2D{0.0f, 0.0f};
+auto p2 = whisker::Point2D{0.0f, 10.0f};
+
+auto p3 = point_along_path(p1, p2, 15.0f);
+
+REQUIRE(p3.x == 0.0f);
+REQUIRE(p3.y == 0.0f);
+}
+
+TEST_CASE("Intermediate Point - 3", "[Distance]") {
+auto p1 = whisker::Point2D{0.0f, 0.0f};
+auto p2 = whisker::Point2D{6.0f, 8.0f};
+
+auto p3 = point_along_path(p1, p2, 5.0f);
+
+REQUIRE(p3.x == 3.0f);
+REQUIRE(p3.y == 4.0f);
+}
