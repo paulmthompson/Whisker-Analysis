@@ -28,14 +28,11 @@ Point2D<float> point_along_path(Point2D<float> const p1, Point2D<float> const p2
 
     auto dist = distance(p1,p2);
 
-    if (dist < pathlength)
-    {
+    if (dist < pathlength) {
         std::cout << "Requested path length " << pathlength <<
-        " is larger than distance between points" << std::endl;
+                  " is larger than distance between points" << std::endl;
         return Point2D<float>{0.0f, 0.0f};
-    }
-
-    if (pathlength <= 0.0f)
+    } else if (pathlength <= 0.0f)
     {
         std::cout << "Invalid pathlength of " << pathlength << " specified" << std::endl;
         return Point2D<float>{0.0f, 0.0f};
@@ -55,9 +52,7 @@ std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, fl
     {
         std::cout << "Line does not contain at least 2 points" << std::endl;
         return std::make_tuple(0,0.0f);
-    }
-
-    if (length(line) < pathlength) {
+    } else if (length(line) < pathlength) {
         std::cout << "The requested pathlength is greater than the length of the line" << std::endl;
         return std::make_tuple(0,0.0f);
     }
@@ -81,13 +76,10 @@ std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, fl
 
 Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength)
 {
-    if (line.size() < 2)
-    {
+    if (line.size() < 2) {
         std::cout << "Line does not contain at least 2 points" << std::endl;
         return Point2D{0.0f, 0.0f};
-    }
-
-    if (length(line) < pathlength) {
+    } else if (length(line) < pathlength) {
         std::cout << "The requested pathlength is greater than the length of the line" << std::endl;
         return line.back();
     }
