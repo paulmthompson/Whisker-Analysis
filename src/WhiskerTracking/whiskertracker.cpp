@@ -5,7 +5,7 @@
 #include <numeric>
 #include "JaneliaWhiskerTracker/io.hpp"
 
-Image<uint8_t> bg = Image<uint8_t>(640,480,std::vector<uint8_t>(640*480,0));
+janelia::Image<uint8_t> bg = janelia::Image<uint8_t>(640,480,std::vector<uint8_t>(640*480,0));
 
 WhiskerTracker::WhiskerTracker() :
     _whisker_length_threshold{75.0},
@@ -13,22 +13,22 @@ WhiskerTracker::WhiskerTracker() :
     _janelia_init{false},
     _whisker_pad{0.0f, 0.0f}
 {
-    _janelia = JaneliaTracker();
+    _janelia = janelia::JaneliaTracker();
     whiskers = std::vector<Whisker>{};
 }
 
 void WhiskerTracker::trace(const std::vector<uint8_t>& image, const int image_height, const int image_width) {
 
     if (this->_janelia_init == false) {
-        this->_janelia.bank = LineDetector(this->_janelia.config);
-        this->_janelia.half_space_bank = HalfSpaceDetector(this->_janelia.config);
+        this->_janelia.bank = janelia::LineDetector(this->_janelia.config);
+        this->_janelia.half_space_bank = janelia::HalfSpaceDetector(this->_janelia.config);
         this->_janelia_init = true;
     }
 
     whiskers.clear();
 
-    Image<uint8_t>img = Image<uint8_t>(image_width,image_height,image);
-    std::vector<Whisker_Seg> j_segs = _janelia.find_segments(1,img,bg);
+    janelia::Image<uint8_t>img = janelia::Image<uint8_t>(image_width,image_height,image);
+    std::vector<janelia::Whisker_Seg> j_segs = _janelia.find_segments(1,img,bg);
 
     std::vector<float> scores = std::vector<float>();
     int whisker_count = 1;
@@ -68,7 +68,7 @@ std::tuple<float,int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p) 
 
 std::map<int,std::vector<Whisker>> WhiskerTracker::load_janelia_whiskers(const std::string filename)
 {
-    auto j_segs = load_binary_data(filename);
+    auto j_segs = janelia::load_binary_data(filename);
 
     auto output_whiskers = std::map<int,std::vector<Whisker>>();
 
@@ -309,7 +309,7 @@ void WhiskerTracker::_eraseWhiskers(std::vector<int>& erase_inds)
 
 void WhiskerTracker::_reinitializeJanelia()
 {
-    _janelia.bank = LineDetector(_janelia.config);
-    _janelia.half_space_bank = HalfSpaceDetector(_janelia.config);
+    _janelia.bank = janelia::LineDetector(_janelia.config);
+    _janelia.half_space_bank = janelia::HalfSpaceDetector(_janelia.config);
     _janelia_init = true;
 }

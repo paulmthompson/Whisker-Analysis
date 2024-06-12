@@ -73,7 +73,7 @@ public:
    std::vector<Whisker> whiskers;
 
 private:
-    JaneliaTracker _janelia;
+    janelia::JaneliaTracker _janelia;
     bool _janelia_init;
     float _whisker_length_threshold;
     float _whisker_pad_radius;
