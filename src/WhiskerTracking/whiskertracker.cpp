@@ -31,19 +31,16 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     janelia::Image<uint8_t> img = janelia::Image<uint8_t>(image_width, image_height, image);
     std::vector<janelia::Whisker_Seg> j_segs = _janelia.find_segments(1, img, bg);
 
-    std::vector<float> scores = std::vector<float>();
     int whisker_count = 1;
     for (auto &w_seg: j_segs) {
         auto whisker = create_line(std::move(w_seg.x), std::move(w_seg.y));
         if (length(whisker) > _whisker_length_threshold) {
             _alignWhiskerToFollicle(whisker);
             whiskers.push_back(whisker);
-            scores.push_back(std::accumulate(w_seg.scores.begin(), w_seg.scores.end(), 0.0) /
-                             static_cast<float>(w_seg.scores.size()));
         }
     }
 
-    _removeDuplicates(scores);
+    _removeDuplicates();
     _removeWhiskersByWhiskerPadRadius();
 }
 
@@ -206,34 +203,23 @@ void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float va
     }
 }
 
-void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
+void WhiskerTracker::_removeDuplicates() {
 
-    /*
     struct correlation_matrix {
         int i;
         int j;
         double corr;
     };
 
-    auto minimum_size = 20;
-    auto correlation_threshold = 20.0;
+    auto correlation_threshold = 0.2;
 
     auto cor_mat = std::vector<correlation_matrix>();
 
     for (int i = 0; i < whiskers.size(); i++) {
-        if (whiskers[i].x.size() < minimum_size) {
-            continue;
-        }
-        for (int j = i + 1; j < whiskers.size(); j++) {
-            if (whiskers[j].x.size() < minimum_size) {
-                continue;
-            }
 
-            auto this_cor = 0.0;
-            for (int k = 0; k < minimum_size; k++) {
-                this_cor += sqrt(pow(whiskers[i].x.end()[-k - 1] - whiskers[j].x.end()[-k - 1], 2) +
-                                 pow(whiskers[i].y.end()[-k - 1] - whiskers[j].y.end()[-k - 1], 2));
-            }
+        for (int j = i + 1; j < whiskers.size(); j++) {
+
+            auto this_cor = calculate_overlap_iou_relative(whiskers[i], whiskers[j]);
 
             cor_mat.push_back(correlation_matrix{i, j, this_cor});
         }
@@ -241,10 +227,10 @@ void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
 
     std::vector<int> erase_inds = std::vector<int>();
     for (int i = 0; i < cor_mat.size(); i++) {
-        if (cor_mat[i].corr < correlation_threshold) {
+        if (cor_mat[i].corr > correlation_threshold) {
             std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
 
-            if (scores[cor_mat[i].i] > scores[cor_mat[i].j]) {
+            if (length(whiskers[cor_mat[i].i]) > length(whiskers[cor_mat[i].j])) {
                 erase_inds.push_back(cor_mat[i].j);
             } else {
                 erase_inds.push_back(cor_mat[i].i);
@@ -253,7 +239,7 @@ void WhiskerTracker::_removeDuplicates(std::vector<float> &scores) {
     }
 
     _eraseWhiskers(erase_inds);
-     */
+
 }
 
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {

@@ -69,7 +69,7 @@ private:
     float _whisker_pad_radius;
     Point2D<float> _whisker_pad;
 
-    void _removeDuplicates(std::vector<float> &scores);
+    void _removeDuplicates();
 
     void _alignWhiskerToFollicle(Line2D &whisker);
 
