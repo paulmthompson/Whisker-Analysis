@@ -85,9 +85,14 @@ inline Point2D<float> point_at_pathlength(Line2D const &line, float const pathle
     return point_along_path(line[closest_pre_ind], line[closest_pre_ind + 1], pathlength - dist);
 }
 
-inline void unit_linear_extend_base(Line2D &line)
+inline void unit_linear_extend_base(Line2D &line, int vec_index = 5)
 {
-    auto dir_vector = create_vector(line[1],line[0]);
+    if (vec_index > line.size())
+    {
+        std::cout << "Requested index " << vec_index << " out of bounds" << std::endl;
+        vec_index = 1;
+    }
+    auto dir_vector = create_vector(line[vec_index],line[0]);
 
     dir_vector = normalize(dir_vector);
 
