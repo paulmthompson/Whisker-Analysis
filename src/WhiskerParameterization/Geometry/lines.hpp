@@ -2,6 +2,7 @@
 #define WHISKER_ANALYSIS_LINES_HPP
 
 #include "Geometry/points.hpp"
+#include "Geometry/vector.hpp"
 
 #include <vector>
 #include <tuple>
