@@ -281,13 +281,11 @@ void WhiskerTracker::_connectToFaceMask()
     }
 
     for (auto &w: this->whiskers) {
-        if (!whisker::intersect(w[0], _face_mask)) {
+        while (!whisker::intersect(w[0], _face_mask)) {
 
             whisker::unit_linear_extend_base(w);
-
         }
     }
-
 }
 
 }
