@@ -18,6 +18,7 @@ add_library(Whisker-Analysis SHARED
         WhiskerTracking/whiskertracker.hpp
         WhiskerParameterization/whisker.hpp
         WhiskerParameterization/whisker.cpp
+        WhiskerParameterization/geometry.hpp
 )
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)

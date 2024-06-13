@@ -5,26 +5,13 @@
 #include <tuple>
 #include <set>
 
+#include "geometry.hpp"
+
 namespace whisker {
-
-template <typename T>
-struct Point2D {
-    T x;
-    T y;
-
-    friend bool operator< (Point2D<T> const & p1, Point2D<T> const & p2)
-    {
-        if (p1.x != p2.x) {
-            return p1.x < p2.x;
-        } else {
-            return p1.y < p2.y;
-        }
-    }
-};
 
 using Line2D = std::vector<Point2D<float>>;
 
-Line2D create_line(std::vector<float> const & x, std::vector<float> const & y);
+Line2D create_line(std::vector<float> const& x, std::vector<float> const & y);
 
 float distance(Point2D<float> const p1, Point2D<float> const p2);
 
