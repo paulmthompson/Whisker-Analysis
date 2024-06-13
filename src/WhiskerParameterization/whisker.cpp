@@ -7,66 +7,7 @@
 namespace whisker
 {
 
-Line2D create_line(std::vector<float> const & x, std::vector<float> const & y)
-{
-    auto line = Line2D();
 
-    for (int i = 0; i < x.size(); i++) {
-        line.push_back(Point2D<float>{x[i],y[i]});
-    }
-    return line;
-}
-
-float distance(Point2D<float> const p1, Point2D<float> const p2) {
-    return std::sqrt(std::pow(p1.x - p2.x,2) + std::pow(p1.y - p2.y,2));
-}
-
-float length(Line2D const & line)
-{
-    auto s = 0.0f;
-
-    for (int i = 1; i < line.size(); i ++) {
-        s += distance(line[i],line[i-1]);
-    }
-
-    return s;
-}
-
-float minimum_distance(Line2D const &line, Point2D<float> const p)
-{
-    auto dist = distance(line[0], p);
-
-    for (int i = 1; i < line.size(); i ++) {
-        auto this_dist = distance(line[i], p);
-        if (this_dist < dist) {
-            dist = this_dist;
-        }
-    }
-    return dist;
-}
-
-Point2D<float> point_along_path(Point2D<float> const p1, Point2D<float> const p2, float const pathlength)
-{
-
-    auto dist = distance(p1,p2);
-
-    if (dist < pathlength) {
-        std::cout << "Requested path length " << pathlength <<
-                  " is larger than distance between points" << std::endl;
-        return Point2D<float>{0.0f, 0.0f};
-    } else if (pathlength <= 0.0f)
-    {
-        std::cout << "Invalid pathlength of " << pathlength << " specified" << std::endl;
-        return Point2D<float>{0.0f, 0.0f};
-    }
-
-    auto ratio = pathlength / dist;
-
-    auto p3_x = (p2.x - p1.x) * ratio + p1.x;
-    auto p3_y = (p2.y - p1.y) * ratio + p1.y;
-
-    return Point2D{p3_x, p3_y};
-}
 
 std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, float const pathlength)
 {
