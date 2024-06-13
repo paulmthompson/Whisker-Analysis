@@ -35,7 +35,11 @@ public:
 
     void setWhiskerPad(float w_x, float w_y) { _whisker_pad = Point2D<float>{w_x, w_y}; };
 
-    void setFaceMask(std::vector<Point2D<float>> mask) {_face_mask = create_mask( mask);}
+    void setFaceMask(std::vector<Point2D<float>> mask) {_face_mask = create_mask( mask);};
+
+    void setImageHeight(int const height) {_image_height = height;};
+
+    void setImageWidth(int const width) {_image_width = width;};
 
     enum JaneliaParameter {
         SEED_ON_GRID_LATTICE_SPACING,
@@ -72,6 +76,8 @@ private:
     float _whisker_pad_radius;
     Point2D<float> _whisker_pad;
     Mask2D _face_mask;
+    int _image_height;
+    int _image_width;
 
     void _removeDuplicates();
 

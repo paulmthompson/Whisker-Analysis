@@ -13,7 +13,10 @@ WhiskerTracker::WhiskerTracker() :
         _whisker_length_threshold{75.0},
         _whisker_pad_radius{150.0},
         _janelia_init{false},
-        _whisker_pad{0.0f, 0.0f} {
+        _whisker_pad{0.0f, 0.0f} ,
+        _image_height{480},
+        _image_width{640}
+{
     _janelia = janelia::JaneliaTracker();
     whiskers = std::vector<Line2D>{};
 }
@@ -284,6 +287,11 @@ void WhiskerTracker::_connectToFaceMask()
         while (!whisker::intersect(w[0], _face_mask)) {
 
             whisker::unit_linear_extend_base(w);
+
+            if (w[0].x < 0 || w[0].y < 0 || w[0].x > _image_width || w[0].y > _image_height)
+            {
+                break;
+            }
         }
     }
 }
