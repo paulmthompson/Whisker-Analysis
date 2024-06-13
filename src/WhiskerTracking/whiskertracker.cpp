@@ -41,6 +41,7 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     }
 
     _removeDuplicates();
+    _connectToFaceMask();
     _removeWhiskersByWhiskerPadRadius();
 }
 
