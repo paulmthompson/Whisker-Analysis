@@ -27,7 +27,8 @@ float distance(Point2D<T> const p1, Point2D<T> const p2)
     return static_cast<float>(std::sqrt(std::pow(p1.x - p2.x,2) + std::pow(p1.y - p2.y,2)));
 };
 
-inline Point2D<float> point_along_path(Point2D<float> const p1, Point2D<float> const p2, float const pathlength)
+template <typename T>
+Point2D<float> point_along_path(Point2D<T> const p1, Point2D<T> const p2, float const pathlength)
 {
 
     auto dist = distance(p1,p2);

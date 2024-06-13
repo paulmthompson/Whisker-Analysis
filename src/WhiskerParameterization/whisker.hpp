@@ -11,10 +11,6 @@
 
 namespace whisker {
 
-std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, float const pathlength);
-
-Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength);
-
 std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points);
 
 std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points);

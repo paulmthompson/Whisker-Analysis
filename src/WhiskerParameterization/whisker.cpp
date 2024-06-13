@@ -9,51 +9,6 @@ namespace whisker
 
 
 
-std::tuple<int, float> nearest_preceding_index_along_path(Line2D const& line, float const pathlength)
-{
-    if (line.size() < 2)
-    {
-        std::cout << "Line does not contain at least 2 points" << std::endl;
-        return std::make_tuple(0,0.0f);
-    } else if (length(line) < pathlength) {
-        std::cout << "The requested pathlength is greater than the length of the line" << std::endl;
-        return std::make_tuple(0,0.0f);
-    }
-
-    float s = 0.0f;
-    int closest_pre_ind = 0;
-
-    for (int i = 1; i < line.size(); i ++) {
-        auto dist = distance(line[i],line[i-1]);
-        if (s + dist > pathlength) {
-            break;
-        } else {
-            s = s + dist;
-            closest_pre_ind += 1;
-        }
-    }
-
-    return std::make_tuple(closest_pre_ind, s);
-}
-
-
-Point2D<float> point_at_pathlength(Line2D const & line, float const pathlength)
-{
-    if (line.size() < 2) {
-        std::cout << "Line does not contain at least 2 points" << std::endl;
-        return Point2D{0.0f, 0.0f};
-    } else if (length(line) < pathlength) {
-        std::cout << "The requested pathlength is greater than the length of the line" << std::endl;
-        return line.back();
-    }
-
-    auto const [closest_pre_ind, dist] = nearest_preceding_index_along_path(line, pathlength);
-
-    //auto final_segment_dist = distance(line[closest_pre_ind],line[closest_pre_ind+1]);
-
-    return point_along_path(line[closest_pre_ind],line[closest_pre_ind+1], pathlength - dist);
-}
-
 std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points)
 {
     return std::set<Point2D<int>>{points.begin(), points.end()};
