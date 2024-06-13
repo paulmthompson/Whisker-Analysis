@@ -61,13 +61,31 @@ TEST_CASE("IoU - 1", "[Set]") {
 
 TEST_CASE("IoU - 2", "[Set]") {
 
-auto IoU = calculate_overlap_iou_relative(line100_2, line100_3);
+    auto IoU = calculate_overlap_iou_relative(line100_2, line100_3);
 
-std::cout << "IoU calculated as " << IoU << std::endl;
+    std::cout << "IoU calculated as " << IoU << std::endl;
 
-REQUIRE(IoU == 1.0);
+    REQUIRE(IoU == 1.0);
 
-BENCHMARK("IoU Calculation") {
-return calculate_overlap_iou_relative(line100_2, line100_3);
-};
+    BENCHMARK("IoU Calculation") {
+        return calculate_overlap_iou_relative(line100_2, line100_3);
+    };
+}
+
+TEST_CASE("Mask Intersection - 1", "[Set]") {
+
+    auto mask = whisker::Mask2D{whisker::Point2D<int>{0, 0}};
+    auto intersection = intersect(line100[0],mask);
+
+    REQUIRE(intersection == true);
+
+}
+
+TEST_CASE("Mask Intersection - 2", "[Set]") {
+
+    auto mask = whisker::Mask2D{whisker::Point2D<int>{5, 5},whisker::Point2D<int>{4,4}};
+    auto intersection = intersect(line100[0],mask);
+
+    REQUIRE(intersection == false);
+
 }

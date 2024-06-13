@@ -22,6 +22,7 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/points.hpp
         WhiskerParameterization/Geometry/lines.hpp
         WhiskerParameterization/Geometry/vector.hpp
+        WhiskerParameterization/Geometry/mask.hpp
 )
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)

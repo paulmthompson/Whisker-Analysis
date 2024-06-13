@@ -8,6 +8,7 @@
 #include "geometry.hpp"
 #include "Geometry/points.hpp"
 #include "Geometry/lines.hpp"
+#include "Geometry/mask.hpp"
 
 namespace whisker {
 
@@ -18,5 +19,8 @@ std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points);
 float calculate_overlap_iou(Line2D const& line, Line2D const& line2);
 
 float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2);
+
+bool intersect(Point2D<float> const p1, Mask2D const & mask);
+
 }
 #endif //WHISKER_ANALYSIS_WHISKER_HPP

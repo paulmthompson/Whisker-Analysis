@@ -8,6 +8,7 @@
 
 #include "JaneliaWhiskerTracker/janelia.hpp"
 #include "whisker.hpp"
+#include "Geometry/mask.hpp"
 
 namespace whisker {
 
@@ -33,6 +34,8 @@ public:
     Point2D<float> getWhiskerPad() const { return _whisker_pad; };
 
     void setWhiskerPad(float w_x, float w_y) { _whisker_pad = Point2D<float>{w_x, w_y}; };
+
+    void setFaceMask(std::vector<Point2D<float>> mask) {_face_mask = create_mask( mask);}
 
     enum JaneliaParameter {
         SEED_ON_GRID_LATTICE_SPACING,
@@ -68,6 +71,7 @@ private:
     float _whisker_length_threshold;
     float _whisker_pad_radius;
     Point2D<float> _whisker_pad;
+    Mask2D _face_mask;
 
     void _removeDuplicates();
 
@@ -78,6 +82,9 @@ private:
     void _eraseWhiskers(std::vector<int> &erase_inds);
 
     void _reinitializeJanelia();
+
+    //void _clipFaceMask();
+    void _connectToFaceMask();
 
 };
 

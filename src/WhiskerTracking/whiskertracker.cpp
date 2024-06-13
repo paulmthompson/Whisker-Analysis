@@ -273,4 +273,20 @@ void WhiskerTracker::_reinitializeJanelia() {
     _janelia_init = true;
 }
 
+void WhiskerTracker::_connectToFaceMask()
+{
+    if (_face_mask.size() == 0) {
+        return;
+    }
+
+    for (auto &w: this->whiskers) {
+        if (!whisker::intersect(w[0], _face_mask)) {
+
+            whisker::unit_linear_extend_base(w);
+
+        }
+    }
+
+}
+
 }
