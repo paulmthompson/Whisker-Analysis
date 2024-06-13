@@ -10,6 +10,15 @@ struct GeomVector {
     float y;
 };
 
+/**
+ *
+ * Creates vector point from p1 to p2
+ *
+ * @tparam T
+ * @param p1
+ * @param p2
+ * @return
+ */
 template <typename T>
 inline GeomVector create_vector(Point2D<T> p1, Point2D<T> p2)
 {
@@ -31,6 +40,11 @@ inline GeomVector normalize(GeomVector vec) {
     auto mag = magnitude(vec);
     return GeomVector{vec.x / mag, vec.y / mag};
 }
+
+inline Point2D<float> create_point(GeomVector vec, Point2D<float> p1)
+{
+  return Point2D<float>{p1.x + vec.x, p1.y + vec.y};
+};
 
 }
 #endif //WHISKER_ANALYSIS_VECTOR_HPP
