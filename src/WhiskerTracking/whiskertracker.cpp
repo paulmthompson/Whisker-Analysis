@@ -9,13 +9,7 @@ namespace whisker {
 
 janelia::Image<uint8_t> bg = janelia::Image<uint8_t>(640, 480, std::vector<uint8_t>(640 * 480, 0));
 
-WhiskerTracker::WhiskerTracker() :
-        _whisker_length_threshold{75.0},
-        _whisker_pad_radius{150.0},
-        _janelia_init{false},
-        _whisker_pad{0.0f, 0.0f} ,
-        _image_height{480},
-        _image_width{640}
+WhiskerTracker::WhiskerTracker()
 {
     _janelia = janelia::JaneliaTracker();
     whiskers = std::vector<Line2D>{};
@@ -23,18 +17,17 @@ WhiskerTracker::WhiskerTracker() :
 
 void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_height, const int image_width) {
 
-    if (this->_janelia_init == false) {
-        this->_janelia.bank = janelia::LineDetector(this->_janelia.config);
-        this->_janelia.half_space_bank = janelia::HalfSpaceDetector(this->_janelia.config);
-        this->_janelia_init = true;
+    if (_janelia_init == false) {
+        _janelia.bank = janelia::LineDetector(_janelia.config);
+        _janelia.half_space_bank = janelia::HalfSpaceDetector(_janelia.config);
+        _janelia_init = true;
     }
 
     whiskers.clear();
 
-    janelia::Image<uint8_t> img = janelia::Image<uint8_t>(image_width, image_height, image);
-    std::vector<janelia::Whisker_Seg> j_segs = _janelia.find_segments(1, img, bg);
+    auto img = janelia::Image<uint8_t>(image_width, image_height, image);
+    auto j_segs = _janelia.find_segments(1, img, bg);
 
-    int whisker_count = 1;
     for (auto &w_seg: j_segs) {
         auto whisker = create_line(std::move(w_seg.x), std::move(w_seg.y));
         if (length(whisker) > _whisker_length_threshold) {
@@ -229,7 +222,7 @@ void WhiskerTracker::_removeDuplicates() {
         }
     }
 
-    std::vector<int> erase_inds = std::vector<int>();
+    auto erase_inds = std::vector<int>();
     for (int i = 0; i < cor_mat.size(); i++) {
         if (cor_mat[i].corr > correlation_threshold) {
             std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
@@ -248,7 +241,7 @@ void WhiskerTracker::_removeDuplicates() {
 
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
 
-    std::vector<int> erase_inds = std::vector<int>();
+    auto erase_inds = std::vector<int>();
 
     for (int i = 0; i < whiskers.size(); i++) {
         auto distance_to_follicle = distance(whiskers[i][0], _whisker_pad);

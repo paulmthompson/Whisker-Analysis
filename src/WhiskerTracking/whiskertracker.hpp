@@ -71,13 +71,13 @@ public:
 
 private:
     janelia::JaneliaTracker _janelia;
-    bool _janelia_init;
-    float _whisker_length_threshold;
-    float _whisker_pad_radius;
-    Point2D<float> _whisker_pad;
+    bool _janelia_init {false};
+    float _whisker_length_threshold {75.0};
+    float _whisker_pad_radius {150.0f};
+    Point2D<float> _whisker_pad {0.0f, 0.0f};
     Mask2D _face_mask;
-    int _image_height;
-    int _image_width;
+    int _image_height {480};
+    int _image_width {640};
 
     void _removeDuplicates();
 
