@@ -220,25 +220,25 @@ void WhiskerTracker::_removeDuplicates() {
 
             auto this_cor = calculate_overlap_iou_relative(whiskers[i], whiskers[j]);
 
-            cor_mat.push_back(correlation_matrix{i, j, this_cor});
+            if (this_cor > correlation_threshold) {
+                cor_mat.push_back(correlation_matrix{i, j, this_cor});
+                break;
+            }
         }
     }
 
     auto erase_inds = std::vector<int>();
     for (int i = 0; i < cor_mat.size(); i++) {
-        if (cor_mat[i].corr > correlation_threshold) {
-            std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
+        std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
 
-            if (length(whiskers[cor_mat[i].i]) > length(whiskers[cor_mat[i].j])) {
-                erase_inds.push_back(cor_mat[i].j);
-            } else {
-                erase_inds.push_back(cor_mat[i].i);
-            }
+        if (length(whiskers[cor_mat[i].i]) > length(whiskers[cor_mat[i].j])) {
+            erase_inds.push_back(cor_mat[i].j);
+        } else {
+            erase_inds.push_back(cor_mat[i].i);
         }
     }
 
     _eraseWhiskers(erase_inds);
-
 }
 
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
