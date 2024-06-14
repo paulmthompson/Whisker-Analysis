@@ -150,11 +150,6 @@ private:
 
     bool is_local_area_trusted_conservative(Line_Params *line, Image<uint8_t> &image, int p);
 
-    //New
-    double calculate_whisker_length(Whisker_Seg &w);
-
-    void eliminate_redundant(std::vector<Whisker_Seg> &w_segs);
-
     std::vector<offset_pair> pxlist;
 
 };

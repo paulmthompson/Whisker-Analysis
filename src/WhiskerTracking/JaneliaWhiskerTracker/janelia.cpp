@@ -148,65 +148,8 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
 
         }
     }
-    eliminate_redundant(wsegs);
 
     return wsegs;
-}
-
-double JaneliaTracker::calculate_whisker_length(Whisker_Seg &w) {
-
-    double out = 0.0f;
-
-    if (w.len > 0) {
-        for (int i = 1; i < w.x.size(); i++) {
-            out += sqrt(pow(w.x[i] - w.x[i - 1], 2) + pow(w.y[i] - w.y[i - 1], 2));
-        }
-    }
-
-    return out;
-}
-
-void JaneliaTracker::eliminate_redundant(std::vector<Whisker_Seg> &w_segs) {
-
-    int i = 0;
-
-    while (i < w_segs.size()) {
-        auto &w2_x = w_segs[i].x;
-        auto &w2_y = w_segs[i].y;
-
-        double min_cor = 10000.0;
-
-        for (int j = 0; j < w_segs.size(); j++) {
-            if (j != i) {
-                auto &w1_x = w_segs[j].x;
-                auto &w1_y = w_segs[j].y;
-
-                double mycor = 0.0;
-                for (int k = 1; k < 21; k++) {
-                    mycor += sqrt(pow(w1_x[w1_x.size() - k] - w2_x[w2_x.size() - k], 2) +
-                                  pow(w1_y[w1_y.size() - k] - w2_y[w2_y.size() - k], 2));
-                }
-                if (mycor < min_cor) {
-                    min_cor = mycor;
-                }
-            }
-            if (min_cor < this->config._redundancy_thres) {
-                double w1_score = std::accumulate(w_segs[j].scores.begin(), w_segs[j].scores.end(), 0.0);
-                double w2_score = std::accumulate(w_segs[i].scores.begin(), w_segs[i].scores.end(), 0.0);
-
-                if (w1_score > w2_score) {
-                    w_segs.erase(w_segs.begin() + i);
-                } else {
-                    w_segs.erase(w_segs.begin() + j);
-                }
-
-                i = 1;
-                break;
-            }
-        }
-        i++;
-    }
-
 }
 
 void JaneliaTracker::compute_seed_from_point_field_on_grid(const Image<uint8_t> &image, Image<uint8_t> &hist,
