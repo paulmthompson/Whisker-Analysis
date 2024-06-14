@@ -35,7 +35,7 @@ target_include_directories(Whisker-Analysis PUBLIC
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(Whisker-Analysis INTERFACE ${CLANG_OPTIONS})
+    target_compile_options(Whisker-Analysis PRIVATE ${CLANG_OPTIONS})
 endif()
 
 
