@@ -34,3 +34,8 @@ target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerParameterization>"
 )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(Whisker-Analysis INTERFACE ${CLANG_OPTIONS})
+endif()
+
+

@@ -22,7 +22,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#include(enable_sanitizers)
+include(enable_sanitizers)
+include(CompilerWarnings)
 
 #[[
 Manifest mode from VCPKG will make all dependencies specified in vcpkg.json be associated and installed
