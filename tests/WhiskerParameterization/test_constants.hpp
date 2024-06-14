@@ -4,10 +4,10 @@
 
 #include "whisker.hpp"
 
-inline auto p1 = whisker::Point2D{0.0f, 0.0f};
-inline auto p2 = whisker::Point2D{0.0f, 10.0f};
-inline auto p3 = whisker::Point2D{10.0f, 10.0f};
-inline auto p4 = whisker::Point2D{6.0f, 8.0f};
+inline auto p1 = whisker::Point2D<float>{0.0f, 0.0f};
+inline auto p2 = whisker::Point2D<float>{0.0f, 10.0f};
+inline auto p3 = whisker::Point2D<float>{10.0f, 10.0f};
+inline auto p4 = whisker::Point2D<float>{6.0f, 8.0f};
 
 inline auto p1_int = whisker::Point2D<int>{0, 0};
 inline auto p2_int = whisker::Point2D<int>{1, 1};

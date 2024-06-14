@@ -21,7 +21,7 @@ public:
 
     std::tuple<float, int> get_nearest_whisker(float x_p, float y_p);
 
-    std::map<int, std::vector<Line2D>> load_janelia_whiskers(const std::string filename);
+    std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
 
     float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 

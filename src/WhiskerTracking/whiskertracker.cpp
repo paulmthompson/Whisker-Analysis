@@ -70,7 +70,7 @@ std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p)
     return std::make_tuple(nearest_distance, whisker_id);
 }
 
-std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(const std::string filename) {
+std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(std::string const & filename) {
     auto j_segs = janelia::load_binary_data(filename);
 
     auto output_whiskers = std::map<int, std::vector<Line2D>>();
