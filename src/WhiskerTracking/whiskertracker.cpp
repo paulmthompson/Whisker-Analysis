@@ -226,7 +226,7 @@ void WhiskerTracker::_removeDuplicates() {
 
             if (this_cor > correlation_threshold) {
                 cor_mat.push_back(correlation_matrix{i, j, this_cor});
-                break;
+                //break;
             }
         }
     }
