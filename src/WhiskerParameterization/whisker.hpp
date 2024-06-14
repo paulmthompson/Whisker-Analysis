@@ -17,8 +17,10 @@ std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points);
 std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points);
 
 float calculate_overlap_iou(Line2D const& line, Line2D const& line2);
+float calculate_overlap_iou(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set);
 
 float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2);
+float calculate_overlap_iou_relative(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set);
 
 bool intersect(Point2D<float> const p1, Mask2D const & mask);
 

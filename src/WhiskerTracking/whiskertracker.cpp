@@ -213,11 +213,16 @@ void WhiskerTracker::_removeDuplicates() {
 
     auto cor_mat = std::vector<correlation_matrix>();
 
-    for (int i = 0; i < whiskers.size(); i++) {
+    auto whisker_sets = std::vector<std::set<whisker::Point2D<int>>>();
+    for (auto & w : whiskers) {
+        whisker_sets.push_back(whisker::create_set(w));
+    }
 
-        for (int j = i + 1; j < whiskers.size(); j++) {
+    for (int i = 0; i < whisker_sets.size(); i++) {
 
-            auto this_cor = calculate_overlap_iou_relative(whiskers[i], whiskers[j]);
+        for (int j = i + 1; j < whisker_sets.size(); j++) {
+
+            auto this_cor = calculate_overlap_iou_relative(whisker_sets[i], whisker_sets[j]);
 
             if (this_cor > correlation_threshold) {
                 cor_mat.push_back(correlation_matrix{i, j, this_cor});

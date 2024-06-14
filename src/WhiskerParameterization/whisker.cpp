@@ -37,10 +37,8 @@ bool intersect(Point2D<float> const p1, Mask2D const & mask)
     return !v_intersection.empty();
 }
 
-float calculate_overlap_iou(Line2D const& line, Line2D const& line2)
+float calculate_overlap_iou(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set)
 {
-    auto l1_set = create_set(line);
-    auto l2_set = create_set(line2);
 
     std::vector<whisker::Point2D<int>> v_intersection;
     std::vector<whisker::Point2D<int>> v_union;
@@ -49,15 +47,21 @@ float calculate_overlap_iou(Line2D const& line, Line2D const& line2)
                           std::back_inserter(v_intersection));
 
     std::set_union(l1_set.begin(), l1_set.end(), l2_set.begin(), l2_set.end(),
-                          std::back_inserter(v_union));
+                   std::back_inserter(v_union));
 
     return static_cast<float>(v_intersection.size()) / static_cast<float>(v_union.size());
 }
 
-float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2)
+float calculate_overlap_iou(Line2D const& line, Line2D const& line2)
 {
     auto l1_set = create_set(line);
     auto l2_set = create_set(line2);
+
+    return calculate_overlap_iou(l1_set, l2_set);
+}
+
+float calculate_overlap_iou_relative(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set)
+{
 
     std::vector<whisker::Point2D<int>> v_intersection;
 
@@ -68,6 +72,14 @@ float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2)
     float iou_2 = static_cast<float>(v_intersection.size()) / static_cast<float>(l2_set.size());
 
     return std::max(iou_1, iou_2);
+}
+
+float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2)
+{
+    auto l1_set = create_set(line);
+    auto l2_set = create_set(line2);
+
+    return calculate_overlap_iou_relative(l1_set, l2_set);
 }
 
 }
