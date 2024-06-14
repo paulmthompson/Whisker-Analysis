@@ -31,12 +31,14 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     for (auto &w_seg: j_segs) {
         auto whisker = create_line(std::move(w_seg.x), std::move(w_seg.y));
         if (length(whisker) > _whisker_length_threshold) {
-            _alignWhiskerToFollicle(whisker);
+            //_alignWhiskerToFollicle(whisker,_whisker_pad);
             whiskers.push_back(whisker);
         }
     }
 
     _removeDuplicates();
+    std::ranges::for_each(whiskers, [wp=_whisker_pad](Line2D & w)
+    {_alignWhiskerToFollicle(w, wp);});
     _connectToFaceMask();
     _removeWhiskersByWhiskerPadRadius();
 }
@@ -91,11 +93,11 @@ std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(std::st
  *
  * @param whisker whisker to be checked
  */
-void WhiskerTracker::_alignWhiskerToFollicle(Line2D &whisker) {
+void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad) {
 
-    auto start_distance = distance(whisker[0], _whisker_pad);
+    auto start_distance = distance(whisker[0], whisker_pad);
 
-    auto end_distance = distance(whisker.back(), _whisker_pad);
+    auto end_distance = distance(whisker.back(), whisker_pad);
 
     if (start_distance > end_distance) {
         std::reverse(whisker.begin(), whisker.end());

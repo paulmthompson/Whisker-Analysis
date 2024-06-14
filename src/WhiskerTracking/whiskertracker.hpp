@@ -81,8 +81,6 @@ private:
 
     void _removeDuplicates();
 
-    void _alignWhiskerToFollicle(Line2D &whisker);
-
     void _removeWhiskersByWhiskerPadRadius();
 
     void _eraseWhiskers(std::vector<int> &erase_inds);
@@ -93,6 +91,8 @@ private:
     void _connectToFaceMask();
 
 };
+
+void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
 
 }
 
