@@ -69,13 +69,13 @@ std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(std::st
 
     auto output_whiskers = std::map<int, std::vector<Line2D>>();
 
-    for (auto &w_seg: j_segs) {
+    for (auto const & w_seg: j_segs) {
 
-        if (output_whiskers.find(w_seg.time) == output_whiskers.end()) { // Key doesn't exist
+        if (!output_whiskers.contains(w_seg.time)) { // Key doesn't exist
             output_whiskers[w_seg.time] = std::vector<Line2D>();
         }
 
-        output_whiskers[w_seg.time].push_back(create_line(std::move(w_seg.x), std::move(w_seg.y)));
+        output_whiskers[w_seg.time].push_back(create_line(w_seg.x, w_seg.y));
 
     }
 
@@ -99,7 +99,7 @@ void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pa
     auto end_distance = distance(whisker.back(), whisker_pad);
 
     if (start_distance > end_distance) {
-        std::reverse(whisker.begin(), whisker.end());
+        std::ranges::reverse(whisker);
     }
 }
 
@@ -206,15 +206,15 @@ void WhiskerTracker::_removeDuplicates() {
     struct correlation_matrix {
         int i;
         int j;
-        double corr;
+        float corr;
     };
 
-    auto correlation_threshold = 0.2;
+    auto correlation_threshold = 0.2f;
 
     auto cor_mat = std::vector<correlation_matrix>();
 
     auto whisker_sets = std::vector<std::set<whisker::Point2D<int>>>();
-    for (auto & w : whiskers) {
+    for (auto const & w : whiskers) {
         whisker_sets.push_back(whisker::create_set(w));
     }
 
@@ -226,7 +226,6 @@ void WhiskerTracker::_removeDuplicates() {
 
             if (this_cor > correlation_threshold) {
                 cor_mat.push_back(correlation_matrix{i, j, this_cor});
-                //break;
             }
         }
     }
@@ -261,7 +260,7 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
 }
 
 void WhiskerTracker::_eraseWhiskers(std::vector<int> &erase_inds) {
-    std::sort(erase_inds.begin(), erase_inds.end(), std::greater<int>());
+    std::ranges::sort(erase_inds, std::greater<int>());
     auto last = std::unique(erase_inds.begin(), erase_inds.end());
     erase_inds.erase(last, erase_inds.end());
 
@@ -278,7 +277,7 @@ void WhiskerTracker::_reinitializeJanelia() {
 
 void WhiskerTracker::_connectToFaceMask()
 {
-    if (_face_mask.size() == 0) {
+    if (_face_mask.empty()) {
         return;
     }
 
