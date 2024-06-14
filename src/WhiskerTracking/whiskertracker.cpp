@@ -29,10 +29,9 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     auto j_segs = _janelia.find_segments(1, img, bg);
 
     for (auto &w_seg: j_segs) {
-        auto whisker = create_line(std::move(w_seg.x), std::move(w_seg.y));
+        auto whisker = create_line(w_seg.x, w_seg.y);
         if (length(whisker) > _whisker_length_threshold) {
-            //_alignWhiskerToFollicle(whisker,_whisker_pad);
-            whiskers.push_back(whisker);
+            whiskers.push_back(std::move(whisker));
         }
     }
 
@@ -229,7 +228,7 @@ void WhiskerTracker::_removeDuplicates() {
 
     auto erase_inds = std::vector<int>();
     for (int i = 0; i < cor_mat.size(); i++) {
-        std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
+        //std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
 
         if (length(whiskers[cor_mat[i].i]) > length(whiskers[cor_mat[i].j])) {
             erase_inds.push_back(cor_mat[i].j);
