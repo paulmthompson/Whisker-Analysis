@@ -16,7 +16,7 @@ struct Line2D : public std::vector<Point2D<float>> {
 inline Line2D create_line(std::vector<float> const &x, std::vector<float> const &y) {
     auto line = Line2D();
 
-    for (int i = 0; i < x.size(); i++) {
+    for (std::size_t i = 0; i < x.size(); i++) {
         line.push_back(Point2D<float>{x[i], y[i]});
     }
     return line;
@@ -25,7 +25,7 @@ inline Line2D create_line(std::vector<float> const &x, std::vector<float> const 
 inline float length(Line2D const &line) {
     auto s = 0.0f;
 
-    for (int i = 1; i < line.size(); i++) {
+    for (std::size_t i = 1; i < line.size(); i++) {
         s += distance(line[i], line[i - 1]);
     }
 
@@ -35,7 +35,7 @@ inline float length(Line2D const &line) {
 inline float minimum_distance(Line2D const &line, Point2D<float> const p) {
     auto dist = distance(line[0], p);
 
-    for (int i = 1; i < line.size(); i++) {
+    for (std::size_t i = 1; i < line.size(); i++) {
         auto this_dist = distance(line[i], p);
         if (this_dist < dist) {
             dist = this_dist;
@@ -56,7 +56,7 @@ inline std::tuple<int, float> nearest_preceding_index_along_path(Line2D const &l
     float s = 0.0f;
     int closest_pre_ind = 0;
 
-    for (int i = 1; i < line.size(); i++) {
+    for (std::size_t i = 1; i < line.size(); i++) {
         auto dist = distance(line[i], line[i - 1]);
         if (s + dist > pathlength) {
             break;
