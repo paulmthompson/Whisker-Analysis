@@ -5,6 +5,7 @@
 //If c++20, can switch to std::pi in the future to remove cmath
 //https://stackoverflow.com/questions/6563810/m-pi-works-with-math-h-but-not-with-cmath-in-visual-studio
 #define _USE_MATH_DEFINES
+#include <numbers>
 #include <cmath>
 #include <algorithm>
 #include <numeric>
@@ -438,7 +439,7 @@ JaneliaTracker::compute_seed_from_point_ex(const Image<uint8_t> &image, int p, i
 
 Line_Params JaneliaTracker::line_param_from_seed(const Seed s) {
     Line_Params line;
-    const double hpi = M_PI / 4.0;
+    const double hpi = std::numbers::pi / 4.0;
     const double ain = hpi / this->config._angle_step;
     line.offset = .5;
     {
@@ -487,8 +488,8 @@ std::pair<float, int> JaneliaTracker::round_anchor_and_offset(const Line_Params 
 **  bounded to less than the pixel size (proof?).
 */
 {
-    float ex = cos(line.angle + M_PI / 2); // unit vector normal to line
-    float ey = sin(line.angle + M_PI / 2);
+    float ex = cos(line.angle + std::numbers::pi / 2); // unit vector normal to line
+    float ey = sin(line.angle + std::numbers::pi / 2);
     float px = (p % stride);            // current anchor
     float py = (p / stride);
     float rx = px + ex * line.offset;    // current position
@@ -552,8 +553,8 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
     auto is_small_angle = [](const float angle)
             /* true iff angle is in [-pi/4,pi/4) or [3pi/4,5pi/4) */
     {
-        static const float qpi = M_PI / 4.0;
-        static const float hpi = M_PI / 2.0;
+        static const float qpi = std::numbers::pi / 4.0;
+        static const float hpi = std::numbers::pi / 2.0;
         int n = floorf((angle - qpi) / hpi);
         return (n % 2) != 0;
     };
@@ -641,7 +642,7 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
     Line_Params line, rline, oldline;
     int trusted = 1;
 
-    const double hpi = M_PI / 4.0;
+    const double hpi = std::numbers::pi / 4.0;
     const double ain = hpi / this->config._angle_step;
     const double rad = 45. / hpi;
     const double sigmin = (2 * this->config._tlen + 1) * this->config._min_signal;// + 255.00;
@@ -654,8 +655,8 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
         Interval roff, rang, rwid;
 
         auto compute_dxdy = [](Line_Params *line, float *dx, float *dy) {
-            float ex = cos(line->angle + M_PI / 2);  // unit vector normal to line
-            float ey = sin(line->angle + M_PI / 2);
+            float ex = cos(line->angle + std::numbers::pi / 2);  // unit vector normal to line
+            float ey = sin(line->angle + std::numbers::pi / 2);
             *dx = ex * line->offset; // current position
             *dy = ey * line->offset;
         };
@@ -679,8 +680,8 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
             rwid->max = 3.0;
             roff->min = -2.5;
             roff->max = 2.5;
-            rang->min = line->angle - M_PI;
-            rang->max = line->angle + M_PI;
+            rang->min = line->angle - std::numbers::pi;
+            rang->max = line->angle + std::numbers::pi;
         };
 
         initialize_parameter_ranges(&line, &roff, &rang, &rwid);
@@ -986,8 +987,8 @@ int JaneliaTracker::move_line(Line_Params *line, const int p, const int stride, 
     float th = line->angle;
     lx = cos(th);           // unit vector along direction of line
     ly = sin(th);
-    ex = cos(th + M_PI / 2);  // unit vector normal to line
-    ey = sin(th + M_PI / 2);
+    ex = cos(th + std::numbers::pi / 2);  // unit vector normal to line
+    ey = sin(th + std::numbers::pi / 2);
     rx0 = (p % stride) + ex * line->offset; // current position
     ry0 = (p / stride) + ey * line->offset;
     rx1 = rx0 + direction * lx;        // step to next position
@@ -1118,7 +1119,7 @@ JaneliaTracker::is_change_too_big(const Line_Params new_line, const Line_Params 
     float dth = old.angle - new_line.angle,
             dw = old.width - new_line.width,
             doff = old.offset - new_line.offset;
-    if ((fabs((dth * 180.0 / M_PI)) > alim) ||
+    if ((fabs((dth * 180.0 / std::numbers::pi)) > alim) ||
         (fabs(dw) > wlim) ||
         (fabs(doff) > olim)) {
         return true;
