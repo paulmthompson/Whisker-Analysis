@@ -25,7 +25,7 @@
     "href": "parameterization/parameter_overview.html#d-whisker-imaging",
     "title": "Parameterization Overview",
     "section": "2D Whisker Imaging",
-    "text": "2D Whisker Imaging\nWhiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.\nFigure: Cartoon of whisker from top view\nWhisker is defined as a collection of points\n\\((x_1,y_1), (x_2,y_2), ... (x_n,y_n)\\)\nThese points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.\nThe spacing between these points may not be uniform, and segments of the whisker may be missing."
+    "text": "2D Whisker Imaging\nWhiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.\nWhisker is defined as a collection of points\n\\((x_1,y_1), (x_2,y_2), ... (x_n,y_n)\\)\nThese points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.\nThe spacing between these points may not be uniform, and segments of the whisker may be missing."
   },
   {
     "objectID": "parameterization/parameter_overview.html#converting-whisker-masks-to-paths",

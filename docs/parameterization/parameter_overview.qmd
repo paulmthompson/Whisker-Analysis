@@ -18,8 +18,6 @@ Figure: 3d structure of whisker
 
 Whiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.
 
-Figure: Cartoon of whisker from top view
-
 Whisker is defined as a collection of points
 
 $(x_1,y_1), (x_2,y_2), ... (x_n,y_n)$
@@ -27,6 +25,8 @@ $(x_1,y_1), (x_2,y_2), ... (x_n,y_n)$
 These points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.
 
 The spacing between these points may not be uniform, and segments of the whisker may be missing.
+
+![](/media/mouse_whisker_points.png){width="249"}
 
 ## Converting Whisker Masks to Paths
 
