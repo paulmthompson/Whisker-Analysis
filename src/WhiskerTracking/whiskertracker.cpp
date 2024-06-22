@@ -318,8 +318,8 @@ void WhiskerTracker::_orderWhiskers()
     for (std::size_t i = 0; i < _position_order.size(); i++) {
 
         std::cout << "The " << i << " position whisker is " << _position_order[i];
-        std::cout << " with follicle at " << "(" << whiskers[i][_position_order[i]].x << ","
-                  << whiskers[i][_position_order[i]].y << ")" << std::endl;
+        std::cout << " with follicle at " << "(" << whiskers[_position_order[i]][0].x << ","
+                  << whiskers[_position_order[i]][0].y << ")" << std::endl;
     }
 }
 
