@@ -87,7 +87,7 @@ std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(std::st
 
 void WhiskerTracker::setHeadDirection(float x, float y)
 {
-    _head_direction_vector = GeomVector(x,y);
+    _head_direction_vector = GeomVector{x,y};
     _head_direction_vector = normalize(_head_direction_vector);
 }
 
