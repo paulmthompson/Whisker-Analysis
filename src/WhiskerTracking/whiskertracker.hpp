@@ -41,6 +41,8 @@ public:
 
     void setImageWidth(int const width) {_image_width = width;};
 
+    void setHeadDirection(float x, float y);
+
     enum JaneliaParameter {
         SEED_ON_GRID_LATTICE_SPACING,
         SEED_SIZE_PX,
@@ -78,6 +80,8 @@ private:
     Mask2D _face_mask;
     int _image_height {480};
     int _image_width {640};
+    std::vector<std::size_t> _position_order {};
+    GeomVector _head_direction_vector {0.0, 1.0};
 
     void _removeDuplicates();
 
@@ -89,6 +93,8 @@ private:
 
     //void _clipFaceMask();
     void _connectToFaceMask();
+
+    void _orderWhiskers();
 
 };
 

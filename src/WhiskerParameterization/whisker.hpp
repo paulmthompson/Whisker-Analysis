@@ -9,6 +9,7 @@
 #include "Geometry/points.hpp"
 #include "Geometry/lines.hpp"
 #include "Geometry/mask.hpp"
+#include "Geometry/vector.hpp"
 
 namespace whisker {
 

@@ -24,6 +24,7 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     }
 
     whiskers.clear();
+    _position_order.clear();
 
     auto img = janelia::Image<uint8_t>(image_width, image_height, image);
     auto j_segs = _janelia.find_segments(1, img, bg);
@@ -40,6 +41,8 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     {_alignWhiskerToFollicle(w, wp);});
     _connectToFaceMask();
     _removeWhiskersByWhiskerPadRadius();
+
+    _orderWhiskers();
 }
 
 std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p) {
@@ -80,6 +83,12 @@ std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(std::st
     }
 
     return output_whiskers;
+}
+
+void WhiskerTracker::setHeadDirection(float x, float y)
+{
+    _head_direction_vector = GeomVector(x,y);
+    _head_direction_vector = normalize(_head_direction_vector);
 }
 
 /**
@@ -291,6 +300,25 @@ void WhiskerTracker::_connectToFaceMask()
                 break;
             }
         }
+    }
+}
+
+void WhiskerTracker::_orderWhiskers()
+{
+    std::vector<float> w_projection_vector;
+    for (auto const & w : whiskers)
+    {
+        w_projection_vector.push_back(project(_head_direction_vector, w[0]));
+    }
+
+    std::iota(_position_order.begin(), _position_order.end(), 0);
+    std::sort(std::begin(_position_order), std::end(_position_order));
+
+    for (std::size_t i = 0; i < _position_order.size(); i++) {
+
+        std::cout << "The " << i << " position whisker is " << _position_order[i];
+        std::cout << " with follicle at " << "(" << whiskers[i][_position_order[i]].x << ","
+                  << whiskers[i][_position_order[i]].y << ")" << std::endl;
     }
 }
 
