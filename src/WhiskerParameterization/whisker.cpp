@@ -18,7 +18,9 @@ std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points)
 {
     std::set<Point2D<int>> s;
     for (auto const & p : points) {
-        s.insert(Point2D<int>{std::lround(p.x),std::lround(p.y)});
+        s.insert(Point2D<int>{
+            static_cast<int>(std::lround(p.x)),
+            static_cast<int>(std::lround(p.y))});
     }
     return s;
 }
@@ -26,7 +28,9 @@ std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points)
 bool intersect(Point2D<float> const p1, Mask2D const & mask)
 {
     std::set<Point2D<int>> p_set;
-    p_set.insert(Point2D<int>{std::lround(p1.x),std::lround(p1.y)});
+    p_set.insert(Point2D<int>{
+        static_cast<int>(std::lround(p1.x)),
+        static_cast<int>(std::lround(p1.y))});
 
     auto mask_set = create_set(mask);
 
