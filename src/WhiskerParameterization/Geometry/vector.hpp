@@ -51,7 +51,7 @@ inline float project(GeomVector vec, Point2D<T> p2)
 {
     float a_dot_b = vec.x * static_cast<float>(p2.x) + vec.y * static_cast<float>(p2.y);
 
-    a_dot_b / magnitude(vec);
+    return a_dot_b / magnitude(vec);
 };
 
 inline GeomVector normalize(GeomVector vec) {
