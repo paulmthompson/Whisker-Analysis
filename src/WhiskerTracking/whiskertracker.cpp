@@ -311,6 +311,7 @@ void WhiskerTracker::_orderWhiskers()
         w_projection_vector.push_back(project(_head_direction_vector, w[0]));
     }
 
+    _position_order = std::vector<std::size_t>(w_projection_vector.size());
     std::iota(_position_order.begin(), _position_order.end(), 0);
     std::sort(std::begin(_position_order), std::end(_position_order));
 
