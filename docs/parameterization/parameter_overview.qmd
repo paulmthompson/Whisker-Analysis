@@ -20,11 +20,11 @@ Whiskers are usually imaged in behavioral preparation with strong backlighting, 
 
 Figure: Cartoon of whisker from top view
 
-Whisker is defined as a collection of points
+A whisker is defined as a collection of points
 
 $(x_1,y_1), (x_2,y_2), ... (x_n,y_n)$
 
-These points are ordered to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.
+These points are **ordered** to define a path along the whisker. We will define the first point as being most proximal, while the last point is most distal.
 
 The spacing between these points may not be uniform, and segments of the whisker may be missing.
 
