@@ -219,7 +219,7 @@
     },
     {
       "name": "mac-amd64-clang-release",
-      "inherits": ["mac-am64-base", "clang-release-base"]
+      "inherits": ["mac-amd64-base", "clang-release-base"]
     },
     {
       "name": "linux-gcc-release",
