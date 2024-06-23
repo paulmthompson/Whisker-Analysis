@@ -303,6 +303,16 @@ void WhiskerTracker::_connectToFaceMask()
     }
 }
 
+/**
+ *
+ * Whiskers are ordered with the most posterior being 0, more anterior 1, etc
+ * If the head director vector is known, the follicular base can be projected
+ * onto this vector. Consequently, the smallest value of the projection will be
+ * most posterior.
+ *
+ *
+ *
+ */
 void WhiskerTracker::_orderWhiskers()
 {
     std::vector<float> w_projection_vector;
@@ -313,7 +323,12 @@ void WhiskerTracker::_orderWhiskers()
 
     _position_order = std::vector<std::size_t>(w_projection_vector.size());
     std::iota(_position_order.begin(), _position_order.end(), 0);
-    std::sort(std::begin(_position_order), std::end(_position_order));
+    std::sort(
+            std::begin(_position_order),
+            std::end(_position_order),
+            [&](std::size_t i1, std::size_t i2)
+            { return w_projection_vector[i1] > w_projection_vector[i2]; }
+            );
 
     for (std::size_t i = 0; i < _position_order.size(); i++) {
 
