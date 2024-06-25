@@ -38,4 +38,14 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(Whisker-Analysis PRIVATE ${CLANG_OPTIONS})
 endif()
 
-
+install(TARGETS Whisker-Analysis
+        BUNDLE DESTINATION .
+        LIBRARY
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
