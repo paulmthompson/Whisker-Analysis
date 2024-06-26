@@ -41,7 +41,7 @@ set(CMAKE_SUPPORT_WINDOWS_EXPORT_ALL_SYMBOLS 1)
 # Externally Provided Content
 #=============================
 
-#add_subdirectory(external)
+add_subdirectory(external)
 
 #=============================
 # Main Build Targets

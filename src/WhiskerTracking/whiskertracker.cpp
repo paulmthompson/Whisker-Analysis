@@ -1,9 +1,10 @@
 #include "whiskertracker.hpp"
 
+#include "JaneliaWhiskerTracker/io.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include "JaneliaWhiskerTracker/io.hpp"
 
 namespace whisker {
 
