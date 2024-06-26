@@ -31,12 +31,14 @@ add_library(Whisker-Analysis SHARED
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
-pybind11_add_module(Whisker-Analysis-py WhiskerTracking/whiskertracker_pybind.cpp)
+pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
+
+set_target_properties(whiskertracker PROPERTIES OUTPUT_NAME "whiskertracker")
 
 target_link_libraries(Whisker-Analysis PUBLIC janelia)
 
-target_link_libraries(Whisker-Analysis-py PRIVATE Whisker-Analysis)
-target_link_libraries(Whisker-Analysis-py PRIVATE pybind11::module)
+target_link_libraries(whiskertracker PRIVATE Whisker-Analysis)
+target_link_libraries(whiskertracker PRIVATE pybind11::module)
 
 target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
