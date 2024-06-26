@@ -103,7 +103,6 @@
 
     {
       "name": "gcc-base",
-      "inherits": ["default"],
       "hidden": true,
       "cacheVariables": {
         "CMAKE_C_COMPILER": "gcc",
@@ -134,7 +133,6 @@
 
     {
       "name": "clang-base",
-      "inherits": ["default"],
       "hidden": true,
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang",
@@ -164,7 +162,6 @@
 
     {
       "name": "msvc-base",
-      "inherits": ["default"],
       "hidden": true,
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl.exe",

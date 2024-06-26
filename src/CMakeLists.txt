@@ -11,11 +11,14 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${stageDir})
 endif()
 
+#find_package(Python3 COMPONENTS Interpreter Development)
+
 add_subdirectory(WhiskerTracking/JaneliaWhiskerTracker)
 
 add_library(Whisker-Analysis SHARED
         WhiskerTracking/whiskertracker.cpp
         WhiskerTracking/whiskertracker.hpp
+
         WhiskerParameterization/whisker.hpp
         WhiskerParameterization/whisker.cpp
         WhiskerParameterization/geometry.hpp
@@ -23,11 +26,17 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/lines.hpp
         WhiskerParameterization/Geometry/vector.hpp
         WhiskerParameterization/Geometry/mask.hpp
+
 )
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
+pybind11_add_module(Whisker-Analysis-py WhiskerTracking/whiskertracker_pybind.cpp)
+
 target_link_libraries(Whisker-Analysis PUBLIC janelia)
+
+target_link_libraries(Whisker-Analysis-py PRIVATE Whisker-Analysis)
+target_link_libraries(Whisker-Analysis-py PRIVATE pybind11::module)
 
 target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
@@ -36,6 +45,14 @@ target_include_directories(Whisker-Analysis PUBLIC
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(Whisker-Analysis PRIVATE ${CLANG_OPTIONS})
+endif()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(Whisker-Analysis PRIVATE ${GCC_WARNINGS})
+endif()
+
+if (MSVC)
+    target_compile_options(Whisker-Analysis PRIVATE ${MSVC_WARNINGS})
 endif()
 
 install(TARGETS Whisker-Analysis
