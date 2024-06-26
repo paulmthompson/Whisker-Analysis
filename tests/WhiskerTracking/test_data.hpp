@@ -14,21 +14,17 @@ inline const int img_width = 640;
 inline const int img_height = 480;
 
 inline auto load_img = [](std::string filename){
-    std::ifstream stream(filename, std::ios::in | std::ios::binary);
+    std::ifstream stream(filename, std::ios::binary);
 
-    std::vector<uint8_t> buffer(img_height * img_width);
-    stream.read(reinterpret_cast<char*>(buffer.data()), img_height * img_width);
-    stream.close();
-    return buffer;
+    std::vector<uint8_t> data((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
+    return data;
 };
 
-inline auto sample_img1 = load_img(data_filename);
-
-inline auto create_warmed_up_wt = []() {
+inline auto create_warmed_up_wt = [](std::vector<uint8_t> & img) {
     auto wt = whisker::WhiskerTracker();
-    wt.setWhiskerPad(584.0f, 288.0f);
+    wt.setWhiskerPad(582.0f, 267.0f);
 
-    wt.trace(sample_img1, img_height, img_width);
+    wt.trace(img, img_height, img_width);
     return wt;
 };
 
