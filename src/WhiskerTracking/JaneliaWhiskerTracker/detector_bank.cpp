@@ -51,22 +51,23 @@ HalfSpaceDetector::HalfSpaceDetector(JaneliaConfig config) {
 
 void LineDetector::Build_Line_Detectors(float length, int supportsize) {
 
-    int noff = compute_number_steps(this->off),
-            nwid = compute_number_steps(this->wid),
-            nang = compute_number_steps(this->ang);
+    int n_offset_steps = compute_number_steps(this->off);
+    int n_width_steps = compute_number_steps(this->wid);
+    int n_angle_steps = compute_number_steps(this->ang);
+
     std::array<int, 5> shape = {supportsize,
                                 supportsize,
-                                noff,
-                                nwid,
-                                nang};
+                                n_offset_steps,
+                                n_width_steps,
+                                n_angle_steps};
     this->bank = Array(shape, sizeof(float)); // This array is always size 5 for the number of dimensions
 
     {
         int o, a, w;
-        for (o = 0; o < noff; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
+        for (o = 0; o < n_offset_steps; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
-            for (a = 0; a < nang; a++)
-                for (w = 0; w < nwid; w++) {
+            for (a = 0; a < n_angle_steps; a++)
+                for (w = 0; w < n_width_steps; w++) {
                     float *bank_i = this->bank.data.data() + Get_Detector(o, w, a);
                     Render_Line_Detector(
                             o * off.step + off.min,                       //offset (before rotation)
@@ -132,22 +133,24 @@ void LineDetector::Render_Line_Detector(float offset,
 }
 
 void HalfSpaceDetector::Build_Half_Space_Detectors(float length, int supportsize) {
-    int noff = compute_number_steps(this->off),
-            nwid = compute_number_steps(this->wid),
-            nang = compute_number_steps(this->ang);
+
+    int n_offset_steps = compute_number_steps(this->off);
+    int n_width_steps = compute_number_steps(this->wid);
+    int n_angle_steps = compute_number_steps(this->ang);
+
     std::array<int, 5> shape = {supportsize,
                                 supportsize,
-                                noff,
-                                nwid,
-                                nang};
+                                n_offset_steps,
+                                n_width_steps,
+                                n_angle_steps};
     this->bank = Array(shape, sizeof(float));
 
     {
         int o, a, w;
-        for (o = 0; o < noff; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
+        for (o = 0; o < n_offset_steps; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
-            for (a = 0; a < nang; a++)
-                for (w = 0; w < nwid; w++) {
+            for (a = 0; a < n_angle_steps; a++)
+                for (w = 0; w < n_width_steps; w++) {
                     float *bank_i = this->bank.data.data() + Get_Detector(o, w, a);
                     Render_Half_Space_Detector(
                             o * off.step + off.min,                       //offset (before rotation)

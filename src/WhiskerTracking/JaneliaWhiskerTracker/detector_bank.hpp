@@ -14,59 +14,32 @@ enum SEED_METHOD_ENUM {
 };
 
 struct JaneliaConfig {
-    SEED_METHOD_ENUM _seed_method;
-    int _lattice_spacing; // SEED_ON_GRID_LATTICE_SPACING (pixels)
-    int _maxr; //SEED_SIZE_PX Width of the seed detector in pixels.
-    int _maxiter; // SEED_ITERATIONS Maxium number of iterations to re-estimate a seed.
-    float _iteration_thres; // SEED_ITERATION_THRESH (0 to 1) Threshold score determining when a seed should be reestimated.
-    float _accum_thres; // SEED_ACCUM_THRESH (0 to 1) Threshold score determining when to accumulate statistics
-    float _seed_thres; // SEED_THRESH (0 to 1) Threshold score determining when to generate a seed
-
-
-
+    SEED_METHOD_ENUM _seed_method {SEED_ON_GRID};
+    int _lattice_spacing {30}; // SEED_ON_GRID_LATTICE_SPACING (pixels)
+    int _maxr {4}; //SEED_SIZE_PX Width of the seed detector in pixels.
+    int _maxiter {1}; // SEED_ITERATIONS Maxium number of iterations to re-estimate a seed.
+    float _iteration_thres {0.0}; // SEED_ITERATION_THRESH (0 to 1) Threshold score determining when a seed should be reestimated.
+    float _accum_thres {0.99f}; // SEED_ACCUM_THRESH (0 to 1) Threshold score determining when to accumulate statistics
+    float _seed_thres {0.99f}; // SEED_THRESH (0 to 1) Threshold score determining when to generate a seed
 
     // These are all related to the detector bank (should be in that class)?
     // The detector bank will need to be updated if any of them change.
-    int _tlen;  // (px) half the size of the detector support.
-    float _angle_step; // divisions of pi/4
-    float _offset_step; // pixels
-    float _width_min; // (pixels) must be a multiple of WIDTH_STEP
-    float _width_max; // (pixels) must be a multiple of WIDTH_STEP
-    float _width_step; // (pixels)
-    float _min_signal; // minimum detector response per detector column.  Typically: (2*TLEN+1)*MIN_SIGNAL is the threshold determining when tracing stops.
-    float _half_space_assymetry; // (between 0 and 1)  1 is completely insensitive to asymmetry
-    float _max_delta_angle; // (degrees)  The detector is constrained to turns less than this value at each step.
-    int _half_space_tunneling_max_moves; // (pixels)  This should be the largest size of an occluding area to cross
-    float _max_delta_width; // (pixels)   The detector width is constrained to change less than this value at each step.
-    float _max_delta_offset; // (pixels)   The detector offset is constrained to change less than this value at each step.
+    int _tlen {8};  // (px) half the size of the detector support.
+    float _angle_step {18.0}; // divisions of pi/4
+    float _offset_step {0.1}; // pixels
+    float _width_min {0.4}; // (pixels) must be a multiple of WIDTH_STEP
+    float _width_max {6.5}; // (pixels) must be a multiple of WIDTH_STEP
+    float _width_step {0.2}; // (pixels)
+    float _min_signal {5.0}; // minimum detector response per detector column.  Typically: (2*TLEN+1)*MIN_SIGNAL is the threshold determining when tracing stops.
+    float _half_space_assymetry {0.25}; // (between 0 and 1)  1 is completely insensitive to asymmetry
+    float _max_delta_angle {10.1f}; // (degrees)  The detector is constrained to turns less than this value at each step.
+    int _half_space_tunneling_max_moves {50}; // (pixels)  This should be the largest size of an occluding area to cross
+    float _max_delta_width {6.0f}; // (pixels)   The detector width is constrained to change less than this value at each step.
+    float _max_delta_offset {6.0f}; // (pixels)   The detector offset is constrained to change less than this value at each step.
 
 
-    float _min_length;
-    float _redundancy_thres;
-
-    JaneliaConfig() {
-        _seed_method = SEED_ON_GRID;
-        _lattice_spacing = 30;
-        _maxr = 4;
-        _maxiter = 1;
-        _iteration_thres = 0.0;
-        _accum_thres = 0.90; // Originally 0.99
-        _seed_thres = 0.80; // Originally 0.9
-        _angle_step = 18.0;
-        _tlen = 8;
-        _offset_step = 0.1;
-        _width_min = 0.4;
-        _width_max = 6.5;
-        _width_step = 0.2;
-        _min_signal = 5.0;
-        _half_space_assymetry = 0.25;
-        _max_delta_angle = 10.1;
-        _half_space_tunneling_max_moves = 50;
-        _max_delta_width = 6.0;
-        _max_delta_offset = 6.0;
-        _min_length = 20.0;
-        _redundancy_thres = 5.0;
-    }
+    float _min_length {20.0f};
+    float _redundancy_thres {5.0f};
 };
 
 struct Range {
