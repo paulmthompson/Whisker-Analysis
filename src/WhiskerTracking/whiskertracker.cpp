@@ -367,6 +367,13 @@ void WhiskerTracker::_orderWhiskers()
         std::cout << " with follicle at " << "(" << whiskers[_position_order[i]][0].x << ","
                   << whiskers[_position_order[i]][0].y << ")" << std::endl;
     }
+
+    std::vector<Line2D> sorted_whiskers;
+    for (int i : _position_order) {
+        sorted_whiskers.push_back(whiskers[i]);
+    }
+
+    whiskers = sorted_whiskers;
 }
 
 }
