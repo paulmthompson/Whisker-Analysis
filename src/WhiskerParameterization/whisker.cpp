@@ -41,6 +41,20 @@ bool intersect(Point2D<float> const p1, Mask2D const & mask)
     return !v_intersection.empty();
 }
 
+bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set)
+{
+    std::set<Point2D<int>> p_set;
+    p_set.insert(Point2D<int>{
+            static_cast<int>(std::lround(p1.x)),
+            static_cast<int>(std::lround(p1.y))});
+
+    std::vector<whisker::Point2D<int>> v_intersection;
+    std::set_intersection(p_set.begin(), p_set.end(), mask_set.begin(), mask_set.end(),
+                          std::back_inserter(v_intersection));
+
+    return !v_intersection.empty();
+}
+
 float calculate_overlap_iou(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set)
 {
 

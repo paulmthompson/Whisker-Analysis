@@ -24,6 +24,7 @@ float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2);
 float calculate_overlap_iou_relative(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set);
 
 bool intersect(Point2D<float> const p1, Mask2D const & mask);
+bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set);
 
 }
 #endif //WHISKER_ANALYSIS_WHISKER_HPP

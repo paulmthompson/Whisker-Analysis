@@ -321,16 +321,28 @@ void WhiskerTracker::_connectToFaceMask()
         return;
     }
 
+    auto mask_set = whisker::create_set(_face_mask);
+
     for (auto &w: this->whiskers) {
-        while (!whisker::intersect(w[0], _face_mask)) {
 
-            whisker::unit_linear_extend_base(w);
+        auto point = w[0];
+        auto reference_point = w[5];
 
-            if (w[0].x < 0 || w[0].y < 0 || w[0].x > _image_width || w[0].y > _image_height)
+        while(!whisker::intersect(point, mask_set)) {
+
+            auto dir_vector = whisker::create_vector(reference_point, point);
+
+            dir_vector = normalize(dir_vector);
+
+            point = create_point(dir_vector, point);
+
+            if (point.x < 0 || point.y < 0 || point.x > _image_width || point.y > _image_height)
             {
                 break;
             }
         }
+
+        w.insert(w.begin(), point);
     }
 }
 

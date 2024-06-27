@@ -33,5 +33,13 @@ PYBIND11_MODULE(whiskertracker, m) {
                     whiskers_py.push_back(py::array(line_py.size(), line_py.data()));
                 }
                 return whiskers_py;
+            })
+            .def("setFaceMask", [](whisker::WhiskerTracker &wt, py::list mask) {
+                std::vector<whisker::Point2D<float>> mask_cpp;
+                for (py::handle obj : mask) {
+                    py::tuple t = obj.cast<py::tuple>();
+                    mask_cpp.push_back(whisker::Point2D<float>{t[0].cast<float>(), t[1].cast<float>()});
+                }
+                wt.setFaceMask(mask_cpp);
             });
 };

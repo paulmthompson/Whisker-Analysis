@@ -100,6 +100,22 @@ inline void unit_linear_extend_base(Line2D &line, int vec_index = 5)
     it = line.insert(it, create_point(dir_vector, line[0]));
 };
 
+inline void unit_linear_extend_tip(Line2D &line, int vec_index = 5, bool normalize_vector = true)
+{
+    if (line.size() - vec_index < 0)
+    {
+        std::cout << "Requested index " << vec_index << " out of bounds" << std::endl;
+        vec_index = 1;
+    }
+    auto dir_vector = create_vector(line[line.size() - vec_index - 1], line.back());
+
+    if (normalize_vector) {
+        dir_vector = normalize(dir_vector);
+    }
+
+    line.push_back(create_point(dir_vector, line.back()));
+};
+
 }
 
 #endif //WHISKER_ANALYSIS_LINES_HPP
