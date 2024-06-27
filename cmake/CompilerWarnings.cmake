@@ -20,6 +20,7 @@ if("${CLANG_OPTIONS}" STREQUAL "")
             -Wdouble-promotion # warn if float is implicit promoted to double
             -Wformat=2 # warn on security issues around functions that format output (ie printf)
             -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
+            -ffast-math
             -fsave-optimization-record
             -Rpass-analysis=loop-vectorize
     )
@@ -51,6 +52,7 @@ if("${MSVC_WARNINGS}" STREQUAL "")
             /w14906 # string literal cast to 'LPWSTR'
             /w14928 # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
             /permissive- # standards conformance mode for MSVC compiler.
+            /fp:fast
     )
 endif()
 
@@ -79,6 +81,7 @@ if("${GCC_WARNINGS}" STREQUAL "")
             -Wuseless-cast # warn if you perform a cast to the same type
             -Wsuggest-override # warn if an overridden member function is not marked 'override' or 'final'
             -Wuninitialized
+            -ffast-math
     )
 endif()
 
