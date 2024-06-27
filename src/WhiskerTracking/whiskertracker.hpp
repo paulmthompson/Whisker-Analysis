@@ -35,7 +35,11 @@ public:
 
     void setWhiskerPad(float w_x, float w_y) { _whisker_pad = Point2D<float>{w_x, w_y}; };
 
-    void setFaceMask(std::vector<Point2D<float>> mask) {_face_mask = create_mask( mask);};
+    void setFaceMask(std::vector<Point2D<float>> mask)
+    {
+        _face_mask = create_mask( mask);
+        _face_mask_set = whisker::create_set(_face_mask);
+    };
 
     void setImageHeight(int const height) {_image_height = height;};
 
@@ -78,6 +82,7 @@ private:
     float _whisker_pad_radius {150.0f};
     Point2D<float> _whisker_pad {0.0f, 0.0f};
     Mask2D _face_mask;
+    std::set<Point2D<int>> _face_mask_set;
     int _image_height {480};
     int _image_width {640};
     std::vector<std::size_t> _position_order {};

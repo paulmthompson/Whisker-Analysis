@@ -100,4 +100,39 @@ float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2)
     return calculate_overlap_iou_relative(l1_set, l2_set);
 }
 
+void extend_line_to_mask(Line2D & line, std::set<Point2D<int>> const & mask, int const x_bound, int const y_bound)
+{
+    std::size_t vec_index = 5;
+    const auto line_spacing = 2.0f;
+
+    auto point = line[0];
+
+    if (vec_index > line.size())
+    {
+        std::cout << "Requested index " << vec_index << " out of bounds" << std::endl;
+        vec_index = 1;
+    }
+
+    auto reference_point = line[vec_index];
+    auto dir_vector = create_vector(reference_point,point);
+
+    dir_vector = normalize(dir_vector);
+
+    point = create_point(dir_vector, point);
+    reference_point = point;
+
+    while(!whisker::intersect(point, mask)) {
+        point = create_point(dir_vector, point);
+        if (point.x < 0 || point.y < 0 || point.x > x_bound || point.y > y_bound)
+        {
+            break;
+        }
+    }
+
+    auto extended_line = linspace(point, line[0], line_spacing);
+
+    line.insert(line.begin(), extended_line.begin(), extended_line.end() - 1);
+
+};
+
 }

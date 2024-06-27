@@ -85,6 +85,26 @@ inline Point2D<float> point_at_pathlength(Line2D const &line, float const pathle
     return point_along_path(line[closest_pre_ind], line[closest_pre_ind + 1], pathlength - dist);
 }
 
+inline Line2D linspace(Point2D<float> start, Point2D<float> end, int num_points)
+{
+    Line2D line;
+    float dx = (end.x - start.x) / (num_points - 1);
+    float dy = (end.y - start.y) / (num_points - 1);
+    for (int i = 0; i < num_points; ++i) {
+        line.push_back({start.x + i * dx, start.y + i * dy});
+    }
+    return line;
+};
+
+inline Line2D linspace(Point2D<float> start, Point2D<float> end, float spacing)
+{
+    auto total_distance = distance(start, end);
+
+    auto num_points = static_cast<int>(total_distance / spacing);
+
+    return linspace(start, end, num_points);
+};
+
 inline void unit_linear_extend_base(Line2D &line, int vec_index = 5)
 {
     if (vec_index > line.size())

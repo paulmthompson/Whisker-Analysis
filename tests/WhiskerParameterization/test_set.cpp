@@ -79,6 +79,10 @@ TEST_CASE("Mask Intersection - 1", "[Set]") {
 
     REQUIRE(intersection == true);
 
+    BENCHMARK("Mask Intersection") {
+        return intersect(line100[0],mask);
+    };
+
 }
 
 TEST_CASE("Mask Intersection - 2", "[Set]") {
