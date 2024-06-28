@@ -66,14 +66,15 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
 
     auto t7 = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Image conversion: " << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count() << "ms" << std::endl;
-    std::cout << "Janelia find segments: " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms" << std::endl;
-    std::cout << "Create whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count() << "ms" << std::endl;
-    std::cout << "Remove duplicates: " << std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count() << "ms" << std::endl;
-    std::cout << "Connect to face mask: " << std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count() << "ms" << std::endl;
-    std::cout << "Remove whiskers by whisker pad radius: " << std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count() << "ms" << std::endl;
-    std::cout << "Order whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count() << "ms" << std::endl;
-
+    if (_verbose) {
+        std::cout << "Image conversion: " << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count() << "ms" << std::endl;
+        std::cout << "Janelia find segments: " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms" << std::endl;
+        std::cout << "Create whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count() << "ms" << std::endl;
+        std::cout << "Remove duplicates: " << std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count() << "ms" << std::endl;
+        std::cout << "Connect to face mask: " << std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count() << "ms" << std::endl;
+        std::cout << "Remove whiskers by whisker pad radius: " << std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count() << "ms" << std::endl;
+        std::cout << "Order whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count() << "ms" << std::endl;
+    }
 }
 
 std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p) {
@@ -299,7 +300,17 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
     _eraseWhiskers(erase_inds);
 }
 
-void WhiskerTracker::_eraseWhiskers(std::vector<int> &erase_inds) {
+/**
+ * @brief Erases whiskers at specified indices.
+ *
+ * This function takes a vector of indices and erases the whiskers at these indices from the whiskers vector.
+ * It first sorts the indices in descending order and removes any duplicates.
+ * Then, it iterates over the sorted and unique indices and erases the whisker at each index.
+ * Note that the indices are processed in descending order to prevent the erasure of a whisker from affecting the indices of subsequent whiskers to be erased.
+ *
+ * @param erase_inds A vector of indices of the whiskers to be erased.
+ */
+void WhiskerTracker::_eraseWhiskers(std::vector<int> & erase_inds) {
     std::ranges::sort(erase_inds, std::greater<int>());
     auto last = std::unique(erase_inds.begin(), erase_inds.end());
     erase_inds.erase(last, erase_inds.end());
@@ -328,14 +339,15 @@ void WhiskerTracker::_connectToFaceMask()
 }
 
 /**
+ * @brief Orders the whiskers based on their position.
  *
- * Whiskers are ordered with the most posterior being 0, more anterior 1, etc
- * If the head director vector is known, the follicular base can be projected
- * onto this vector. Consequently, the smallest value of the projection will be
- * most posterior.
+ * This function orders the whiskers with the most posterior being 0, more anterior 1, etc.
+ * If the head direction vector is known, the follicular base can be projected onto this vector.
+ * Consequently, the smallest value of the projection will be most posterior.
  *
- *
- *
+ * The function first calculates the projection of each whisker's follicular base onto the head direction vector.
+ * It then creates a vector of indices from 0 to the number of whiskers and sorts this vector based on the calculated projections.
+ * Finally, it creates a new vector of whiskers sorted according to the calculated order and replaces the original vector of whiskers with this sorted vector.
  */
 void WhiskerTracker::_orderWhiskers()
 {
@@ -354,11 +366,13 @@ void WhiskerTracker::_orderWhiskers()
             { return w_projection_vector[i1] > w_projection_vector[i2]; }
             );
 
-    for (std::size_t i = 0; i < _position_order.size(); i++) {
+    if (_verbose) {
+        for (std::size_t i = 0; i < _position_order.size(); i++) {
 
-        std::cout << "The " << i << " position whisker is " << _position_order[i];
-        std::cout << " with follicle at " << "(" << whiskers[_position_order[i]][0].x << ","
-                  << whiskers[_position_order[i]][0].y << ")" << std::endl;
+            std::cout << "The " << i << " position whisker is " << _position_order[i];
+            std::cout << " with follicle at " << "(" << whiskers[_position_order[i]][0].x << ","
+                      << whiskers[_position_order[i]][0].y << ")" << std::endl;
+        }
     }
 
     std::vector<Line2D> sorted_whiskers;

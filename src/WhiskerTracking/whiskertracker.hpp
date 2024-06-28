@@ -87,6 +87,7 @@ private:
     int _image_width {640};
     std::vector<std::size_t> _position_order {};
     GeomVector _head_direction_vector {0.0, 1.0};
+    bool _verbose {false};
 
     void _removeDuplicates();
 
