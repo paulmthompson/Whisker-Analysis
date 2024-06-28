@@ -317,7 +317,6 @@ void Simple_Line_Primitive(std::array<point, N> &verts, const point offset, cons
 
 template<size_t N>
 void rotate(std::array<point, N> &pbuf, const float angle)
-/* positive angle rotates counter clockwise */
 {
     float s = sin(angle);
     float c = cos(angle);
@@ -486,13 +485,11 @@ void range(box &B, std::array<point, N> &x) {
 }
 
 long long cntrib(const ipoint f, const ipoint t, const short w)
-/* Integrand for the line integral.  Google `Green's theorem polygon area` for
-* functional form.
-*/
-{ return (long long) w * (t.x - f.x) * (t.y + f.y) / 2; }
+{
+    return (long long) w * (t.x - f.x) * (t.y + f.y) / 2;
+}
 
 long long area(const ipoint a, const ipoint p, const ipoint q)
-/* Compute the area of the triangle (apq) */
 {
     return (long long) p.x * q.y - (long long) p.y * q.x +
            (long long) a.x * (p.y - q.y) + (long long) a.y * (q.x - p.x);

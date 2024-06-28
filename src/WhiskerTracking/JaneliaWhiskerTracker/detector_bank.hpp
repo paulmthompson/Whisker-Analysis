@@ -166,9 +166,29 @@ private:
 template<std::size_t N>
 void Simple_Line_Primitive(std::array<point, N> &verts, const point offset, const float length, const float thick);
 
+/**
+ * @brief Creates a point by adding a geometric vector to an existing point.
+ *
+ * This function creates a new point by adding the x and y components of a geometric vector to the x and y coordinates of an existing point, respectively.
+ * The new point is located at the end of the vector if the vector is placed such that its start coincides with the existing point.
+ *
+ * @param vec A GeomVector object representing the vector to be added to the point.
+ * @param p1 A Point2D<float> object representing the existing point.
+ * @return A Point2D<float> object representing the new point.
+ */
 template<std::size_t N>
 void rotate(std::array<point, N> &pbuf, const float angle);
 
+/**
+ * @brief Translates a set of points by a given offset.
+ *
+ * This function translates a set of points by a given offset. The translation is performed in-place, modifying the original points.
+ * Each point in the array is moved by adding the x and y components of the offset to the x and y coordinates of the point, respectively.
+ *
+ * @tparam N The number of points in the array.
+ * @param pbuf An array of points to be translated.
+ * @param ori A point object representing the offset by which to translate the points.
+ */
 template<std::size_t N>
 void translate(std::array<point, N> &pbuf, const point ori);
 
@@ -183,8 +203,31 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b);
 template<std::size_t N>
 void range(box &B, std::array<point, N> &x);
 
+/**
+ * @brief Calculates the integrand for the line integral.
+ *
+ * This function calculates the integrand for the line integral, which is used in the computation of polygon area.
+ * The formula used in this function is derived from Green's theorem. For more information, Google `Green's theorem polygon area`.
+ *
+ * @param f An ipoint object representing the first point.
+ * @param t An ipoint object representing the second point.
+ * @param w A short representing the weight of the line integral.
+ * @return A long long representing the computed integrand for the line integral.
+ */
 long long cntrib(const ipoint f, const ipoint t, const short w);
 
+/**
+ * @brief Computes the area of a triangle defined by three points.
+ *
+ * This function calculates the area of a triangle defined by three points (a, p, q).
+ * The area is calculated using the formula:
+ * Area = p.x * q.y - p.y * q.x + a.x * (p.y - q.y) + a.y * (q.x - p.x)
+ *
+ * @param a An ipoint object representing the first point of the triangle.
+ * @param p An ipoint object representing the second point of the triangle.
+ * @param q An ipoint object representing the third point of the triangle.
+ * @return A long long representing the computed area of the triangle.
+ */
 long long area(const ipoint a, const ipoint p, const ipoint q);
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
