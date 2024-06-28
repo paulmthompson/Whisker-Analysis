@@ -27,6 +27,18 @@ inline float distance(Point2D<T> const p1, Point2D<T> const p2)
     return static_cast<float>(std::sqrt(std::pow(p1.x - p2.x,2) + std::pow(p1.y - p2.y,2)));
 };
 
+/**
+ * @brief Calculates a point along the path between two points.
+ *
+ * This function calculates a point along the path between two points (p1 and p2) at a specified path length from p1.
+ * The path length is specified by the user. If the path length is greater than the distance between the two points,
+ * or if the path length is less than or equal to zero, an error message is printed and a point at the origin is returned.
+ *
+ * @param p1 A Point2D<T> object representing the first point.
+ * @param p2 A Point2D<T> object representing the second point.
+ * @param pathlength The path length from the first point at which the point is to be calculated.
+ * @return A Point2D<float> object representing the point along the path at the specified path length from the first point.
+ */
 template <typename T>
 inline Point2D<float> point_along_path(Point2D<T> const p1, Point2D<T> const p2, float const pathlength)
 {
