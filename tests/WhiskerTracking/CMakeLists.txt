@@ -19,7 +19,18 @@ endif()
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
 
-add_custom_command(TARGET tests POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/test_img.bin
-        ${CMAKE_CURRENT_BINARY_DIR}/data/test_img.bin)
+function(copy_files TARGET_NAME SOURCE_DIR DEST_DIR FILES)
+    foreach(FILE ${FILES})
+        add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                ${SOURCE_DIR}/${FILE}
+                ${DEST_DIR}/${FILE})
+    endforeach()
+endfunction()
+
+set(FILES_TO_COPY "test_img.bin" "test_img2.bin")
+copy_files(tests
+        "${CMAKE_CURRENT_SOURCE_DIR}/data"
+        "${CMAKE_CURRENT_BINARY_DIR}/data"
+        "${FILES_TO_COPY}"
+)
