@@ -87,6 +87,11 @@ inline Point2D<float> point_at_pathlength(Line2D const &line, float const pathle
 
 inline Line2D linspace(Point2D<float> start, Point2D<float> end, int num_points)
 {
+    if (num_points < 2) {
+        std::cout << "Number of points must be greater than 1" << std::endl;
+        return Line2D{start, end};
+    }
+
     Line2D line;
     float dx = (end.x - start.x) / (num_points - 1);
     float dy = (end.y - start.y) / (num_points - 1);
@@ -99,6 +104,12 @@ inline Line2D linspace(Point2D<float> start, Point2D<float> end, int num_points)
 inline Line2D linspace(Point2D<float> start, Point2D<float> end, float spacing)
 {
     auto total_distance = distance(start, end);
+
+    if (total_distance < spacing)
+    {
+        std::cout << "Spacing is greater than the total distance between the points" << std::endl;
+        return Line2D{start, end};
+    }
 
     auto num_points = static_cast<int>(total_distance / spacing);
 

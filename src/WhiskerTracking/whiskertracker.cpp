@@ -321,8 +321,6 @@ void WhiskerTracker::_connectToFaceMask()
         return;
     }
 
-
-
     for (auto &w: this->whiskers) {
 
         whisker::extend_line_to_mask(w, _face_mask_set, _image_width, _image_height);
