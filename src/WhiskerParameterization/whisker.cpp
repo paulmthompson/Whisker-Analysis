@@ -34,10 +34,10 @@ bool intersect(Point2D<float> const p1, Mask2D const & mask)
 
 bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set)
 {
-    Point2D<int> p(
+    Point2D<int> p{
             static_cast<int>(std::lround(p1.x)),
             static_cast<int>(std::lround(p1.y))
-            );
+    };
 
     return mask_set.find(p) != mask_set.end();
 }
