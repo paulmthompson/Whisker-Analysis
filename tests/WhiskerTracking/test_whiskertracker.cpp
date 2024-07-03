@@ -1,11 +1,11 @@
 
-#include "test_data.hpp"
+#include "Geometry/lines.hpp"
+#include "whiskertracker.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/benchmark/catch_benchmark.hpp>
 
-#include <iostream>
-
+#include "test_data.hpp"
 
 TEST_CASE("Test Trace", "[Trace]") {
 

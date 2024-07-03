@@ -1,9 +1,18 @@
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
+#include "Geometry/lines.hpp"
+#include "Geometry/mask.hpp"
+#include "Geometry/points.hpp"
 #include "whisker.hpp"
 
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/benchmark/catch_benchmark.hpp>
+
+#include <algorithm>
 #include <iostream>
+#include <set>
+#include <string>
+#include <vector>
+
 
 #include "test_constants.hpp"
 

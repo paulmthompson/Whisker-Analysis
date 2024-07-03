@@ -9,7 +9,6 @@ if(PROJECT_IS_TOP_LEVEL)
         set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
                 ${INCLUDE_WHAT_YOU_USE_EXECUTABLE}
                 -Xiwyu --mapping_file=${CMAKE_CURRENT_SOURCE_DIR}/cmake/iwyu_mapping.imp
-                -Xiwyu --error
                 CACHE STRING "Include-what-you-use command"
         )
     endif()

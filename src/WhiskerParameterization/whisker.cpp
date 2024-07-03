@@ -1,13 +1,15 @@
 #include "whisker.hpp"
 
-#include <cmath>
-#include <iostream>
+#include "Geometry/mask.hpp"
+#include "Geometry/vector.hpp"
+
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
+#include <iostream>
 
 namespace whisker
 {
-
-
 
 std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points)
 {
