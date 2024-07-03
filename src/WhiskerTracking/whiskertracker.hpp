@@ -76,11 +76,15 @@ public:
 private:
     static janelia::JaneliaTracker _janelia;
 
+    #ifndef _MSC_VER
     #pragma omp threadprivate(_janelia)
+    #endif
 
     static bool _janelia_init;
 
+    #ifndef _MSC_VER
     #pragma omp threadprivate(_janelia_init)
+    #endif
 
     float _whisker_length_threshold {75.0};
     float _whisker_pad_radius {150.0f};
