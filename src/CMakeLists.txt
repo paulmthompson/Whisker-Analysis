@@ -33,7 +33,7 @@ add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
 pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
 
-set_target_properties(whiskertracker PROPERTIES OUTPUT_NAME "whiskertracker")
+set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
 
 target_link_libraries(Whisker-Analysis PUBLIC janelia)
 
