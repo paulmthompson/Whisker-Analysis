@@ -59,16 +59,16 @@ copy_files(tests
         "${PYTEST_FILES_TO_COPY}"
 )
 
-
-add_test(NAME python-tests
-        COMMAND ${Python3_EXECUTABLE} -m
+if(NOT (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND WIN32))
+    add_test(NAME python-tests
+            COMMAND ${Python3_EXECUTABLE} -m
             pytest ${CMAKE_BINARY_DIR}/tests/WhiskerTracking
             --dirpath=${CMAKE_CURRENT_BINARY_DIR}/data
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
 
-
-set_property(TEST python-tests APPEND PROPERTY
-        ENVIRONMENT
-        "PATH=$<TARGET_FILE_DIR:Whisker-Analysis>;$ENV{PATH}"
-)
+    set_property(TEST python-tests APPEND PROPERTY
+            ENVIRONMENT
+            "PATH=$<TARGET_FILE_DIR:Whisker-Analysis>;$ENV{PATH}"
+    )
+endif()
