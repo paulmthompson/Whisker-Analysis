@@ -13,9 +13,9 @@ TEST_CASE("Test Trace", "[Trace]") {
     static auto wt = create_warmed_up_wt(test_img);
 
     wt.setWhiskerPad(577.0f, 202.0f);
-    wt.trace(test_img, img_height, img_width);
+    auto whiskers = wt.trace(test_img, img_height, img_width);
 
-    CHECK(wt.whiskers.size() == 5);
+    CHECK(whiskers.size() == 5);
 
 }
 

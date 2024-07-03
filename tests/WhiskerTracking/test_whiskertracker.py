@@ -28,5 +28,5 @@ def wt(test_img):
 
 def test_trace(wt, test_img):
     img_height, img_width = 480, 640  # Assuming these are the dimensions of the test image
-    wt.trace(test_img, img_height, img_width)
-    assert len(wt.getWhiskers()) == 5
+    whiskers = wt.trace(test_img, img_height, img_width)
+    assert len(whiskers) == 5

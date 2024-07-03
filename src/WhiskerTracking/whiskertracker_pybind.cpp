@@ -36,13 +36,10 @@ PYBIND11_MODULE(whiskertracker, m) {
 
                 auto ptr = static_cast<uint8_t *>(info.ptr);
                 std::vector<uint8_t> image_data(ptr, ptr + info.size);
-                wt.trace(image_data, image_height, image_width);
+                auto whiskers = wt.trace(image_data, image_height, image_width);
 
-                return wt.whiskers.size();
-            })
-            .def("getWhiskers", [](whisker::WhiskerTracker &wt) {
                 std::vector<py::array_t<float>> whiskers_py;
-                for (const auto &line : wt.whiskers) {
+                for (const auto &line : whiskers) {
                     std::vector<float> line_py;
                     for (const auto &point : line) {
                         line_py.push_back(point.x);

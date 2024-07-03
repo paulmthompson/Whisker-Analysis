@@ -17,9 +17,7 @@ class WhiskerTracker {
 public:
     WhiskerTracker();
 
-    void trace(const std::vector<uint8_t> &image, const int image_height, const int image_width);
-
-    std::tuple<float, int> get_nearest_whisker(float x_p, float y_p);
+    std::vector<Line2D> trace(const std::vector<uint8_t> &image, const int image_height, const int image_width);
 
     float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 
@@ -71,8 +69,6 @@ public:
 
     void changeJaneliaParameter(JaneliaParameter parameter, float value);
 
-    std::vector<Line2D> whiskers;
-
 private:
     janelia::JaneliaTracker _janelia;
     bool _janelia_init {false};
@@ -86,17 +82,18 @@ private:
     GeomVector _head_direction_vector {0.0, 1.0};
     bool _verbose {false};
 
-    void _removeWhiskersByWhiskerPadRadius();
+    void _removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers);
 
     void _reinitializeJanelia();
 
     //void _clipFaceMask();
-    void _connectToFaceMask();
+    void _connectToFaceMask(std::vector<Line2D> & whiskers);
 
 };
 
 void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
 void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &erase_inds);
+std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p);
 void _orderWhiskers(std::vector<Line2D> & whiskers,GeomVector const & head_direction_vector);
 void _removeDuplicates(std::vector<Line2D> & whiskers);
 

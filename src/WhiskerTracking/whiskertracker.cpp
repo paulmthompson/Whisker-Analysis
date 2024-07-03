@@ -15,10 +15,9 @@ janelia::Image<uint8_t> bg = janelia::Image<uint8_t>(640, 480, std::vector<uint8
 WhiskerTracker::WhiskerTracker()
 {
     _janelia = janelia::JaneliaTracker();
-    whiskers = std::vector<Line2D>{};
 }
 
-void WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_height, const int image_width) {
+std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_height, const int image_width) {
 
     if (_janelia_init == false) {
         _janelia.bank = janelia::LineDetector(_janelia.config);
@@ -26,7 +25,7 @@ void WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_h
         _janelia_init = true;
     }
 
-    whiskers.clear();
+    std::vector<Line2D> whiskers{};
 
     auto t0 = std::chrono::high_resolution_clock::now();
 
@@ -53,11 +52,11 @@ void WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_h
 
     auto t4 = std::chrono::high_resolution_clock::now();
 
-    _connectToFaceMask();
+    _connectToFaceMask(whiskers);
 
     auto t5 = std::chrono::high_resolution_clock::now();
 
-    _removeWhiskersByWhiskerPadRadius();
+    _removeWhiskersByWhiskerPadRadius(whiskers);
 
     auto t6 = std::chrono::high_resolution_clock::now();
 
@@ -74,9 +73,11 @@ void WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_h
         std::cout << "Remove whiskers by whisker pad radius: " << std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count() << "ms" << std::endl;
         std::cout << "Order whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count() << "ms" << std::endl;
     }
+
+    return whiskers;
 }
 
-std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p) {
+std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p) {
 
     float nearest_distance = 1000.0;
     int whisker_id = 0;
@@ -84,7 +85,7 @@ std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p)
     float current_d = 0.0f;
     int current_whisker_id = 0;
 
-    for (auto &w: this->whiskers) {
+    for (auto &w: whiskers) {
         for (int i = 0; i < w.size(); i++) {
             current_d = sqrt(pow(x_p - w[i].x, 2) + pow(y_p - w[i].y, 2));
             if (current_d < nearest_distance) {
@@ -284,7 +285,8 @@ void _removeDuplicates(std::vector<Line2D> & whiskers) {
     _eraseWhiskers(whiskers, erase_inds);
 }
 
-void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
+void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers)
+{
 
     auto erase_inds = std::vector<std::size_t>();
 
@@ -327,13 +329,13 @@ void WhiskerTracker::_reinitializeJanelia() {
     _janelia_init = true;
 }
 
-void WhiskerTracker::_connectToFaceMask()
+void WhiskerTracker::_connectToFaceMask(std::vector<Line2D> & whiskers)
 {
     if (_face_mask.empty()) {
         return;
     }
 
-    for (auto &w: this->whiskers) {
+    for (auto &w: whiskers) {
 
         whisker::extend_line_to_mask(w, _face_mask_set, _image_width, _image_height);
     }
