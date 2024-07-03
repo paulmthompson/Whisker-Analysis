@@ -18,7 +18,7 @@ WhiskerTracker::WhiskerTracker()
     whiskers = std::vector<Line2D>{};
 }
 
-void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_height, const int image_width) {
+void WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_height, const int image_width) {
 
     if (_janelia_init == false) {
         _janelia.bank = janelia::LineDetector(_janelia.config);
@@ -132,7 +132,7 @@ void WhiskerTracker::setHeadDirection(float x, float y)
  *
  * @param whisker whisker to be checked
  */
-void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad) {
+void _alignWhiskerToFollicle(Line2D & whisker, whisker::Point2D<float> whisker_pad) {
 
     auto start_distance = distance(whisker[0], whisker_pad);
 

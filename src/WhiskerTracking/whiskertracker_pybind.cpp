@@ -4,6 +4,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
+#include <iostream>
 
 namespace py = pybind11;
 
@@ -18,12 +19,26 @@ PYBIND11_MODULE(whiskertracker, m) {
                 return py::make_tuple(pad.x, pad.y);
             })
             .def("setWhiskerPad", &whisker::WhiskerTracker::setWhiskerPad)
-            .def("trace", [](whisker::WhiskerTracker &wt, py::array_t<uint8_t> image, int image_height, int image_width) {
+            .def("trace", [](whisker::WhiskerTracker &wt, py::array_t<uint8_t, py::array::c_style | py::array::forcecast> image, int image_height, int image_width) {
                 py::buffer_info info = image.request();
+
+                if (info.ndim != 1) {
+                    throw std::runtime_error("Number of dimensions must be one");
+                }
+
+                if (info.format != py::format_descriptor<uint8_t>::format()) {
+                    throw std::runtime_error("Image must be of type uint8_t");
+                }
+
+                if (info.size != image_height * image_width) {
+                    throw std::runtime_error("Image size must match image height and width");
+                }
 
                 auto ptr = static_cast<uint8_t *>(info.ptr);
                 std::vector<uint8_t> image_data(ptr, ptr + info.size);
                 wt.trace(image_data, image_height, image_width);
+
+                return wt.whiskers.size();
             })
             .def("getWhiskers", [](whisker::WhiskerTracker &wt) {
                 std::vector<py::array_t<float>> whiskers_py;

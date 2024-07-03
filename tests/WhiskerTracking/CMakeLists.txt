@@ -3,9 +3,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 
-add_executable(tests test_whiskertracker.cpp test_data.hpp)
+add_executable(tests
+        test_whiskertracker.cpp
+        test_data.hpp
+)
 
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
+target_link_libraries(tests PRIVATE
+        Catch2::Catch2WithMain
+        Whisker-Analysis
+
+)
 
 if (WIN32)
     catch_discover_tests(tests
@@ -28,7 +35,7 @@ function(copy_files TARGET_NAME SOURCE_DIR DEST_DIR FILES)
     endforeach()
 endfunction()
 
-set(FILES_TO_COPY
+set(DATA_FILES_TO_COPY
         "test_img.bin"
         "test_img2.bin"
         "test_img3.bin"
@@ -38,5 +45,31 @@ set(FILES_TO_COPY
 copy_files(tests
         "${CMAKE_CURRENT_SOURCE_DIR}/data"
         "${CMAKE_CURRENT_BINARY_DIR}/data"
-        "${FILES_TO_COPY}"
+        "${DATA_FILES_TO_COPY}"
 )
+
+set(PYTEST_FILES_TO_COPY
+        "test_whiskertracker.py"
+        "conftest.py"
+)
+
+copy_files(tests
+        "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_BINARY_DIR}"
+        "${PYTEST_FILES_TO_COPY}"
+)
+
+
+add_test(NAME python-tests
+        COMMAND ${Python3_EXECUTABLE} -m
+            pytest ${CMAKE_BINARY_DIR}/tests/WhiskerTracking
+            --dirpath=${CMAKE_CURRENT_BINARY_DIR}/data
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+if (WIN32)
+    set_property(TEST python-tests APPEND PROPERTY
+            ENVIRONMENT
+            "PATH=$<TARGET_FILE_DIR:Whisker-Analysis>;$ENV{PATH}"
+    )
+endif()

@@ -15,6 +15,10 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
 include(Catch)
 
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+
+message(STATUS "${Python3_RUNTIME_LIBRARY_DIRS}")
+
 add_subdirectory(WhiskerParameterization)
 
 add_subdirectory(WhiskerTracking)
