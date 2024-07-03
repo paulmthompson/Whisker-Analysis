@@ -76,11 +76,11 @@ jobs:
           echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
       - name: Configure CMake
-        run: cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release
+        run: cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
       - name: Build
-        run: cmake --build --preset ${{matrix.short}}-${{matrix.compiler}}-release
+        run: cmake --build --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
       - name: Test
-        run: ctest --verbose --preset ${{matrix.short}}-${{matrix.compiler}}-release -C ${{matrix.short}}-${{matrix.compiler}}-release
+        run: ctest --verbose --preset ${{matrix.short}}-${{matrix.compiler}}-release -C ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
         working-directory: ${{ github.workspace }}
