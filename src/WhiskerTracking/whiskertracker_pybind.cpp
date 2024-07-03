@@ -13,7 +13,10 @@ PYBIND11_MODULE(whiskertracker, m) {
             .def("setWhiskerLengthThreshold", &whisker::WhiskerTracker::setWhiskerLengthThreshold)
             .def("getWhiskerPadRadius", &whisker::WhiskerTracker::getWhiskerPadRadius)
             .def("setWhiskerPadRadius", &whisker::WhiskerTracker::setWhiskerPadRadius)
-            .def("getWhiskerPad", &whisker::WhiskerTracker::getWhiskerPad)
+            .def("getWhiskerPad", [](whisker::WhiskerTracker& wt) {
+                auto pad = wt.getWhiskerPad();
+                return py::make_tuple(pad.x, pad.y);
+            })
             .def("setWhiskerPad", &whisker::WhiskerTracker::setWhiskerPad)
             .def("trace", [](whisker::WhiskerTracker &wt, py::array_t<uint8_t> image, int image_height, int image_width) {
                 py::buffer_info info = image.request();
