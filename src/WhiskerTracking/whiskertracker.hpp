@@ -21,8 +21,6 @@ public:
 
     std::tuple<float, int> get_nearest_whisker(float x_p, float y_p);
 
-    std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
-
     float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 
     void setWhiskerLengthThreshold(float length_threshold) { _whisker_length_threshold = length_threshold; };
@@ -85,15 +83,10 @@ private:
     std::set<Point2D<int>> _face_mask_set;
     int _image_height {480};
     int _image_width {640};
-    std::vector<std::size_t> _position_order {};
     GeomVector _head_direction_vector {0.0, 1.0};
     bool _verbose {false};
 
-    void _removeDuplicates();
-
     void _removeWhiskersByWhiskerPadRadius();
-
-    void _eraseWhiskers(std::vector<int> &erase_inds);
 
     void _reinitializeJanelia();
 
@@ -105,6 +98,10 @@ private:
 };
 
 void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
+void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<int> &erase_inds);
+void _removeDuplicates(std::vector<Line2D> & whiskers);
+
+std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
 
 }
 

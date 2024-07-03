@@ -27,7 +27,6 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
     }
 
     whiskers.clear();
-    _position_order.clear();
 
     auto t0 = std::chrono::high_resolution_clock::now();
 
@@ -48,7 +47,7 @@ void WhiskerTracker::trace(const std::vector<uint8_t> &image, const int image_he
 
     auto t3 = std::chrono::high_resolution_clock::now();
 
-    _removeDuplicates();
+    _removeDuplicates(whiskers);
     std::ranges::for_each(whiskers, [wp=_whisker_pad](Line2D & w)
     {_alignWhiskerToFollicle(w, wp);});
 
@@ -99,7 +98,7 @@ std::tuple<float, int> WhiskerTracker::get_nearest_whisker(float x_p, float y_p)
     return std::make_tuple(nearest_distance, whisker_id);
 }
 
-std::map<int, std::vector<Line2D>> WhiskerTracker::load_janelia_whiskers(std::string const & filename) {
+std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename) {
     auto j_segs = janelia::load_binary_data(filename);
 
     auto output_whiskers = std::map<int, std::vector<Line2D>>();
@@ -242,7 +241,7 @@ void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float va
     }
 }
 
-void WhiskerTracker::_removeDuplicates() {
+void _removeDuplicates(std::vector<Line2D> & whiskers) {
 
     struct correlation_matrix {
         int i;
@@ -282,7 +281,7 @@ void WhiskerTracker::_removeDuplicates() {
         }
     }
 
-    _eraseWhiskers(erase_inds);
+    _eraseWhiskers(whiskers, erase_inds);
 }
 
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
@@ -297,7 +296,7 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
         }
     }
 
-    _eraseWhiskers(erase_inds);
+    _eraseWhiskers(whiskers, erase_inds);
 }
 
 /**
@@ -308,9 +307,11 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius() {
  * Then, it iterates over the sorted and unique indices and erases the whisker at each index.
  * Note that the indices are processed in descending order to prevent the erasure of a whisker from affecting the indices of subsequent whiskers to be erased.
  *
+ * @param whiskers A vector of whiskers to be modified.
  * @param erase_inds A vector of indices of the whiskers to be erased.
  */
-void WhiskerTracker::_eraseWhiskers(std::vector<int> & erase_inds) {
+void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<int> & erase_inds)
+{
     std::ranges::sort(erase_inds, std::greater<int>());
     auto last = std::unique(erase_inds.begin(), erase_inds.end());
     erase_inds.erase(last, erase_inds.end());
@@ -357,26 +358,26 @@ void WhiskerTracker::_orderWhiskers()
         w_projection_vector.push_back(project(_head_direction_vector, w[0]));
     }
 
-    _position_order = std::vector<std::size_t>(w_projection_vector.size());
-    std::iota(_position_order.begin(), _position_order.end(), 0);
+    auto position_order = std::vector<std::size_t>(w_projection_vector.size());
+    std::iota(position_order.begin(), position_order.end(), 0);
     std::sort(
-            std::begin(_position_order),
-            std::end(_position_order),
+            std::begin(position_order),
+            std::end(position_order),
             [&](std::size_t i1, std::size_t i2)
             { return w_projection_vector[i1] > w_projection_vector[i2]; }
             );
 
     if (_verbose) {
-        for (std::size_t i = 0; i < _position_order.size(); i++) {
+        for (std::size_t i = 0; i < position_order.size(); i++) {
 
-            std::cout << "The " << i << " position whisker is " << _position_order[i];
-            std::cout << " with follicle at " << "(" << whiskers[_position_order[i]][0].x << ","
-                      << whiskers[_position_order[i]][0].y << ")" << std::endl;
+            std::cout << "The " << i << " position whisker is " << position_order[i];
+            std::cout << " with follicle at " << "(" << whiskers[position_order[i]][0].x << ","
+                      << whiskers[position_order[i]][0].y << ")" << std::endl;
         }
     }
 
     std::vector<Line2D> sorted_whiskers;
-    for (int i : _position_order) {
+    for (int i : position_order) {
         sorted_whiskers.push_back(whiskers[i]);
     }
 
