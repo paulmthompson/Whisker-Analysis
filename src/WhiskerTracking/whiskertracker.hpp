@@ -93,12 +93,11 @@ private:
     //void _clipFaceMask();
     void _connectToFaceMask();
 
-    void _orderWhiskers();
-
 };
 
 void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
-void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<int> &erase_inds);
+void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &erase_inds);
+void _orderWhiskers(std::vector<Line2D> & whiskers,GeomVector const & head_direction_vector);
 void _removeDuplicates(std::vector<Line2D> & whiskers);
 
 std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
