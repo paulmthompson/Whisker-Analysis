@@ -49,6 +49,33 @@ PYBIND11_MODULE(whiskertracker, m) {
                 }
                 return whiskers_py;
             })
+            .def("trace_multiple_images", [](whisker::WhiskerTracker &wt, py::list images_list, int image_height, int image_width) {
+                std::vector<std::vector<uint8_t>> images_cpp;
+                for (py::handle image_py : images_list) {
+                    py::array_t<uint8_t, py::array::c_style | py::array::forcecast> image = image_py.cast<py::array_t<uint8_t>>();
+                    py::buffer_info info = image.request();
+                    if (info.ndim != 1 || info.format != py::format_descriptor<uint8_t>::format() || info.size != image_height * image_width) {
+                        throw std::runtime_error("Each image must be a 1D uint8_t array with size matching image_height * image_width");
+                    }
+                    auto ptr = static_cast<uint8_t *>(info.ptr);
+                    images_cpp.push_back(std::vector<uint8_t>(ptr, ptr + info.size));
+                }
+                auto whiskers = wt.trace_multiple_images(images_cpp, image_height, image_width);
+
+                py::list whiskers_py;
+                for (const auto &image_whiskers : whiskers) {
+                    py::list image_whiskers_py;
+                    for (const auto &line : image_whiskers) {
+                        py::list line_py;
+                        for (const auto &point : line) {
+                            line_py.append(py::make_tuple(point.x, point.y));
+                        }
+                        image_whiskers_py.append(line_py);
+                    }
+                    whiskers_py.append(image_whiskers_py);
+                }
+                return whiskers_py;
+            })
             .def("setFaceMask", [](whisker::WhiskerTracker &wt, py::list mask) {
                 std::vector<whisker::Point2D<float>> mask_cpp;
                 for (py::handle obj : mask) {

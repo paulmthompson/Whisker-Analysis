@@ -20,14 +20,12 @@ JaneliaTracker::JaneliaTracker() {
     half_space_bank = HalfSpaceDetector();
 
     pxlist = std::vector<offset_pair>(1000);
+
+    _ldata = std::vector<record>(1000);
+    _rdata = std::vector<record>(1000);
 }
 
 std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t> &image, const Image<uint8_t> &bg) {
-    static Image<uint8_t> h = Image<uint8_t>(); // histogram from compute_seed_from_point_field_windowed_on_contour
-    static Image<float> th = Image<float>(); // slopes
-    static Image<float> s = Image<float>(); // stats
-    static Image<uint8_t> mask = Image<uint8_t>(); // Mask for keeping track of seed points
-    static int sarea = 0;
 
     //auto start = std::chrono::high_resolution_clock::now();
 
@@ -36,19 +34,16 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
     int n_segs = 0;
 
     // Prepare
-    if ((sarea != area)) {
-        h = Image<uint8_t>(image.width, image.height);
-        th = Image<float>(image.width, image.height);
-        s = Image<float>(image.width, image.height);
-        mask = Image<uint8_t>(image.width, image.height);
-        sarea = area;
-    }
+    _histogram = Image<uint8_t>(image.width, image.height);
+    _slopes = Image<float>(image.width, image.height);
+    _stats = Image<float>(image.width, image.height);
+    _mask = Image<uint8_t>(image.width, image.height);
 
-    //Reset static arrays to zero
-    std::fill(h.array.begin(), h.array.end(), 0x0);
-    std::fill(th.array.begin(), th.array.end(), 0.0f);
-    std::fill(s.array.begin(), s.array.end(), 0.0f);
-    std::fill(mask.array.begin(), mask.array.end(), 0x0);
+    //Reset arrays to zero
+    std::fill(_histogram.array.begin(), _histogram.array.end(), 0x0);
+    std::fill(_slopes.array.begin(), _slopes.array.end(), 0.0f);
+    std::fill(_stats.array.begin(), _stats.array.end(), 0.0f);
+    std::fill(_mask.array.begin(), _mask.array.end(), 0x0);
 
     _trust_thresh = threshold_bottom_fraction_uint8(image);
     _trust_thresh_conservative = threshold_two_means(
@@ -62,7 +57,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
 
         }
         case SEED_ON_GRID: {
-            compute_seed_from_point_field_on_grid(image, h, th, s); // 17 ms
+            compute_seed_from_point_field_on_grid(image, _histogram, _slopes, _stats); // 17 ms
         }
         case SEED_EVERYWHERE: {
 
@@ -72,12 +67,12 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
     }
     auto t1 = std::chrono::high_resolution_clock::now();
     {
-        int i = sarea;
+        int i = area;
         int nseeds = 0;
-        auto &sa = s.array;
-        auto &tha = th.array;
-        auto &ha = h.array;
-        auto &maska = mask.array;
+        auto &sa = _stats.array;
+        auto &tha = _slopes.array;
+        auto &ha = _histogram.array;
+        auto &maska = _mask.array;
 
         // Compute means and mask
         while (i--) {
@@ -85,7 +80,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
             if (n > 0.0f)
                 tha[i] /= n;
         }
-        i = sarea;
+        i = area;
         while (i--) {
             if (sa[i] > this->config._seed_thres) {
                 maska[i] = 1;
@@ -99,7 +94,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
             int j = 0;
 
             auto start = std::chrono::high_resolution_clock::now();
-            i = sarea;
+            i = area;
             while (i--) {
                 if (maska[i] == 1) {
                     Seed seed = {i % stride,
@@ -227,8 +222,7 @@ std::optional<Seed>
 JaneliaTracker::compute_seed_from_point_ex(const Image<uint8_t> &image, int p, int maxr, float *out_m,
                                            float *out_stat) {
 
-    static Seed myseed;
-    static const float eps = 1e-3;
+    const float eps = 1e-3;
     int i = -1, rnpoints = 0, lnpoints = 0;
     int stride = image.width;
     float lsx = 0.0, /* statistics for left corner cut: (ab,cd) grouping */
@@ -419,19 +413,19 @@ JaneliaTracker::compute_seed_from_point_ex(const Image<uint8_t> &image, int p, i
         {
             float norm;
             if (lstat > rstat) {
-                myseed.xpnt = (int) lsx / lnpoints;
-                myseed.ypnt = (int) lsy / lnpoints;
-                myseed.xdir = 100 * cos(lm);
-                myseed.ydir = (int) (100 * sin(lm));
+                _myseed.xpnt = (int) lsx / lnpoints;
+                _myseed.ypnt = (int) lsy / lnpoints;
+                _myseed.xdir = 100 * cos(lm);
+                _myseed.ydir = (int) (100 * sin(lm));
 
                 norm = 1.0; //_compute_seed_from_point_eigennorm( lm ); // weights by length of line in square
                 *out_m = lm;
                 *out_stat = lstat / (norm * norm); // normalize by length squared since the eigenvalue is variance
             } else {
-                myseed.xpnt = (int) rsx / rnpoints;
-                myseed.ypnt = (int) rsy / rnpoints;
-                myseed.xdir = 100 * cos(rm);
-                myseed.ydir = (int) (100 * sin(rm));
+                _myseed.xpnt = (int) rsx / rnpoints;
+                _myseed.ypnt = (int) rsy / rnpoints;
+                _myseed.xdir = 100 * cos(rm);
+                _myseed.ydir = (int) (100 * sin(rm));
 
                 norm = 1.0; //_compute_seed_from_point_eigennorm( rm );
                 *out_m = rm;
@@ -440,7 +434,7 @@ JaneliaTracker::compute_seed_from_point_ex(const Image<uint8_t> &image, int p, i
         }
     }
 
-    return myseed;
+    return _myseed;
 }
 
 Line_Params JaneliaTracker::line_param_from_seed(const Seed s) {
@@ -556,8 +550,8 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
     auto is_small_angle = [](const float angle)
             /* true iff angle is in [-pi/4,pi/4) or [3pi/4,5pi/4) */
     {
-        static const float qpi = std::numbers::pi / 4.0;
-        static const float hpi = std::numbers::pi / 2.0;
+        const float qpi = std::numbers::pi / 4.0;
+        const float hpi = std::numbers::pi / 2.0;
         int n = floorf((angle - qpi) / hpi);
         return (n % 2) != 0;
     };
@@ -635,8 +629,6 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
 }
 
 Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
-    static std::vector<record> ldata(1000);
-    static std::vector<record> rdata(1000);
 
     int nleft = 0, nright = 0;
     float dx, dy, newoff;
@@ -673,8 +665,8 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
         /*
      *  init
      */
-        std::fill(ldata.begin(), ldata.end(), record());
-        std::fill(rdata.begin(), rdata.end(), record());
+        std::fill(_ldata.begin(), _ldata.end(), record());
+        std::fill(_rdata.begin(), _rdata.end(), record());
 
         line = line_param_from_seed(s);
 
@@ -699,7 +691,7 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
         compute_dxdy(&line, &dx, &dy);
 
         //ldata[nleft++] = {p%cwidth + dx, p/cwidth + dy, line.width, line.score };
-        ldata[nleft++] = record(p % cwidth + dx, p / cwidth + dy, line.width, line.score);
+        _ldata[nleft++] = record(p % cwidth + dx, p / cwidth + dy, line.width, line.score);
 
         q = p;
         rline = line;
@@ -753,10 +745,10 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
 
             compute_dxdy(&line, &dx, &dy);
 
-            if (nleft < ldata.size()) {
-                ldata[nleft] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+            if (nleft < _ldata.size()) {
+                _ldata[nleft] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
             } else {
-                ldata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
+                _ldata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
             }
             nleft++;
         }
@@ -814,10 +806,10 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
 
             compute_dxdy(&line, &dx, &dy);
 
-            if (nright < rdata.size()) {
-                rdata[nright] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+            if (nright < _rdata.size()) {
+                _rdata[nright] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
             } else {
-                rdata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
+                _rdata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
             }
             nright++;
         }
@@ -831,17 +823,17 @@ Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
         int j = 0, i = nright;
         while (i--)  /* backward copy */
         {
-            wseg.x[j] = rdata[i].x;
-            wseg.y[j] = rdata[i].y;
-            wseg.thick[j] = rdata[i].thick;
-            wseg.scores[j] = rdata[i].score;
+            wseg.x[j] = _rdata[i].x;
+            wseg.y[j] = _rdata[i].y;
+            wseg.thick[j] = _rdata[i].thick;
+            wseg.scores[j] = _rdata[i].score;
             j++;
         }
         for (i = 0; i < nleft; i++) {
-            wseg.x[j] = ldata[i].x;
-            wseg.y[j] = ldata[i].y;
-            wseg.thick[j] = ldata[i].thick;
-            wseg.scores[j] = ldata[i].score;
+            wseg.x[j] = _ldata[i].x;
+            wseg.y[j] = _ldata[i].y;
+            wseg.thick[j] = _ldata[i].thick;
+            wseg.scores[j] = _ldata[i].score;
             j++;
         }
         return wseg;

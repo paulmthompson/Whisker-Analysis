@@ -1,14 +1,17 @@
 #ifndef WHISKERTRACKER_HPP
 #define WHISKERTRACKER_HPP
 
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include <map>
-
+#include "Geometry/mask.hpp"
 #include "JaneliaWhiskerTracker/janelia.hpp"
 #include "whisker.hpp"
-#include "Geometry/mask.hpp"
+
+#include <omp.h>
+
+#include <map>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 
 namespace whisker {
 
@@ -18,6 +21,7 @@ public:
     WhiskerTracker();
 
     std::vector<Line2D> trace(const std::vector<uint8_t> &image, const int image_height, const int image_width);
+    std::vector<std::vector<Line2D>> trace_multiple_images(const std::vector<std::vector<uint8_t>> & images, const int image_height, const int image_width);
 
     float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 
@@ -70,8 +74,14 @@ public:
     void changeJaneliaParameter(JaneliaParameter parameter, float value);
 
 private:
-    janelia::JaneliaTracker _janelia;
-    bool _janelia_init {false};
+    static janelia::JaneliaTracker _janelia;
+
+    #pragma omp threadprivate(_janelia)
+
+    static bool _janelia_init;
+
+    #pragma omp threadprivate(_janelia_init)
+
     float _whisker_length_threshold {75.0};
     float _whisker_pad_radius {150.0f};
     Point2D<float> _whisker_pad {0.0f, 0.0f};

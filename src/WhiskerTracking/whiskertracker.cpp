@@ -2,11 +2,16 @@
 
 #include "JaneliaWhiskerTracker/io.hpp"
 
+#include <omp.h>
+
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <iostream>
 #include <numeric>
+
+janelia::JaneliaTracker whisker::WhiskerTracker::_janelia;
+bool whisker::WhiskerTracker::_janelia_init;
 
 namespace whisker {
 
@@ -15,15 +20,29 @@ janelia::Image<uint8_t> bg = janelia::Image<uint8_t>(640, 480, std::vector<uint8
 WhiskerTracker::WhiskerTracker()
 {
     _janelia = janelia::JaneliaTracker();
+    _janelia_init = false;
+}
+
+std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images(const std::vector<std::vector<uint8_t>> & images, const int image_height, const int image_width) {
+
+    std::vector<std::vector<Line2D>> whiskers(images.size());
+
+    #pragma omp parallel
+    {
+        _reinitializeJanelia();
+    }
+
+    #pragma omp parallel for
+    for (int i = 0; i < static_cast<int>(images.size()); i++) {
+        whiskers[i] = trace(images[i], image_height, image_width);
+    }
+
+    return whiskers;
 }
 
 std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_height, const int image_width) {
 
-    if (_janelia_init == false) {
-        _janelia.bank = janelia::LineDetector(_janelia.config);
-        _janelia.half_space_bank = janelia::HalfSpaceDetector(_janelia.config);
-        _janelia_init = true;
-    }
+    _reinitializeJanelia();
 
     std::vector<Line2D> whiskers{};
 
@@ -324,9 +343,11 @@ void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & e
 }
 
 void WhiskerTracker::_reinitializeJanelia() {
-    _janelia.bank = janelia::LineDetector(_janelia.config);
-    _janelia.half_space_bank = janelia::HalfSpaceDetector(_janelia.config);
-    _janelia_init = true;
+    if (_janelia_init == false) {
+        _janelia.bank = janelia::LineDetector(_janelia.config);
+        _janelia.half_space_bank = janelia::HalfSpaceDetector(_janelia.config);
+        _janelia_init = true;
+    }
 }
 
 void WhiskerTracker::_connectToFaceMask(std::vector<Line2D> & whiskers)

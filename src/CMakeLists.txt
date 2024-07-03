@@ -12,6 +12,11 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 endif()
 
 #find_package(Python3 COMPONENTS Interpreter Development)
+find_package(OpenMP REQUIRED)
+if(MSVC)
+    set(OpenMP_CXX_FLAGS "-openmp:experimental")
+endif()
+message(STATUS "OpenMP_CXX_FLAGS: ${OpenMP_CXX_FLAGS}")
 
 add_subdirectory(WhiskerTracking/JaneliaWhiskerTracker)
 
@@ -41,7 +46,7 @@ else()
     set_target_properties(whiskertracker PROPERTIES SUFFIX ".so")
 endif()
 
-target_link_libraries(Whisker-Analysis PUBLIC janelia)
+target_link_libraries(Whisker-Analysis PUBLIC janelia OpenMP::OpenMP_CXX)
 
 target_link_libraries(whiskertracker PRIVATE Whisker-Analysis)
 target_link_libraries(whiskertracker PRIVATE pybind11::module)

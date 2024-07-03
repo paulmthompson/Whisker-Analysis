@@ -53,6 +53,7 @@ if("${MSVC_WARNINGS}" STREQUAL "")
             /w14928 # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
             /permissive- # standards conformance mode for MSVC compiler.
             /fp:fast
+            /openmp:llvm
     )
 endif()
 

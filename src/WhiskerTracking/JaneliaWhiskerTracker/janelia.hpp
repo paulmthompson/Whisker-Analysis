@@ -124,6 +124,13 @@ private:
     int _last_issmallangle {-1};
     float _trust_thresh {-1.0};
     float _trust_thresh_conservative {-1.0};
+    Image<uint8_t> _mask; // Mask for keeping track of seed points
+    Image<uint8_t> _histogram; // histogram from compute_seed_from_point_field_windowed_on_contour
+    Image<float> _slopes;
+    Image<float> _stats;
+    Seed _myseed;
+    std::vector<record> _ldata;
+    std::vector<record> _rdata;
 
     void compute_seed_from_point_field_on_grid(const Image<uint8_t> &image, Image<uint8_t> &h, Image<float> &th,
                                                Image<float> &s);

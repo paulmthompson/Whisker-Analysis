@@ -216,8 +216,8 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
     auto is_small_angle = [](const float angle)
             /* true iff angle is in [-pi/4,pi/4) or [3pi/4,5pi/4) */
     {
-        static const float qpi = std::numbers::pi / 4.0;
-        static const float hpi = std::numbers::pi / 2.0;
+        const float qpi = std::numbers::pi / 4.0;
+        const float hpi = std::numbers::pi / 2.0;
         int n = std::floor((angle - qpi) / hpi);
         return (n % 2) != 0;
     };
@@ -236,7 +236,7 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
     auto is_angle_leftward = [](const float angle)
             /* true iff angle is in left half plane */
     { //static const float qpi = std::numbers::pi/4.0;
-        static const float hpi = std::numbers::pi / 2.0;
+        const float hpi = std::numbers::pi / 2.0;
         int n = std::floor((angle - hpi) / std::numbers::pi);
         return (n % 2) == 0;
     };
