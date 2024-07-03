@@ -122,6 +122,8 @@ private:
     int _snpx {0};
     int _lastp {-1};
     int _last_issmallangle {-1};
+    float _trust_thresh {-1.0};
+    float _trust_thresh_conservative {-1.0};
 
     void compute_seed_from_point_field_on_grid(const Image<uint8_t> &image, Image<uint8_t> &h, Image<float> &th,
                                                Image<float> &s);
@@ -156,6 +158,9 @@ private:
     bool is_local_area_trusted_conservative(Line_Params *line, Image<uint8_t> &image, int p);
 
 };
+
+int threshold_bottom_fraction_uint8(const Image<uint8_t> &im);
+float threshold_two_means(uint8_t *array, size_t size);
 
 #define _COMPUTE_SEED_FROM_POINT_HELPER(BEST, BP)                    \
 { int tp = x+cx + image.width * (y+cy);                            \

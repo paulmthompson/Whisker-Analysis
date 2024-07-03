@@ -50,6 +50,12 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
     std::fill(s.array.begin(), s.array.end(), 0.0f);
     std::fill(mask.array.begin(), mask.array.end(), 0x0);
 
+    _trust_thresh = threshold_bottom_fraction_uint8(image);
+    _trust_thresh_conservative = threshold_two_means(
+            image.array.data(),
+            image.width * image.height
+            );
+
     // Get contours, and compute correlations on perimeters
     switch (this->config._seed_method) {
         case SEED_ON_MHAT_CONTOURS: {
@@ -904,17 +910,9 @@ int threshold_bottom_fraction_uint8(const Image<uint8_t> &im) //, float fraction
 
 bool JaneliaTracker::is_local_area_trusted(Line_Params *line, Image<uint8_t> &image, int p) {
     float q, r, l;
-    static float thresh = -1.0;
-    static std::vector<uint8_t> *lastim = {};
     q = eval_half_space(line, image, p, &r, &l);
 
-    if (thresh < 0.0 || lastim != &image.array) /* recomputes when image changes */
-    {
-        thresh = threshold_bottom_fraction_uint8(image);//,HALF_SPACE_FRACTION_DARK );
-        lastim = &image.array;
-    }
-
-    if (((r < thresh) && (l < thresh)) ||
+    if (((r < _trust_thresh) && (l < _trust_thresh)) ||
         (fabs(q) > this->config._half_space_assymetry)) {
         return false;
     } else {
@@ -924,17 +922,9 @@ bool JaneliaTracker::is_local_area_trusted(Line_Params *line, Image<uint8_t> &im
 
 bool JaneliaTracker::is_local_area_trusted_conservative(Line_Params *line, Image<uint8_t> &image, int p) {
     float q, r, l;
-    static float thresh = -1.0;
-    static std::vector<uint8_t> *lastim = {};
-    //static const std::vector<uint8_t>* lastim = {};
     q = eval_half_space(line, image, p, &r, &l);
 
-    if (thresh < 0.0 || lastim != &image.array) /* recomputes when image changes */
-    { //thresh = mean_uint8( image );
-        thresh = threshold_two_means(image.array.data(), image.width * image.height);
-        lastim = &image.array;
-    }
-    if (((r < thresh) && (l < thresh)) ||
+    if (((r < _trust_thresh_conservative) && (l < _trust_thresh_conservative)) ||
         (fabs(q) > this->config._half_space_assymetry)) {
         return false;
     } else {
