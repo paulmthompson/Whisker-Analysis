@@ -118,6 +118,11 @@ public:
     HalfSpaceDetector half_space_bank;
 private:
 
+    std::vector<offset_pair> pxlist;
+    int _snpx {0};
+    int _lastp {-1};
+    int _last_issmallangle {-1};
+
     void compute_seed_from_point_field_on_grid(const Image<uint8_t> &image, Image<uint8_t> &h, Image<float> &th,
                                                Image<float> &s);
 
@@ -149,8 +154,6 @@ private:
     bool is_local_area_trusted(Line_Params *line, Image<uint8_t> &image, int p);
 
     bool is_local_area_trusted_conservative(Line_Params *line, Image<uint8_t> &image, int p);
-
-    std::vector<offset_pair> pxlist;
 
 };
 

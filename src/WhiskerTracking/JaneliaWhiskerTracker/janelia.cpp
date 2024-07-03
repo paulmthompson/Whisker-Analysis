@@ -536,9 +536,6 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
    *
    */
 {
-    static int snpx = 0;
-    static int lastp = -1;
-    static int last_issmallangle = -1;
     int i, j;
     int half = support / 2;
     int px = p % (image.width),
@@ -560,7 +557,7 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
     };
 
     int issa = is_small_angle(angle);
-    if (p != lastp || issa != last_issmallangle) //recompute only if neccessary
+    if (p != _lastp || issa != _last_issmallangle) //recompute only if neccessary
     {
         int tx, ty;                    //  Neglects to check if support has changed
         //float angle = line->angle;
@@ -568,11 +565,11 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
         int hh = image.height;
         int ox = px - half;
         int oy = py - half;
-        lastp = p;
-        last_issmallangle = issa;
+        _lastp = p;
+        _last_issmallangle = issa;
         //lastangle = line->angle;
 
-        snpx = 0;
+        _snpx = 0;
         if (issa) {
             for (i = 0; i < support; i++) {
                 ty = oy + i;
@@ -580,7 +577,7 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
                     for (j = 0; j < support; j++) {
                         tx = ox + j;
                         if ((tx >= 0) && (tx < ww)) {
-                            this->pxlist[snpx++] = std::move(
+                            this->pxlist[_snpx++] = std::move(
                                     offset_pair(ww * ty + tx, support * i + j));    // image   pixel address
                             //this->pxlist[ snpx++ ] = support * i + j; // weights pixel address
                         }
@@ -607,7 +604,7 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
                     for (j = 0; j < support; j++) {
                         ty = oy + j;
                         if ((ty >= 0) && (ty < hh)) {
-                            this->pxlist[snpx++] = std::move(offset_pair(ww * ty + tx, support * i + j));
+                            this->pxlist[_snpx++] = std::move(offset_pair(ww * ty + tx, support * i + j));
                             //this->pxlist[ snpx++ ] = support * i + j;
                         }
                     }
@@ -628,7 +625,7 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
         } // end if/ angle check
     }
 
-    *npx = snpx;
+    *npx = _snpx;
 }
 
 Whisker_Seg JaneliaTracker::trace_whisker(Seed s, Image<uint8_t> &image) {
