@@ -28,7 +28,13 @@ function(copy_files TARGET_NAME SOURCE_DIR DEST_DIR FILES)
     endforeach()
 endfunction()
 
-set(FILES_TO_COPY "test_img.bin" "test_img2.bin" "test_img3.bin")
+set(FILES_TO_COPY
+        "test_img.bin"
+        "test_img2.bin"
+        "test_img3.bin"
+        "0110_1_0000000.bin"
+)
+
 copy_files(tests
         "${CMAKE_CURRENT_SOURCE_DIR}/data"
         "${CMAKE_CURRENT_BINARY_DIR}/data"

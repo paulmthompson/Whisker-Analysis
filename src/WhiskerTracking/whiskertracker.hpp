@@ -102,7 +102,7 @@ void _removeDuplicates(std::vector<Line2D> & whiskers);
 
 std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
 
-}
+} // namespace whisker
 
 
 #endif // WHISKERTRACKER_HPP
