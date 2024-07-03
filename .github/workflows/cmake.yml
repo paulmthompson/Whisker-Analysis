@@ -45,6 +45,8 @@ jobs:
 
       - name: Install dependencies
         run: python -m pip install --upgrade pip pytest numpy
+        shell: powershell
+        if: runner.os == 'Windows'
 
       - uses: ilammy/msvc-dev-cmd@v1
         if: runner.os == 'Windows' && matrix.compiler == 'msvc'
