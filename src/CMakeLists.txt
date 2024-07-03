@@ -33,7 +33,13 @@ add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
 pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
 
-set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
+if (WIN32)
+    set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
+elseif(APPLE)
+    set_target_properties(whiskertracker PROPERTIES SUFFIX ".so") #I think?
+else()
+    set_target_properties(whiskertracker PROPERTIES SUFFIX ".so")
+endif()
 
 target_link_libraries(Whisker-Analysis PUBLIC janelia)
 
