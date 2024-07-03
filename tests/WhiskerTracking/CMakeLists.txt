@@ -67,9 +67,8 @@ add_test(NAME python-tests
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-if (WIN32)
-    set_property(TEST python-tests APPEND PROPERTY
-            ENVIRONMENT
-            "PATH=$<TARGET_FILE_DIR:Whisker-Analysis>;$ENV{PATH}"
-    )
-endif()
+
+set_property(TEST python-tests APPEND PROPERTY
+        ENVIRONMENT
+        "PATH=$<TARGET_FILE_DIR:Whisker-Analysis>;$ENV{PATH}"
+)
