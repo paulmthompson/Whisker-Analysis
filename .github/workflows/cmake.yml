@@ -87,7 +87,7 @@ jobs:
       - name: "Install Mac System Dependencies"
         if: runner.os == 'macOS'
         run: |
-          brew install libomp
+          brew install libomp llvm
 
       - name: "Set environmental variables"
         if: runner.os == 'Linux' || runner.os == 'Windows'
