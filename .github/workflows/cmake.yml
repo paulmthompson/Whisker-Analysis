@@ -88,6 +88,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install libomp llvm
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
 
       - name: "Set environmental variables"
         if: runner.os == 'Linux' || runner.os == 'Windows'
