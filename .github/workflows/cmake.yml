@@ -78,6 +78,7 @@ jobs:
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-cmake
             mingw-w64-clang-x86_64-openmp
+            mingw-w64-x86_64-openmp
 
       - name: "Install Linux System Dependencies"
         if: runner.os == 'Linux'
