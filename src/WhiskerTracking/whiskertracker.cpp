@@ -397,12 +397,14 @@ void _orderWhiskers(std::vector<Line2D> & whiskers, GeomVector const & head_dire
             { return w_projection_vector[i1] > w_projection_vector[i2]; }
             );
 
+    /*
     for (std::size_t i = 0; i < position_order.size(); i++) {
 
         std::cout << "The " << i << " position whisker is " << position_order[i];
         std::cout << " with follicle at " << "(" << whiskers[position_order[i]][0].x << ","
                 << whiskers[position_order[i]][0].y << ")" << std::endl;
     }
+    */
 
     std::vector<Line2D> sorted_whiskers;
     for (std::size_t i : position_order) {

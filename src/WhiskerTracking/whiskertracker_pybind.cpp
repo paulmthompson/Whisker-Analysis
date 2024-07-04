@@ -1,5 +1,6 @@
 #include "whiskertracker.hpp"
 
+#include <omp.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -84,4 +85,6 @@ PYBIND11_MODULE(whiskertracker, m) {
                 }
                 wt.setFaceMask(mask_cpp);
             });
+    m.def("get_max_threads", &omp_get_max_threads);
+    m.def("set_num_threads", &omp_set_num_threads);
 };
