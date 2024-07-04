@@ -27,12 +27,16 @@ std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images(const std
 
     std::vector<std::vector<Line2D>> whiskers(images.size());
 
+    #ifndef _MSC_VER
     #pragma omp parallel
     {
         _reinitializeJanelia();
     }
+    #endif
 
+    #ifndef _MSC_VER
     #pragma omp parallel for
+    #endif
     for (int i = 0; i < static_cast<int>(images.size()); i++) {
         whiskers[i] = trace(images[i], image_height, image_width);
     }
