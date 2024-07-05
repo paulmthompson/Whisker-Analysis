@@ -38,9 +38,7 @@ def create_face_mask(wt, mask_path, dilation_size,):
     return
 
 
-def trace_loop_parallel(wt, video_path, start_frame=0, end_frame=None,):
-
-    batch_size = 1024
+def trace_loop_parallel(wt, video_path, start_frame=0, end_frame=None, batch_size=1024,):
 
     vidcap = cv2.VideoCapture(video_path)
 
