@@ -164,8 +164,8 @@ def save_whiskers_as_hdf5(data_path, num_whiskers, frame_list, whiskers_per_fram
 
             for i, whiskers in enumerate(whiskers_per_frame):
                 if len(whiskers) <= w_id:
-                    x[i] = np.array([], dtype=np.float32)
-                    y[i] = np.array([], dtype=np.float32)
+                    x[i] = np.array([], dtype=np.float64)
+                    y[i] = np.array([], dtype=np.float64)
                     continue
 
                 w = whiskers[w_id]
@@ -175,6 +175,8 @@ def save_whiskers_as_hdf5(data_path, num_whiskers, frame_list, whiskers_per_fram
 
             f.create_dataset("x", data=x, dtype=dt_float)
             f.create_dataset("y", data=y, dtype=dt_float)
+        
+        print(f"finished {w_id}")
 
 
 def create_progress_bar(num_frames, label="Train"):
