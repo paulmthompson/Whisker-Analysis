@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 
-def create_face_mask(wt,mask_path, dilation_size,):
+def create_face_mask(wt, mask_path, dilation_size,):
 
     face_mask = cv2.imread(mask_path)
 
@@ -38,13 +38,19 @@ def create_face_mask(wt,mask_path, dilation_size,):
     return
 
 
-def trace_loop_parallel(wt, video_path):
+def trace_loop_parallel(wt, video_path, start_frame=0, end_frame=None,):
 
     batch_size = 1024
 
     vidcap = cv2.VideoCapture(video_path)
 
+    width = int(vidcap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(vidcap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
     num_frames = get_total_frames(vidcap)
+
+    if end_frame is not None:
+        num_frames = min(num_frames, end_frame)
 
     iterable = create_progress_bar(num_frames)
 
@@ -59,6 +65,9 @@ def trace_loop_parallel(wt, video_path):
     for i, frame in iterable:
         success, single_frame_img = vidcap.read()
 
+        if i < start_frame:
+            continue
+
         if success:
             single_frame_img = cv2.cvtColor(single_frame_img, cv2.COLOR_BGR2GRAY)
             image_data = single_frame_img.flatten().tolist()
@@ -67,7 +76,7 @@ def trace_loop_parallel(wt, video_path):
             frame_list.append(i)
 
         if count > batch_size:
-            whiskers_in_batch = wt.trace_multiple_images(frames_to_trace,480,640);
+            whiskers_in_batch = wt.trace_multiple_images(frames_to_trace, height, width,)
 
             for whiskers_in_single_frame in whiskers_in_batch:
                 add_whiskers(whiskers_per_frame, whiskers_in_single_frame)
@@ -76,7 +85,7 @@ def trace_loop_parallel(wt, video_path):
             frames_to_trace = []
 
     if len(frames_to_trace) > 0:
-        whiskers_in_batch = wt.trace_multiple_images(frames_to_trace,480,640);
+        whiskers_in_batch = wt.trace_multiple_images(frames_to_trace, height, width,)
 
         for whiskers_in_single_frame in whiskers_in_batch:
             add_whiskers(whiskers_per_frame, whiskers_in_single_frame)
@@ -86,11 +95,17 @@ def trace_loop_parallel(wt, video_path):
     return (frame_list, whiskers_per_frame)
 
 
-def trace_loop(wt, video_path):
+def trace_loop(wt, video_path, start_frame=0, end_frame=None):
 
     vidcap = cv2.VideoCapture(video_path)
 
+    width = int(vidcap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(vidcap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
     num_frames = get_total_frames(vidcap)
+
+    if end_frame is not None:
+        num_frames = min(num_frames, end_frame)
 
     iterable = create_progress_bar(num_frames)
 
@@ -100,12 +115,15 @@ def trace_loop(wt, video_path):
     for i, frame in iterable:
         success, single_frame_image = vidcap.read()
 
+        if i < start_frame:
+            continue
+
         if success:
             single_frame_image = cv2.cvtColor(single_frame_image, cv2.COLOR_BGR2GRAY)
 
             image_data = single_frame_image.flatten().tolist()
 
-            wt.trace(image_data,480,640)
+            wt.trace(image_data, height, width)
 
             whiskers_in_single_frame = wt.getWhiskers()
 
@@ -124,17 +142,16 @@ def trace_loop(wt, video_path):
 def add_whiskers(whiskers_per_frame, whiskers_in_single_frame,):
 
     whiskers_per_frame.append([])
-    for j in range(0,len(whiskers_in_single_frame)):
-        ww = np.reshape(whiskers_in_single_frame[j],(-1,2))
+    for j in range(0, len(whiskers_in_single_frame)):
+        ww = np.reshape(whiskers_in_single_frame[j], (-1, 2))
         whiskers_per_frame[-1].append(ww)
-
 
 
 def save_whiskers_as_hdf5(data_path, num_whiskers, frame_list, whiskers_per_frame,):
 
     frame_list = np.array(frame_list, dtype=np.int64)
 
-    for w_id in range(0,num_whiskers):
+    for w_id in range(0, num_whiskers):
 
         with h5py.File(data_path + f"whisker_{w_id}.h5", "w") as f:
             
@@ -142,19 +159,19 @@ def save_whiskers_as_hdf5(data_path, num_whiskers, frame_list, whiskers_per_fram
 
             dt_float = h5py.vlen_dtype(np.dtype("float32"))
 
-            x = np.empty(len(frame_list),dtype=object)
-            y = np.empty(len(frame_list),dtype=object)
+            x = np.empty(len(frame_list), dtype=object)
+            y = np.empty(len(frame_list), dtype=object)
 
             for i, whiskers in enumerate(whiskers_per_frame):
                 if len(whiskers) <= w_id:
-                    x[i] = np.array([],dtype=np.float32)
-                    y[i] = np.array([],dtype=np.float32)
+                    x[i] = np.array([], dtype=np.float32)
+                    y[i] = np.array([], dtype=np.float32)
                     continue
 
                 w = whiskers[w_id]
 
-                x[i] = w[:,1]
-                y[i] = w[:,0]
+                x[i] = w[:, 1]
+                y[i] = w[:, 0]
 
             f.create_dataset("x", data=x, dtype=dt_float)
             f.create_dataset("y", data=y, dtype=dt_float)
@@ -174,7 +191,7 @@ def create_progress_bar(num_frames, label="Train"):
     """
     iterable = enumerate(range(0, num_frames))
     progress = tqdm(
-        iterable, desc=label, total=num_frames, ascii=True, leave=True, position=0
+        iterable, desc=label, total=num_frames, ascii=True, leave=True, position=0,
     )
     iterable = progress
     return iterable
