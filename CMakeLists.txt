@@ -37,6 +37,13 @@ set(VCPKG_MANIFEST_MODE ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_SUPPORT_WINDOWS_EXPORT_ALL_SYMBOLS 1)
 
+option(BUILD_WHISKERTRACKER "Build the whiskertracker target" OFF)
+
+if (PROJECT_IS_TOP_LEVEL)
+    set(BUILD_WHISKERTRACKER ON)
+endif()
+
+
 #=============================
 # Externally Provided Content
 #=============================
