@@ -68,11 +68,10 @@ if(BUILD_WHISKERTRACKER)
     FetchContent_GetProperties(pybind11)
     if(NOT pybind11_POPULATED)
         FetchContent_Populate(pybind11)
-        add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR} EXCLUDE_FROM_ALL)
+        add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
     endif()
 
     pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
-    set_target_properties(whiskertracker PROPERTIES EXCLUDE_FROM_ALL TRUE)
     target_link_libraries(whiskertracker PRIVATE Whisker-Analysis pybind11::module)
 
     if (WIN32)
