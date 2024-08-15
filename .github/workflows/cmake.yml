@@ -99,6 +99,7 @@ jobs:
           echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
       - name: Configure CMake
+        shell: bash
         run: |
           if [[ "${{ matrix.compiler }}" == "clang" && "${{ runner.os }}" == "Linux" ]]; then
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}" -DCODE_COVERAGE=ON
