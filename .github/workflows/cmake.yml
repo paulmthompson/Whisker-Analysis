@@ -84,7 +84,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libomp-14-dev lcov llvm
+          sudo apt-get install -y libomp-14-dev lcov llvm gcovr
 
       - name: "Install Mac System Dependencies"
         if: runner.os == 'macOS'
@@ -98,13 +98,13 @@ jobs:
         run: |
           echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
-      - name: Configure CMake with coverage Linux Clang
-        if: matrix.compiler == 'clang' && runner.os == 'Linux'
+      - name: Configure CMake with coverage Linux GCC
+        if: matrix.compiler == 'gcc' && runner.os == 'Linux'
         run: |
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}" -DCODE_COVERAGE=ON
 
-      - name: Configure CMake without coverage for all other runners (does not equal clang AND Linux)
-        if: ${{ !((matrix.compiler == 'clang') && (runner.os == 'Linux')) }}
+      - name: Configure CMake without coverage for all other runners (does not equal gcc AND Linux)
+        if: ${{ !((matrix.compiler == 'gcc') && (runner.os == 'Linux')) }}
         run: |
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
@@ -116,13 +116,14 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Capture coverage info
-        if: matrix.compiler == 'clang' && runner.os == 'Linux'
+        if: matrix.compiler == 'gcc' && runner.os == 'Linux'
         run: |
-          llvm-cov gcov /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/Clang/Release
-          llvm-cov show /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/Clang/Release > coverage.info
+          lcov --directory /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/GCC/Release --capture --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' --output-file coverage.info
+          lcov --list coverage.info
 
       - name: Upload coverage to Coveralls
-        if: matrix.compiler == 'clang' && runner.os == 'Linux'
+        if: matrix.compiler == 'gcc' && runner.os == 'Linux'
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
