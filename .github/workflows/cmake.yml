@@ -98,14 +98,16 @@ jobs:
         run: |
           echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
-      - name: Configure CMake
-        shell: bash
+      - name: Configure CMake with coverage Linux Clang
+        if: matrix.compiler == 'clang' && runner.os == 'Linux'
         run: |
-          if [[ "${{ matrix.compiler }}" == "clang" && "${{ runner.os }}" == "Linux" ]]; then
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}" -DCODE_COVERAGE=ON
-          else
+
+      - name: Configure CMake without coverage for all other runners (does not equal clang AND Linux)
+        if: ${{ !((matrix.compiler == 'clang') && (runner.os == 'Linux')) }}
+        run: |
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
-          fi
+
       - name: Build
         run: cmake --build --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
