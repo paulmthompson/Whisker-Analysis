@@ -119,7 +119,7 @@ jobs:
         if: matrix.compiler == 'clang' && runner.os == 'Linux'
         run: |
           llvm-cov gcov /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/Clang/Release
-          llvm-cov report /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/Clang/Release --output-file coverage.info
+          llvm-cov show /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/Clang/Release > coverage.info
 
       - name: Upload coverage to Coveralls
         if: matrix.compiler == 'clang' && runner.os == 'Linux'
