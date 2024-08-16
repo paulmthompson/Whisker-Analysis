@@ -119,7 +119,7 @@ jobs:
         if: matrix.compiler == 'gcc' && runner.os == 'Linux'
         run: |
           lcov --directory /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/GCC/Release --capture --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/out/*' '*/opt/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Upload coverage to Coveralls
