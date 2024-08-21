@@ -51,6 +51,13 @@ if (PROJECT_IS_TOP_LEVEL)
     set(BUILD_WHISKERTRACKER ON)
 endif()
 
+# Define the output directory for Python files
+set(PYTHON_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# Copy the Python files to the output directory
+file(COPY ${CMAKE_SOURCE_DIR}/python/__init__.py DESTINATION ${PYTHON_OUTPUT_DIRECTORY})
+file(COPY ${CMAKE_SOURCE_DIR}/python/whisker_analysis.py DESTINATION ${PYTHON_OUTPUT_DIRECTORY})
+
 
 #=============================
 # Externally Provided Content
