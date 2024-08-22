@@ -56,10 +56,10 @@ set(PYTHON_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Copy the Python files to the output directory
 configure_file(
-    ${CMAKE_SOURCE_DIR}/python/__init__.py 
+    ${PROJECT_SOURCE_DIR}/python/__init__.py 
     ${PYTHON_OUTPUT_DIRECTORY}/__init__.py COPYONLY)
 configure_file(
-    ${CMAKE_SOURCE_DIR}/python/whisker_analysis.py
+    ${PROJECT_SOURCE_DIR}/python/whisker_analysis.py
     ${PYTHON_OUTPUT_DIRECTORY}/whisker_analysis.py COPYONLY)
 
 
