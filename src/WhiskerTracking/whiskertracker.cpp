@@ -265,49 +265,6 @@ void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float va
     }
 }
 
-void remove_duplicates(std::vector<Line2D> & whiskers) {
-
-    struct correlation_matrix {
-        int i;
-        int j;
-        float corr;
-    };
-
-    auto correlation_threshold = 0.2f;
-
-    auto cor_mat = std::vector<correlation_matrix>();
-
-    auto whisker_sets = std::vector<std::set<whisker::Point2D<int>>>();
-    for (auto const & w : whiskers) {
-        whisker_sets.push_back(whisker::create_set(w));
-    }
-
-    for (int i = 0; i < whisker_sets.size(); i++) {
-
-        for (int j = i + 1; j < whisker_sets.size(); j++) {
-
-            auto this_cor = calculate_overlap_iou_relative(whisker_sets[i], whisker_sets[j]);
-
-            if (this_cor > correlation_threshold) {
-                cor_mat.push_back(correlation_matrix{i, j, this_cor});
-            }
-        }
-    }
-
-    auto erase_inds = std::vector<std::size_t>();
-    for (std::size_t i = 0; i < cor_mat.size(); i++) {
-        //std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
-
-        if (length(whiskers[cor_mat[i].i]) > length(whiskers[cor_mat[i].j])) {
-            erase_inds.push_back(cor_mat[i].j);
-        } else {
-            erase_inds.push_back(cor_mat[i].i);
-        }
-    }
-
-    erase_whiskers(whiskers, erase_inds);
-}
-
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers)
 {
 
@@ -321,29 +278,7 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whi
         }
     }
 
-    erase_whiskers(whiskers, erase_inds);
-}
-
-/**
- * @brief Erases whiskers at specified indices.
- *
- * This function takes a vector of indices and erases the whiskers at these indices from the whiskers vector.
- * It first sorts the indices in descending order and removes any duplicates.
- * Then, it iterates over the sorted and unique indices and erases the whisker at each index.
- * Note that the indices are processed in descending order to prevent the erasure of a whisker from affecting the indices of subsequent whiskers to be erased.
- *
- * @param whiskers A vector of whiskers to be modified.
- * @param erase_inds A vector of indices of the whiskers to be erased.
- */
-void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & erase_inds)
-{
-    std::ranges::sort(erase_inds, std::greater<>());
-    auto last = std::unique(erase_inds.begin(), erase_inds.end());
-    erase_inds.erase(last, erase_inds.end());
-
-    for (auto &erase_ind: erase_inds) {
-        whiskers.erase(whiskers.begin() + erase_ind);
-    }
+    whisker::erase_whiskers(whiskers, erase_inds);
 }
 
 void WhiskerTracker::_reinitializeJanelia() {

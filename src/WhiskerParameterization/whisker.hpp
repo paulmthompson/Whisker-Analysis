@@ -48,5 +48,20 @@ bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set)
 
 void extend_line_to_mask(Line2D & line, std::set<Point2D<int>> const & mask, int const x_bound, int const y_bound);
 
+void remove_duplicates(std::vector<Line2D> & whiskers);
+
+/**
+ * @brief Erases whiskers at specified indices.
+ *
+ * This function takes a vector of indices and erases the whiskers at these indices from the whiskers vector.
+ * It first sorts the indices in descending order and removes any duplicates.
+ * Then, it iterates over the sorted and unique indices and erases the whisker at each index.
+ * Note that the indices are processed in descending order to prevent the erasure of a whisker from affecting the indices of subsequent whiskers to be erased.
+ *
+ * @param whiskers A vector of whiskers to be modified.
+ * @param erase_inds A vector of indices of the whiskers to be erased.
+ */
+void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &erase_inds);
+
 }
 #endif //WHISKER_ANALYSIS_WHISKER_HPP
