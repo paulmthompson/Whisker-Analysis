@@ -247,4 +247,20 @@ void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_dire
     whiskers = sorted_whiskers;
 }
 
+void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<float> whisker_pad, float radius)
+{
+
+    auto erase_inds = std::vector<std::size_t>();
+
+    for (std::size_t i = 0; i < whiskers.size(); i++) {
+        auto distance_to_follicle = distance(whiskers[i][0], whisker_pad);
+
+        if (distance_to_follicle > radius) {
+            erase_inds.push_back(i);
+        }
+    }
+
+    whisker::erase_whiskers(whiskers, erase_inds);
+}
+
 } // namespace whisker

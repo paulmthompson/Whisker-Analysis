@@ -46,8 +46,27 @@ bool intersect(Point2D<float> const p1, Mask2D const & mask);
  */
 bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set);
 
+/**
+ * @brief Extends a 2D line to intersect with a mask.
+ * 
+ * This function extends a 2D line to intersect with a mask. It first calculates the direction vector of the line.
+ * Then, it iteratively extends the line in the direction of the direction vector until it intersects with the mask.
+ * 
+ * @param line The 2D line to be extended.
+ * @param mask The mask to intersect the line with.
+ * @param x_bound The maximum x-coordinate of the mask.
+ * @param y_bound The maximum y-coordinate of the mask.
+ */
 void extend_line_to_mask(Line2D & line, std::set<Point2D<int>> const & mask, int const x_bound, int const y_bound);
 
+/**
+ * @brief Removes duplicate whiskers from a vector of whiskers.
+ * 
+ * This function removes duplicate whiskers from a vector of whiskers.
+ * It calculates the overlap between each pair of whiskers and removes the shorter whisker.
+ * 
+ * @param whiskers A vector of whiskers to be modified.
+ */
 void remove_duplicates(std::vector<Line2D> & whiskers);
 
 /**
@@ -66,7 +85,7 @@ void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &er
 std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p);
 
 /**
- * @brief align_whisker_to_follicle
+ * @brief orient line so that the first index is closest to the follicle
  *
  * Measures the distance between the Point at one end of a whisker and Point
  * at the other end. The whisker is then flipped so that the first index is closest
@@ -92,6 +111,19 @@ void align_whisker_to_follicle(Line2D &whisker, whisker::Point2D<float> whisker_
  * @param head_direction_vector The head direction vector to project the whiskers onto.
  */
 void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_direction_vector);
+
+/**
+ * @brief Removes whiskers that are outside a specified radius from a point.
+ * 
+ * This function removes whiskers that are outside a specified radius from a point.
+ * It iterates over the whiskers and calculates the distance between the whisker's base and the specified point.
+ * If the distance is greater than the specified radius, the whisker is removed from the vector of whiskers.
+ * 
+ * @param whiskers A vector of whiskers to be modified.
+ * @param whisker_pad The point from which the distance is calculated.
+ * @param radius The radius outside of which whiskers are removed.
+ */
+void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<float> whisker_pad, float radius);
 
 } // namespace whisker
 

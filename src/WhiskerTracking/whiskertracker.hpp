@@ -96,8 +96,6 @@ private:
     GeomVector _head_direction_vector {0.0, 1.0};
     bool _verbose {false};
 
-    void _removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers);
-
     void _reinitializeJanelia();
 
     //void _clipFaceMask();

@@ -79,7 +79,7 @@ std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, co
 
     auto t5 = std::chrono::high_resolution_clock::now();
 
-    _removeWhiskersByWhiskerPadRadius(whiskers);
+    remove_whiskers_outside_radius(whiskers, _whisker_pad, _whisker_pad_radius);
 
     auto t6 = std::chrono::high_resolution_clock::now();
 
@@ -220,22 +220,6 @@ void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float va
             break;
         }
     }
-}
-
-void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers)
-{
-
-    auto erase_inds = std::vector<std::size_t>();
-
-    for (std::size_t i = 0; i < whiskers.size(); i++) {
-        auto distance_to_follicle = distance(whiskers[i][0], _whisker_pad);
-
-        if (distance_to_follicle > _whisker_pad_radius) {
-            erase_inds.push_back(i);
-        }
-    }
-
-    whisker::erase_whiskers(whiskers, erase_inds);
 }
 
 void WhiskerTracker::_reinitializeJanelia() {
