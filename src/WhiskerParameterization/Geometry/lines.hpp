@@ -71,6 +71,77 @@ inline float minimum_distance(Line2D const &line, Point2D<float> const p) {
 }
 
 /**
+ * @brief Finds the index of the point on a 2D line that is closest to a specified point.
+ * 
+ * This function calculates the distance between a specified point and each point on a 2D line.
+ * It returns the index of the point on the line that is closest to the specified point.
+ * 
+ * @param line A Line2D object representing the 2D line. It is a vector of Point2D<float> objects.
+ * @param p A Point2D<float> object representing the point for which the nearest point on the line is to be found.
+ */
+inline size_t minimum_distance_index(Line2D const &line, Point2D<float> const p) {
+    auto dist = distance(line[0], p);
+    size_t index = 0;
+
+    for (std::size_t i = 1; i < line.size(); i++) {
+        auto this_dist = distance(line[i], p);
+        if (this_dist < dist) {
+            dist = this_dist;
+            index = i;
+        }
+    }
+    return index;
+}
+
+inline float distance_to_segment(Point2D<float> const p, Point2D<float> const a, Point2D<float> const b) {
+
+    auto ab = create_vector(a, b);
+    auto ap = create_vector(a, p);
+    auto bp = create_vector(b, p);
+
+    auto e = dot(ap, ab);
+
+    if (e <= 0) {
+        return distance(a, p);
+    }
+
+    auto f = dot(ab, ab);
+
+    if (e >= f) {
+        return distance(b, p);
+    }
+
+    return distance(p, a + (e / f) * ab);
+}
+
+inline float minimum_distance_exact(Line2D const & line, Point2D<float> const p) {
+
+    // Find index of minimum distance from existing points
+    auto min_index = minimum_distance_index(line, p);
+
+    // Find minimum distance from line segment between min_index and min_index + 1
+    // as well as min_index -1 and min_index
+
+    if (min_index == 0) {
+        return distance_to_segment(p, line[0], line[1]);
+    } else if (min_index == line.size() - 1) {
+        return distance_to_segment(p, line[min_index - 1], line[min_index]);
+    }
+
+    auto min_dist = distance_to_segment(p, line[min_index - 1], line[min_index]);
+    auto dist = distance_to_segment(p, line[min_index], line[min_index + 1]);
+
+    if (dist < min_dist) {
+        min_dist = dist;
+    }
+
+    return min_dist;
+}
+
+// TODO: Implement this function
+// Index at minimum distance
+
+/**
  * @brief Finds the index of the point on a 2D line that is closest to a specified path length along the line.
  *
  * This function calculates the cumulative distance along a 2D line from the first point to each subsequent point.
