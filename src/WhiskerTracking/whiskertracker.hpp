@@ -105,12 +105,6 @@ private:
 
 };
 
-void align_whisker_to_follicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
-
-std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p);
-void order_whiskers(std::vector<Line2D> & whiskers,GeomVector const & head_direction_vector);
-
-
 std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
 
 } // namespace whisker

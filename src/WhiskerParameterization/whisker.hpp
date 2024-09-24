@@ -63,5 +63,36 @@ void remove_duplicates(std::vector<Line2D> & whiskers);
  */
 void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &erase_inds);
 
-}
+std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p);
+
+/**
+ * @brief align_whisker_to_follicle
+ *
+ * Measures the distance between the Point at one end of a whisker and Point
+ * at the other end. The whisker is then flipped so that the first index is closest
+ * to the follicle
+ *
+ *
+ * @param whisker whisker to be checked
+ */
+void align_whisker_to_follicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
+
+/**
+ * @brief Orders the whiskers based on their position.
+ *
+ * This function orders the whiskers with the most posterior being 0, more anterior 1, etc.
+ * If the head direction vector is known, the follicular base can be projected onto this vector.
+ * Consequently, the smallest value of the projection will be most posterior.
+ *
+ * The function first calculates the projection of each whisker's follicular base onto the head direction vector.
+ * It then creates a vector of indices from 0 to the number of whiskers and sorts this vector based on the calculated projections.
+ * Finally, it creates a new vector of whiskers sorted according to the calculated order and replaces the original vector of whiskers with this sorted vector.
+ *
+ * @param whiskers A vector of whiskers to be ordered.
+ * @param head_direction_vector The head direction vector to project the whiskers onto.
+ */
+void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_direction_vector);
+
+} // namespace whisker
+
 #endif //WHISKER_ANALYSIS_WHISKER_HPP

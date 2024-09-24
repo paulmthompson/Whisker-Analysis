@@ -100,28 +100,6 @@ std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, co
     return whiskers;
 }
 
-std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p) {
-
-    float nearest_distance = 1000.0;
-    int whisker_id = 0;
-
-    float current_d = 0.0f;
-    int current_whisker_id = 0;
-
-    for (auto &w: whiskers) {
-        for (int i = 0; i < w.size(); i++) {
-            current_d = sqrt(pow(x_p - w[i].x, 2) + pow(y_p - w[i].y, 2));
-            if (current_d < nearest_distance) {
-                nearest_distance = current_d;
-                whisker_id = current_whisker_id;
-            }
-        }
-        current_whisker_id += 1;
-    }
-
-    return std::make_tuple(nearest_distance, whisker_id);
-}
-
 std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename) {
     auto j_segs = janelia::load_binary_data(filename);
 
@@ -144,27 +122,6 @@ void WhiskerTracker::setHeadDirection(float x, float y)
 {
     _head_direction_vector = GeomVector{x,y};
     _head_direction_vector = normalize(_head_direction_vector);
-}
-
-/**
- * @brief align_whisker_to_follicle
- *
- * Measures the distance between the Point at one end of a whisker and Point
- * at the other end. The whisker is then flipped so that the first index is closest
- * to the follicle
- *
- *
- * @param whisker whisker to be checked
- */
-void align_whisker_to_follicle(Line2D & whisker, whisker::Point2D<float> whisker_pad) {
-
-    auto start_distance = distance(whisker[0], whisker_pad);
-
-    auto end_distance = distance(whisker.back(), whisker_pad);
-
-    if (start_distance > end_distance) {
-        std::ranges::reverse(whisker);
-    }
 }
 
 void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float value) {
@@ -301,52 +258,4 @@ void WhiskerTracker::_connectToFaceMask(std::vector<Line2D> & whiskers)
     }
 }
 
-/**
- * @brief Orders the whiskers based on their position.
- *
- * This function orders the whiskers with the most posterior being 0, more anterior 1, etc.
- * If the head direction vector is known, the follicular base can be projected onto this vector.
- * Consequently, the smallest value of the projection will be most posterior.
- *
- * The function first calculates the projection of each whisker's follicular base onto the head direction vector.
- * It then creates a vector of indices from 0 to the number of whiskers and sorts this vector based on the calculated projections.
- * Finally, it creates a new vector of whiskers sorted according to the calculated order and replaces the original vector of whiskers with this sorted vector.
- *
- * @param whiskers A vector of whiskers to be ordered.
- * @param head_direction_vector The head direction vector to project the whiskers onto.
- */
-void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_direction_vector)
-{
-    std::vector<float> w_projection_vector;
-    for (auto const & w : whiskers)
-    {
-        w_projection_vector.push_back(project(head_direction_vector, w[0]));
-    }
-
-    auto position_order = std::vector<std::size_t>(w_projection_vector.size());
-    std::iota(position_order.begin(), position_order.end(), 0);
-    std::sort(
-            std::begin(position_order),
-            std::end(position_order),
-            [&](std::size_t i1, std::size_t i2)
-            { return w_projection_vector[i1] > w_projection_vector[i2]; }
-            );
-
-    /*
-    for (std::size_t i = 0; i < position_order.size(); i++) {
-
-        std::cout << "The " << i << " position whisker is " << position_order[i];
-        std::cout << " with follicle at " << "(" << whiskers[position_order[i]][0].x << ","
-                << whiskers[position_order[i]][0].y << ")" << std::endl;
-    }
-    */
-
-    std::vector<Line2D> sorted_whiskers;
-    for (std::size_t i : position_order) {
-        sorted_whiskers.push_back(whiskers[i]);
-    }
-
-    whiskers = sorted_whiskers;
-}
-
-}
+} // namespace whisker
