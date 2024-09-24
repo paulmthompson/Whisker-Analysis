@@ -69,9 +69,9 @@ std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, co
 
     auto t3 = std::chrono::high_resolution_clock::now();
 
-    _removeDuplicates(whiskers);
+    remove_duplicates(whiskers);
     std::ranges::for_each(whiskers, [wp=_whisker_pad](Line2D & w)
-    {_alignWhiskerToFollicle(w, wp);});
+    {align_whisker_to_follicle(w, wp);});
 
     auto t4 = std::chrono::high_resolution_clock::now();
 
@@ -83,7 +83,7 @@ std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, co
 
     auto t6 = std::chrono::high_resolution_clock::now();
 
-    _orderWhiskers(whiskers, _head_direction_vector);
+    order_whiskers(whiskers, _head_direction_vector);
 
     auto t7 = std::chrono::high_resolution_clock::now();
 
@@ -147,7 +147,7 @@ void WhiskerTracker::setHeadDirection(float x, float y)
 }
 
 /**
- * @brief WhiskerTracker::_alignWhiskerToFollicle
+ * @brief align_whisker_to_follicle
  *
  * Measures the distance between the Point at one end of a whisker and Point
  * at the other end. The whisker is then flipped so that the first index is closest
@@ -156,7 +156,7 @@ void WhiskerTracker::setHeadDirection(float x, float y)
  *
  * @param whisker whisker to be checked
  */
-void _alignWhiskerToFollicle(Line2D & whisker, whisker::Point2D<float> whisker_pad) {
+void align_whisker_to_follicle(Line2D & whisker, whisker::Point2D<float> whisker_pad) {
 
     auto start_distance = distance(whisker[0], whisker_pad);
 
@@ -265,7 +265,7 @@ void WhiskerTracker::changeJaneliaParameter(JaneliaParameter parameter, float va
     }
 }
 
-void _removeDuplicates(std::vector<Line2D> & whiskers) {
+void remove_duplicates(std::vector<Line2D> & whiskers) {
 
     struct correlation_matrix {
         int i;
@@ -305,7 +305,7 @@ void _removeDuplicates(std::vector<Line2D> & whiskers) {
         }
     }
 
-    _eraseWhiskers(whiskers, erase_inds);
+    erase_whiskers(whiskers, erase_inds);
 }
 
 void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers)
@@ -321,7 +321,7 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whi
         }
     }
 
-    _eraseWhiskers(whiskers, erase_inds);
+    erase_whiskers(whiskers, erase_inds);
 }
 
 /**
@@ -335,7 +335,7 @@ void WhiskerTracker::_removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whi
  * @param whiskers A vector of whiskers to be modified.
  * @param erase_inds A vector of indices of the whiskers to be erased.
  */
-void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & erase_inds)
+void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & erase_inds)
 {
     std::ranges::sort(erase_inds, std::greater<>());
     auto last = std::unique(erase_inds.begin(), erase_inds.end());
@@ -380,7 +380,7 @@ void WhiskerTracker::_connectToFaceMask(std::vector<Line2D> & whiskers)
  * @param whiskers A vector of whiskers to be ordered.
  * @param head_direction_vector The head direction vector to project the whiskers onto.
  */
-void _orderWhiskers(std::vector<Line2D> & whiskers, GeomVector const & head_direction_vector)
+void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_direction_vector)
 {
     std::vector<float> w_projection_vector;
     for (auto const & w : whiskers)
