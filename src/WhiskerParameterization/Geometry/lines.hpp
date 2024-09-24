@@ -93,26 +93,32 @@ inline size_t minimum_distance_index(Line2D const &line, Point2D<float> const p)
     return index;
 }
 
-inline float distance_to_segment(Point2D<float> const p, Point2D<float> const a, Point2D<float> const b) {
+/**
+ * 
+ * Modified from http://www.sunshine2k.de/coding/java/PointOnLine/PointOnLine.html
+ * 
+ */
+inline Point2D<float> projected_point_on_line(Point2D<float> const p, Point2D<float> const a, Point2D<float> const b) {
 
-    auto ab = create_vector(a, b);
-    auto ap = create_vector(a, p);
-    auto bp = create_vector(b, p);
+    auto e1 = create_vector(a, b);
+    auto e2 = create_vector(a, p);
 
-    auto e = dot(ap, ab);
+    float val_dot_product = dot(e1, e2);
 
-    if (e <= 0) {
-        return distance(a, p);
-    }
+    float len2 = e1.x * e1.x + e1.y * e1.y;
 
-    auto f = dot(ab, ab);
+    Point2D<float> projection = {a.x + (val_dot_product * e1.x) / len2, a.y + (val_dot_product * e1.y) / len2};
 
-    if (e >= f) {
-        return distance(b, p);
-    }
+    return projection;
+};
 
-    return distance(p, a + (e / f) * ab);
-}
+inline float minimum_distance_to_segment(Point2D<float> const p, Point2D<float> const a, Point2D<float> const b)
+{
+    auto projected_point = projected_point_on_line(p, a, b);
+
+    return distance(p, projected_point);
+
+};
 
 inline float minimum_distance_exact(Line2D const & line, Point2D<float> const p) {
 
@@ -123,13 +129,13 @@ inline float minimum_distance_exact(Line2D const & line, Point2D<float> const p)
     // as well as min_index -1 and min_index
 
     if (min_index == 0) {
-        return distance_to_segment(p, line[0], line[1]);
+        return minimum_distance_to_segment(p, line[0], line[1]);
     } else if (min_index == line.size() - 1) {
-        return distance_to_segment(p, line[min_index - 1], line[min_index]);
+        return minimum_distance_to_segment(p, line[min_index - 1], line[min_index]);
     }
 
-    auto min_dist = distance_to_segment(p, line[min_index - 1], line[min_index]);
-    auto dist = distance_to_segment(p, line[min_index], line[min_index + 1]);
+    auto min_dist = minimum_distance_to_segment(p, line[min_index - 1], line[min_index]);
+    auto dist = minimum_distance_to_segment(p, line[min_index], line[min_index + 1]);
 
     if (dist < min_dist) {
         min_dist = dist;
@@ -137,9 +143,6 @@ inline float minimum_distance_exact(Line2D const & line, Point2D<float> const p)
 
     return min_dist;
 }
-
-// TODO: Implement this function
-// Index at minimum distance
 
 /**
  * @brief Finds the index of the point on a 2D line that is closest to a specified path length along the line.

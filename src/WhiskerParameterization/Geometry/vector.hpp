@@ -27,7 +27,6 @@ inline GeomVector create_vector(Point2D<T> p1, Point2D<T> p2) {
     return GeomVector{static_cast<float>(dx), static_cast<float>(dy)};
 };
 
-template<typename T>
 inline float dot(GeomVector vec1, GeomVector vec2) {
     return vec1.x * vec2.x + vec1.y * vec2.y;
 };
