@@ -39,12 +39,12 @@ TEST_CASE("FiniteDifferences - 1", "[Curvature]") {
 
     auto fd = whisker::central_difference_first_derivative(line, index, 1);
 
-    CHECK_THAT(fd, Catch::Matchers::WithinAbs(0.0f, 1e-6));
+    CHECK_THAT(fd, Catch::Matchers::WithinAbs(0.0f, 1e-6f));
 
     // Check that this still works when the window size is increased
     fd = whisker::central_difference_first_derivative(line, index, 2);
 
-    CHECK_THAT(fd, Catch::Matchers::WithinAbs(0.0f, 1e-6));
+    CHECK_THAT(fd, Catch::Matchers::WithinAbs(0.0f, 1e-6f));
 
     // Create new line with index 51 deleted so that it is asymmetric
     x.erase(x.begin() + 51);
@@ -58,7 +58,7 @@ TEST_CASE("FiniteDifferences - 1", "[Curvature]") {
 
     fd = whisker::central_difference_first_derivative(line, index, 1);
 
-    CHECK_THAT(static_cast<double>(fd), Catch::Matchers::WithinRel(0.2, 1e-3));
+    CHECK_THAT(fd, Catch::Matchers::WithinRel(0.2f, 1e-3f));
 }
 
 TEST_CASE("Curvature - 1", "[Curvature]") {
@@ -85,11 +85,11 @@ TEST_CASE("Curvature - 1", "[Curvature]") {
 
     auto curvature = whisker::calculate_curvature_finite_differences(line, index, 1);
 
-    CHECK_THAT(curvature, Catch::Matchers::WithinRel(2.0f, 1e-3));
+    CHECK_THAT(curvature, Catch::Matchers::WithinRel(2.0f, 1e-3f));
 
     // Check that this still works when the window size is increased
     curvature = whisker::calculate_curvature_finite_differences(line, index, 2);
 
-    CHECK_THAT(curvature, Catch::Matchers::WithinRel(2.0f, 1e-3));
+    CHECK_THAT(curvature, Catch::Matchers::WithinRel(2.0f, 1e-3f));
 
 }
