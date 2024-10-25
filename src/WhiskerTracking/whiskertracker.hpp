@@ -96,20 +96,12 @@ private:
     GeomVector _head_direction_vector {0.0, 1.0};
     bool _verbose {false};
 
-    void _removeWhiskersByWhiskerPadRadius(std::vector<Line2D> & whiskers);
-
     void _reinitializeJanelia();
 
     //void _clipFaceMask();
     void _connectToFaceMask(std::vector<Line2D> & whiskers);
 
 };
-
-void _alignWhiskerToFollicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
-void _eraseWhiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &erase_inds);
-std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p);
-void _orderWhiskers(std::vector<Line2D> & whiskers,GeomVector const & head_direction_vector);
-void _removeDuplicates(std::vector<Line2D> & whiskers);
 
 std::map<int, std::vector<Line2D>> load_janelia_whiskers(std::string const & filename);
 

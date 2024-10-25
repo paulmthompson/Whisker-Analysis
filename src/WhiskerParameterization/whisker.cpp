@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iostream>
+#include <numeric>
 
 namespace whisker
 {
@@ -122,6 +123,144 @@ void extend_line_to_mask(Line2D & line, std::set<Point2D<int>> const & mask, int
 
     line.insert(line.begin(), extended_line.begin(), extended_line.end() - 1);
 
-};
-
 }
+
+void remove_duplicates(std::vector<Line2D> & whiskers) {
+
+    struct correlation_matrix {
+        int i;
+        int j;
+        float corr;
+    };
+
+    auto correlation_threshold = 0.2f;
+
+    auto cor_mat = std::vector<correlation_matrix>();
+
+    auto whisker_sets = std::vector<std::set<whisker::Point2D<int>>>();
+    for (auto const & w : whiskers) {
+        whisker_sets.push_back(whisker::create_set(w));
+    }
+
+    for (int i = 0; i < whisker_sets.size(); i++) {
+
+        for (int j = i + 1; j < whisker_sets.size(); j++) {
+
+            auto this_cor = calculate_overlap_iou_relative(whisker_sets[i], whisker_sets[j]);
+
+            if (this_cor > correlation_threshold) {
+                cor_mat.push_back(correlation_matrix{i, j, this_cor});
+            }
+        }
+    }
+
+    auto erase_inds = std::vector<std::size_t>();
+    for (std::size_t i = 0; i < cor_mat.size(); i++) {
+        //std::cout << "Whiskers " << cor_mat[i].i << " and " << cor_mat[i].j << " are the same" << std::endl;
+
+        if (length(whiskers[cor_mat[i].i]) > length(whiskers[cor_mat[i].j])) {
+            erase_inds.push_back(cor_mat[i].j);
+        } else {
+            erase_inds.push_back(cor_mat[i].i);
+        }
+    }
+
+    erase_whiskers(whiskers, erase_inds);
+}
+
+void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & erase_inds)
+{
+    std::ranges::sort(erase_inds, std::greater<>());
+    auto last = std::unique(erase_inds.begin(), erase_inds.end());
+    erase_inds.erase(last, erase_inds.end());
+
+    for (auto &erase_ind: erase_inds) {
+        whiskers.erase(whiskers.begin() + erase_ind);
+    }
+}
+
+std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p) {
+
+    float nearest_distance = 1000.0;
+    int whisker_id = 0;
+
+    float current_d = 0.0f;
+    int current_whisker_id = 0;
+
+    for (auto &w: whiskers) {
+        for (int i = 0; i < w.size(); i++) {
+            current_d = sqrt(pow(x_p - w[i].x, 2) + pow(y_p - w[i].y, 2));
+            if (current_d < nearest_distance) {
+                nearest_distance = current_d;
+                whisker_id = current_whisker_id;
+            }
+        }
+        current_whisker_id += 1;
+    }
+
+    return std::make_tuple(nearest_distance, whisker_id);
+}
+
+
+void align_whisker_to_follicle(Line2D & whisker, whisker::Point2D<float> whisker_pad) {
+
+    auto start_distance = distance(whisker[0], whisker_pad);
+
+    auto end_distance = distance(whisker.back(), whisker_pad);
+
+    if (start_distance > end_distance) {
+        std::ranges::reverse(whisker);
+    }
+}
+
+void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_direction_vector)
+{
+    std::vector<float> w_projection_vector;
+    for (auto const & w : whiskers)
+    {
+        w_projection_vector.push_back(project(head_direction_vector, w[0]));
+    }
+
+    auto position_order = std::vector<std::size_t>(w_projection_vector.size());
+    std::iota(position_order.begin(), position_order.end(), 0);
+    std::sort(
+            std::begin(position_order),
+            std::end(position_order),
+            [&](std::size_t i1, std::size_t i2)
+            { return w_projection_vector[i1] > w_projection_vector[i2]; }
+            );
+
+    /*
+    for (std::size_t i = 0; i < position_order.size(); i++) {
+
+        std::cout << "The " << i << " position whisker is " << position_order[i];
+        std::cout << " with follicle at " << "(" << whiskers[position_order[i]][0].x << ","
+                << whiskers[position_order[i]][0].y << ")" << std::endl;
+    }
+    */
+
+    std::vector<Line2D> sorted_whiskers;
+    for (std::size_t i : position_order) {
+        sorted_whiskers.push_back(whiskers[i]);
+    }
+
+    whiskers = sorted_whiskers;
+}
+
+void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<float> whisker_pad, float radius)
+{
+
+    auto erase_inds = std::vector<std::size_t>();
+
+    for (std::size_t i = 0; i < whiskers.size(); i++) {
+        auto distance_to_follicle = distance(whiskers[i][0], whisker_pad);
+
+        if (distance_to_follicle > radius) {
+            erase_inds.push_back(i);
+        }
+    }
+
+    whisker::erase_whiskers(whiskers, erase_inds);
+}
+
+} // namespace whisker

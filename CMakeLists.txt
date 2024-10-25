@@ -27,6 +27,14 @@ include(CompilerWarnings)
 include(set_rpath)
 include(iwyu)
 
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    option(CODE_COVERAGE "Enable coverage reporting" OFF)
+    if(CODE_COVERAGE)
+        add_compile_options(--coverage -O0 -g)
+        add_link_options(--coverage)
+    endif()
+endif()
+
 #[[
 Manifest mode from VCPKG will make all dependencies specified in vcpkg.json be associated and installed
 with this particular project
@@ -36,6 +44,24 @@ set(VCPKG_MANIFEST_MODE ON)
 #This is necessary to work on windows. A better way would be to define only the symbols that need to be exported
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_SUPPORT_WINDOWS_EXPORT_ALL_SYMBOLS 1)
+
+option(BUILD_WHISKERTRACKER "Build the whiskertracker target" OFF)
+
+if (PROJECT_IS_TOP_LEVEL)
+    set(BUILD_WHISKERTRACKER ON)
+endif()
+
+# Define the output directory for Python files
+set(PYTHON_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# Copy the Python files to the output directory
+configure_file(
+    ${PROJECT_SOURCE_DIR}/python/__init__.py 
+    ${PYTHON_OUTPUT_DIRECTORY}/__init__.py COPYONLY)
+configure_file(
+    ${PROJECT_SOURCE_DIR}/python/whisker_analysis.py
+    ${PYTHON_OUTPUT_DIRECTORY}/whisker_analysis.py COPYONLY)
+
 
 #=============================
 # Externally Provided Content

@@ -8,3 +8,7 @@
 out
 
 *.h5
+
+__pycache__
+
+.vscode

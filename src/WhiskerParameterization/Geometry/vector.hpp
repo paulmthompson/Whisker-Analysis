@@ -27,6 +27,10 @@ inline GeomVector create_vector(Point2D<T> p1, Point2D<T> p2) {
     return GeomVector{static_cast<float>(dx), static_cast<float>(dy)};
 };
 
+inline float dot(GeomVector vec1, GeomVector vec2) {
+    return vec1.x * vec2.x + vec1.y * vec2.y;
+};
+
 /**
  * @brief Reverses the direction of a geometric vector.
  *
@@ -100,5 +104,6 @@ inline Point2D<float> create_point(GeomVector vec, Point2D<float> p1)
   return Point2D<float>{p1.x + vec.x, p1.y + vec.y};
 };
 
-}
+} // namespace whisker
+
 #endif //WHISKER_ANALYSIS_VECTOR_HPP

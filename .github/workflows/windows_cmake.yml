@@ -1,4 +1,4 @@
-name: Linux Build
+name: Windows Build
 
 on:
   push:
@@ -11,8 +11,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - {"os": ubuntu-latest, short: linux, compiler: gcc, shell: bash}
-          - {"os": ubuntu-latest, short: linux, compiler: clang, shell: bash}
+          #- {"os": windows-latest, short: windows, compiler: gcc, shell: msys2}
+          - {"os": windows-latest, short: windows, compiler: clang, shell: msys2}
+          - {"os": windows-latest, short: windows, compiler: msvc, shell: powershell}
 
     runs-on: ${{matrix.os}}
 
@@ -32,9 +33,13 @@ jobs:
         with:
             python-version: '3.10'
 
-      - name: Install python dependencies Unix
+      - name: Install python dependencies Windows
         run: python -m pip install --upgrade pip pytest numpy
-        if: runner.os == 'Linux'
+        shell: powershell
+        if: runner.os == 'Windows'
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows' && matrix.compiler == 'msvc'
 
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@v7
@@ -43,23 +48,25 @@ jobs:
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: "Install Linux System Dependencies"
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libomp-14-dev lcov llvm gcovr
+      - name: Add clang and and gcc to windows runner
+        uses: msys2/setup-msys2@v2
+        if: runner.os == 'Windows' && matrix.shell == 'msys2'
+        with:
+          update: true
+          install: >-
+            base-devel
+            mingw-w64-x86_64-clang
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-clang-x86_64-openmp
+            mingw-w64-x86_64-openmp
 
       - name: "Set environmental variables"
         shell: bash
         run: |
           echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
-      - name: Configure CMake with coverage Linux GCC
-        if: matrix.compiler == 'gcc'
-        run: |
-            cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}" -DCODE_COVERAGE=ON
-
       - name: Configure CMake without coverage for all other runners (does not equal gcc AND Linux)
-        if: ${{ !(matrix.compiler == 'gcc') }}
         run: |
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
@@ -69,17 +76,3 @@ jobs:
       - name: Test
         run: ctest --verbose --preset ${{matrix.short}}-${{matrix.compiler}}-release -C ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
         working-directory: ${{ github.workspace }}
-
-      - name: Capture coverage info
-        if: matrix.compiler == 'gcc'
-        run: |
-          lcov --directory /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/GCC/Release --capture --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/out/*' '*/opt/*' --output-file coverage.info
-          lcov --list coverage.info
-
-      - name: Upload coverage to Coveralls
-        if: matrix.compiler == 'gcc'
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          path-to-lcov: coverage.info

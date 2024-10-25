@@ -1,7 +1,7 @@
 
 import pytest
 import numpy as np
-from whiskertracker import WhiskerTracker
+from whisker_analysis import WhiskerTracker
 
 def load_img(file_path):
     # Assuming the function loads an image from the file and returns it as a numpy array

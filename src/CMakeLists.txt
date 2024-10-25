@@ -31,25 +31,13 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/lines.hpp
         WhiskerParameterization/Geometry/vector.hpp
         WhiskerParameterization/Geometry/mask.hpp
+        WhiskerParameterization/Geometry/curvature.hpp
 
 )
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
-pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
-
-if (WIN32)
-    set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
-elseif(APPLE)
-    set_target_properties(whiskertracker PROPERTIES SUFFIX ".so") #I think?
-else()
-    set_target_properties(whiskertracker PROPERTIES SUFFIX ".so")
-endif()
-
 target_link_libraries(Whisker-Analysis PUBLIC janelia OpenMP::OpenMP_CXX)
-
-target_link_libraries(whiskertracker PRIVATE Whisker-Analysis)
-target_link_libraries(whiskertracker PRIVATE pybind11::module)
 
 target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
@@ -66,6 +54,34 @@ endif()
 
 if (MSVC)
     target_compile_options(Whisker-Analysis PRIVATE ${MSVC_WARNINGS})
+endif()
+
+if(BUILD_WHISKERTRACKER)
+
+    set(PYBIND11_FINDPYTHON ON) # Ensure pybind11 finds Python
+
+    FetchContent_Declare(
+            pybind11
+            GIT_REPOSITORY https://github.com/pybind/pybind11
+            GIT_TAG v2.12.0
+    )
+
+    FetchContent_GetProperties(pybind11)
+    if(NOT pybind11_POPULATED)
+        FetchContent_Populate(pybind11)
+        add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
+    endif()
+
+    pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
+    target_link_libraries(whiskertracker PRIVATE Whisker-Analysis pybind11::module)
+
+    if (WIN32)
+        set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
+    elseif(APPLE)
+        set_target_properties(whiskertracker PROPERTIES SUFFIX ".so") #I think?
+    else()
+        set_target_properties(whiskertracker PROPERTIES SUFFIX ".so")
+    endif()
 endif()
 
 install(TARGETS Whisker-Analysis
