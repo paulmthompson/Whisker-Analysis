@@ -12,27 +12,36 @@ website:
         contents:
         - index.qmd
         
-      - section: "Whisker Parameterization"
+      - section: "Tutorials"
+      
+      - section: "How-to Guides"
+      
+      - section: "Reference Guides"
+      
+      - section: "Background and Concepts"
         contents:
-        - parameterization/parameter_overview.qmd
-        - parameterization/discretization.qmd
-        - parameterization/mask.qmd
-        - parameterization/follicle.qmd
-        - parameterization/point.qmd
-        - parameterization/quality_parameters.qmd
-        - parameterization/beam_parameters.qmd
         
-      - section: "Kinematics"
-        contents:
-        - kinematics/kinematics_overview.qmd
-        - kinematics/angle.qmd
-        - kinematics/curvature.qmd
-        - kinematics/phase.qmd
-        - kinematics/velocity.qmd
+        - section: "Whisker Parameterization"
+          contents:
+          - parameterization/parameter_overview.qmd
+          - parameterization/discretization.qmd
+          - parameterization/mask.qmd
+          - parameterization/follicle.qmd
+          - parameterization/point.qmd
+          - parameterization/quality_parameters.qmd
+          - parameterization/beam_parameters.qmd
         
-      - section: "Mechanics"
-        contents: 
-        - mechanics/mechanics_overview.qmd
+        - section: "Kinematics"
+          contents:
+          - kinematics/kinematics_overview.qmd
+          - kinematics/angle.qmd
+          - kinematics/curvature.qmd
+          - kinematics/phase.qmd
+          - kinematics/velocity.qmd
+        
+        - section: "Mechanics"
+          contents: 
+          - mechanics/mechanics_overview.qmd
      
 format:
   html:

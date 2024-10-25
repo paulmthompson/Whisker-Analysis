@@ -2,3 +2,28 @@
 title: "Whisker Analysis"
 ---
 
+The Whisker Analysis package is designed to aid in the processing of high speed videos of whisker behaviors. The core of the library is written in C++, so it is lightning fast, but also comes with a python wrapper for ease of use.
+
+## Installation
+
+## Features
+
+-   Whisker video analysis - Includes a complete re-write of the Janelia Whisker Tracker
+
+-   Whisker Parameterization operations - Bezier fits,
+
+-   Kinematic analysis - Angle, curvature, and phase calculations
+
+-   Mechanical analysis - Force and moment calculations
+
+## How Documentation is Organized
+
+This documentation will follow the quadrants of the [Diátaxis documentation authoring framework](https://diataxis.fr/)
+
+-   Tutorials
+
+-   How-to Guides
+
+-   Concepts
+
+-   Reference Guides

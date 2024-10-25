@@ -1,0 +1,43 @@
+project:
+  type: book
+  
+
+book:
+  title: "WhiskerAnalysis"
+  author: "P. M. Thompson"
+
+  chapters:
+      - part: "Introduction"
+        chapters: 
+        - index.qmd
+        
+      - part: "Tutorials"
+
+      - part: "How-to guides"
+
+              
+      - part: "Reference Guides"
+
+              
+      - part: "Concepts"
+        chapters:
+        - parameterization/parameter_overview.qmd
+        - parameterization/discretization.qmd
+        - parameterization/mask.qmd
+        - parameterization/follicle.qmd
+        - parameterization/point.qmd
+        - parameterization/quality_parameters.qmd
+        - parameterization/beam_parameters.qmd
+        - kinematics/kinematics_overview.qmd
+        - kinematics/angle.qmd
+        - kinematics/curvature.qmd
+        - kinematics/phase.qmd
+        - kinematics/velocity.qmd
+        - mechanics/mechanics_overview.qmd
+
+
+format:
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
