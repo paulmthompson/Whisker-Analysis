@@ -1,4 +1,5 @@
 #include "whiskertracker.hpp"
+#include "loaders.hpp"
 
 #include <omp.h>
 #include <pybind11/pybind11.h>
@@ -84,6 +85,18 @@ PYBIND11_MODULE(whiskertracker, m) {
                     mask_cpp.push_back(whisker::Point2D<float>{t[0].cast<float>(), t[1].cast<float>()});
                 }
                 wt.setFaceMask(mask_cpp);
+            })
+            .def("load_and_align_whiskers", [](whisker::WhiskerTracker &wt, const std::string &filepath) {
+                auto data_map = whisker::load_line_csv(filepath);
+                std::cout << "Loaded " << data_map.size() << " frames from " << filepath << std::endl;
+                for (auto & [frame_num, lines] : data_map) {
+                    for (auto & line : lines) {
+                        whisker::align_whisker_to_follicle(line, wt.getWhiskerPad());
+                    }
+                }
+
+                std::string output_filepath = filepath.substr(0, filepath.find_last_of('.')) + "_aligned.csv";
+                whisker::save_lines_csv(data_map,output_filepath);
             });
     m.def("get_max_threads", &omp_get_max_threads);
     m.def("set_num_threads", &omp_set_num_threads);

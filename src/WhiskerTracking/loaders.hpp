@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <string>
 #include <vector>
 
 namespace whisker {
@@ -40,7 +41,7 @@ inline std::map<int, std::vector<Line2D>> load_line_csv(const std::string& filep
 
         std::getline(ss, frame_num_str, ',');
 
-        if (frame_num_str == "Frame") {
+        if (frame_num_str.find_first_not_of("0123456789") != std::string::npos) {
             continue;
             // Skip the header line
         }
@@ -80,4 +81,44 @@ inline std::map<int, std::vector<Line2D>> load_line_csv(const std::string& filep
 
     return data_map;
 }
+
+inline void save_lines_csv(
+        const std::map<int,std::vector<Line2D>>& data,
+        const std::string& filename,
+        const std::string& header = "Frame,X,Y")
+{
+
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file");
+    }
+
+    // Write the header
+    file << header << "\n";
+
+    // Write the data
+    for (const auto& [frame, lines] : data) {
+        for (const auto& line : lines) {
+            std::ostringstream x_values;
+            std::ostringstream y_values;
+
+            for (const auto& point : line) {
+                x_values << std::fixed << std::setprecision(1) << point.x << ",";
+                y_values << std::fixed << std::setprecision(1) << point.y << ",";
+            }
+
+            // Remove the trailing comma
+            std::string x_str = x_values.str();
+            std::string y_str = y_values.str();
+            if (!x_str.empty()) x_str.pop_back();
+            if (!y_str.empty()) y_str.pop_back();
+
+            file << frame << ",\"" << x_str << "\",\"" << y_str << "\"\n";
+        }
+    }
+
+    file.close();
+}
+
+
 } // namespace whisker

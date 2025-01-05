@@ -6,7 +6,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_executable(tests
         test_whiskertracker.cpp
         test_data.hpp
-        test_loaders.hpp
+        test_loaders.cpp
 )
 
 target_link_libraries(tests PRIVATE

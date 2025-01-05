@@ -10,6 +10,6 @@ TEST_CASE("Test CSV Load", "[Load]") {
 
     auto whiskers = whisker::load_line_csv("data/whiskers.csv");
 
-    CHECK(whiskers.size() == 168);
+    REQUIRE(whiskers.size() == 168);
 
 }
