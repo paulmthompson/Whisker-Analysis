@@ -4,7 +4,23 @@ title: "Curvature"
 
 ## Overview
 
+One of the most salient parameters that can characterize the shape of a whisker is the degree of bending of the whisker when it encounters an object. For some line in space
+
 ## Methods
+
+$k(x) = \frac{y''(x)}{(1 + (y'(x))^2)^\frac{3}{2}}$
+
+### Direct Calculation via Finite Differences
+
+Pros:
+
+Simple
+
+Cons:
+
+Susceptible to noisy variation from point to point
+
+central differences are poorly defined within unequal spacing between points
 
 ### 2nd Order Polynomial
 
