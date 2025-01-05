@@ -33,6 +33,8 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/mask.hpp
         WhiskerParameterization/Geometry/curvature.hpp
 
+        WhiskerTracking/loaders.hpp
+
 )
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)

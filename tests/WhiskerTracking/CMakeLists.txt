@@ -6,6 +6,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_executable(tests
         test_whiskertracker.cpp
         test_data.hpp
+        test_loaders.hpp
 )
 
 target_link_libraries(tests PRIVATE
@@ -40,6 +41,7 @@ set(DATA_FILES_TO_COPY
         "test_img2.bin"
         "test_img3.bin"
         "0110_1_0000000.bin"
+        "whiskers.csv"
 )
 
 copy_files(tests
