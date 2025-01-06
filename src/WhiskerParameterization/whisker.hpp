@@ -125,6 +125,8 @@ void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_dire
  */
 void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<float> whisker_pad, float radius);
 
+float fast_discrete_frechet_matrix(const Line2D& P, const Line2D& Q);
+
 } // namespace whisker
 
 #endif //WHISKER_ANALYSIS_WHISKER_HPP

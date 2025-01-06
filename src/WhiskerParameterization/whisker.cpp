@@ -6,7 +6,10 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
+#include <functional>
 #include <iostream>
+#include <limits>
 #include <numeric>
 
 namespace whisker
@@ -266,6 +269,56 @@ void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<floa
     }
 
     whisker::erase_whiskers(whiskers, erase_inds);
+}
+
+//This was based on python code found here that was very helpful.
+//https://github.com/joaofig/discrete-frechet
+/*
+MIT License
+
+Copyright (c) 2019 João Paulo Figueira
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+float fast_discrete_frechet_matrix(const Line2D& P, const Line2D& Q) {
+    size_t n = P.size();
+    size_t m = Q.size();
+    std::vector<std::vector<float>> ca(n, std::vector<float>(m, -1.0f));
+
+    std::function<float(std::size_t, std::size_t)> c = [&](size_t i, size_t j) -> float {
+        if (ca[i][j] > -1) {
+            return ca[i][j];
+        } else if (i == 0 && j == 0) {
+            ca[i][j] = distance(P[0], Q[0]);
+        } else if (i > 0 && j == 0) {
+            ca[i][j] = std::max(c(i-1, 0), distance(P[i], Q[0]));
+        } else if (i == 0 && j > 0) {
+            ca[i][j] = std::max(c(0, j-1), distance(P[0], Q[j]));
+        } else if (i > 0 && j > 0) {
+            ca[i][j] = std::max(std::min({c(i-1, j), c(i-1, j-1), c(i, j-1)}), distance(P[i], Q[j]));
+        } else {
+            ca[i][j] = std::numeric_limits<float>::infinity();
+        }
+        return ca[i][j];
+    };
+
+    return c(n-1, m-1);
 }
 
 } // namespace whisker

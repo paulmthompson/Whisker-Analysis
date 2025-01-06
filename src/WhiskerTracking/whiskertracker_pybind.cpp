@@ -1,5 +1,7 @@
 #include "whiskertracker.hpp"
 #include "loaders.hpp"
+#include "Geometry/lines.hpp"
+#include "Geometry/points.hpp"
 
 #include <omp.h>
 #include <pybind11/pybind11.h>
@@ -9,6 +11,21 @@
 #include <iostream>
 
 namespace py = pybind11;
+
+whisker::Line2D convert_np_array_to_line2d(const py::array_t<float>& array) {
+    whisker::Line2D line;
+    auto buf = array.request();
+    if (buf.ndim != 2 || buf.shape[1] != 2) {
+        throw std::runtime_error("Input should be a 2D numpy array with shape (n, 2)");
+    }
+
+    float* ptr = static_cast<float*>(buf.ptr);
+    for (ssize_t i = 0; i < buf.shape[0]; ++i) {
+        line.push_back(whisker::Point2D<float>{ptr[i * 2], ptr[i * 2 + 1]});
+    }
+
+    return line;
+};
 
 PYBIND11_MODULE(whiskertracker, m) {
     py::class_<whisker::WhiskerTracker>(m, "WhiskerTracker")
@@ -97,6 +114,12 @@ PYBIND11_MODULE(whiskertracker, m) {
 
                 std::string output_filepath = filepath.substr(0, filepath.find_last_of('.')) + "_aligned.csv";
                 whisker::save_lines_csv(data_map,output_filepath);
+            })
+            .def("frechet_distance", [](whisker::WhiskerTracker &wt, const py::array_t<float>& whisker1, const py::array_t<float>& whisker2) {
+                
+                whisker::Line2D line1 = convert_np_array_to_line2d(whisker1);
+                whisker::Line2D line2 = convert_np_array_to_line2d(whisker2);
+                return whisker::fast_discrete_frechet_matrix(line1, line2);
             });
     m.def("get_max_threads", &omp_get_max_threads);
     m.def("set_num_threads", &omp_set_num_threads);
