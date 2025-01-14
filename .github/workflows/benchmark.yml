@@ -71,6 +71,8 @@ jobs:
           output-file-path: benchmark_result.txt
           github-token: ${{ secrets.PAGES_TOKEN }}
           auto-push: true
+          gh-repository: github.com/paulmthompson.github.io
+          gh-pages-branch: master
 
       
 
