@@ -69,10 +69,9 @@ jobs:
           name: Benchmark
           tool: 'catch2'
           output-file-path: benchmark_result.txt
-          github-token: ${{ secrets.PAGES_TOKEN }}
           auto-push: true
-          gh-repository: github.com/paulmthompson/paulmthompson.github.io
           gh-pages-branch: master
+          bench-data-dir-path: docs/dev/bench
 
       
 
