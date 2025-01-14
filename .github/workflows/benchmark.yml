@@ -3,8 +3,6 @@ name: Benchmark Build
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -71,8 +69,8 @@ jobs:
           output-file-path: benchmark_result.txt
           github-token: ${{ secrets.PAGES_TOKEN }}
           auto-push: true
-          gh-pages-branch: main
-          bench-data-dir-path: docs/dev/bench
+          gh-pages-branch: gh-pages
+          benchmark-data-dir-path: docs/dev/bench
 
       
 
