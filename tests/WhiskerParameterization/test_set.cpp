@@ -5,7 +5,6 @@
 #include "whisker.hpp"
 
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -63,9 +62,6 @@ TEST_CASE("IoU - 1", "[Set]") {
 
     REQUIRE(IoU > 0.2);
 
-    BENCHMARK("IoU Calculation") {
-        return calculate_overlap_iou(line100_2, line100_3);
-    };
 }
 
 TEST_CASE("IoU - 2", "[Set]") {
@@ -76,9 +72,6 @@ TEST_CASE("IoU - 2", "[Set]") {
 
     REQUIRE(IoU == 1.0);
 
-    BENCHMARK("IoU Calculation") {
-        return calculate_overlap_iou_relative(line100_2, line100_3);
-    };
 }
 
 TEST_CASE("Mask Intersection - 1", "[Set]") {
@@ -87,10 +80,6 @@ TEST_CASE("Mask Intersection - 1", "[Set]") {
     auto intersection = intersect(line100[0],mask);
 
     REQUIRE(intersection == true);
-
-    BENCHMARK("Mask Intersection") {
-        return intersect(line100[0],mask);
-    };
 
 }
 

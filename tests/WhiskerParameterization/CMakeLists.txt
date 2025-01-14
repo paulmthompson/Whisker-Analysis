@@ -25,5 +25,20 @@ else()
     catch_discover_tests(test_parameterization)
 endif()
 
+add_executable(benchmark_parameterization
+    benchmark_set.cpp
+)
 
+target_link_libraries(benchmark_parameterization PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
 
+if (WIN32)
+    catch_discover_tests(benchmark_parameterization
+            DL_PATHS
+            "$ENV{PATH}"
+            "${CMAKE_BINARY_DIR}"
+    )
+else()
+    catch_discover_tests(benchmark_parameterization)
+endif()
+
+#set_tests_properties(benchmark_parameterization PROPERTIES LABELS "benchmark")
