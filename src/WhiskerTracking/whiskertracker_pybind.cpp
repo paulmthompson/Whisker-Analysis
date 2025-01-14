@@ -8,6 +8,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
+#include <cstddef>
 #include <iostream>
 
 namespace py = pybind11;
@@ -20,7 +21,7 @@ whisker::Line2D convert_np_array_to_line2d(const py::array_t<float>& array) {
     }
 
     float* ptr = static_cast<float*>(buf.ptr);
-    for (ssize_t i = 0; i < buf.shape[0]; ++i) {
+    for (std::size_t i = 0; i < buf.shape[0]; ++i) {
         line.push_back(whisker::Point2D<float>{ptr[i * 2], ptr[i * 2 + 1]});
     }
 
