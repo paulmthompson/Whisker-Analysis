@@ -63,6 +63,15 @@ jobs:
         run:  ${{ github.workspace }}/out/build/GCC/Release/bin/benchmark_parameterization | tee benchmark_result.txt
         working-directory: ${{ github.workspace }}
 
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: Benchmark
+          tool: 'catch2'
+          output-file-path: benchmark_result.txt
+          github-token: ${{ secrets.PAGES_TOKEN }}
+          auto-push: true
+
       
 
 
