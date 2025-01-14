@@ -27,6 +27,7 @@ endif()
 
 add_executable(benchmark_parameterization
     benchmark_set.cpp
+    Geometry/benchmark_lines.cpp
 )
 
 target_link_libraries(benchmark_parameterization PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
