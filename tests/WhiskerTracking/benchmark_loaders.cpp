@@ -14,3 +14,12 @@ TEST_CASE("Benchmark CSV Load", "[BENCHMARK]") {
     };
 
 }
+
+TEST_CASE("Benchmark CSV Write", "[BENCHMARK]")
+{
+    auto data = whisker::load_line_csv("../tests/WhiskerTracking/data/whiskers.csv");
+
+    BENCHMARK("CSV Write") {
+        whisker::save_lines_csv(data, "test.csv");
+    };
+}
