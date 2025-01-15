@@ -58,8 +58,8 @@ jobs:
         run: cmake --build --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
       - name: Benchmark
-        run:  ${{ github.workspace }}/out/build/GCC/Release/tests/benchmark | tee benchmark_result.txt
-        working-directory: ${{ github.workspace }}
+        run:  ${{ github.workspace }}/out/build/GCC/Release/tests/benchmark | tee ${{ github.workspace }}/benchmark_result.txt
+        working-directory: ${{ github.workspace }}/out/build/GCC/Release/tests
 
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
