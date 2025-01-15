@@ -1,7 +1,8 @@
 
 #include "Geometry/lines.hpp"
 
-#include <charconv>
+#include "fast_float/fast_float.h"
+
 #include <chrono>
 #include <fstream>
 #include <iomanip>
@@ -49,7 +50,7 @@ inline std::vector<float> parse_string_to_float_vector(const T& str) {
 
     while (start < end) {
         float value;
-        auto [ptr, ec] = std::from_chars(start, end, value);
+        auto [ptr, ec] = fast_float::from_chars(start, end, value);
         if (ec == std::errc()) {
             result.push_back(value);
             start = ptr;
@@ -73,7 +74,7 @@ inline Line2D parse_string_to_line(const T& xstr, const T& ystr) {
 
     while (startx < endx) {
         float value;
-        auto [ptr, ec] = std::from_chars(startx, endx, value);
+        auto [ptr, ec] = fast_float::from_chars(startx, endx, value);
         if (ec == std::errc()) {
             line.emplace_back(Point2D<float>{value,0.0});
             startx = ptr;
@@ -92,7 +93,7 @@ inline Line2D parse_string_to_line(const T& xstr, const T& ystr) {
     int i = 0;
     while (starty < endy) {
         float value;
-        auto [ptr, ec] = std::from_chars(starty, endy, value);
+        auto [ptr, ec] = fast_float::from_chars(starty, endy, value);
         if (ec == std::errc()) {
             line[i].y = value;
             ++i;
@@ -143,7 +144,7 @@ inline std::vector<std::pair<int, std::vector<Line2D>>> load_line_csv(const std:
         y_str = stringview_getline(line_view, '"', pos);
 
         int frame_num;
-        auto result = std::from_chars(frame_num_str.data(), frame_num_str.data() + frame_num_str.size(), frame_num);
+        auto result = fast_float::from_chars(frame_num_str.data(), frame_num_str.data() + frame_num_str.size(), frame_num);
 
         auto line_float = parse_string_to_line(x_str, y_str);
 
@@ -171,6 +172,17 @@ inline std::vector<std::pair<int, std::vector<Line2D>>> load_line_csv(const std:
     return data;
 }
 
+int count_digits(float input)
+{
+    int count = 0;
+    while (input > 1)
+    {
+        input = input / 10;
+        count++;
+    }
+    return count;
+}
+
 inline void save_lines_csv(
         const std::vector<std::pair<int,std::vector<Line2D>>>& data,
         const std::string& filename,
@@ -192,18 +204,41 @@ inline void save_lines_csv(
         for (const auto& line : lines) {
             //std::ostringstream x_values;
             //std::ostringstream y_values;
-            std::string x_values;
-            std::string y_values;
+            
+            //I know the length of x_values and y_values by the number of digitals in each 
+            //float
+
+            auto x_buffer_size = 0;
+            auto y_buffer_size = 0;
 
             for (const auto& point : line) {
-                //x_values << std::fixed << std::setprecision(1) << point.x << ",";
-                //y_values << std::fixed << std::setprecision(1) << point.y << ",";
+                x_buffer_size += count_digits(point.x);
+                y_buffer_size += count_digits(point.y);
+
+                x_buffer_size += 1; // decimal point
+                y_buffer_size += 1; // decimal point
+
+                x_buffer_size += 2; // decimal places
+                y_buffer_size += 2; // decimal places
+
+                x_buffer_size += 1; // comma
+                y_buffer_size += 1; // comma
+            }
+
+            std::string x_values;
+            x_values.reserve(x_buffer_size);
+            std::string y_values;
+            y_values.reserve(y_buffer_size);
+
+            for (const auto& point : line) {
+
                 int x_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", point.x);
                 x_values.append(buffer, x_len);
 
                 int y_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", point.y);
                 y_values.append(buffer, y_len);
             }
+            
 
             // Remove the trailing comma
             if (!x_values.empty()) x_values.pop_back();
