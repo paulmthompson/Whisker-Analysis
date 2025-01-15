@@ -8,6 +8,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
+#include <chrono>
 #include <cstddef>
 #include <iostream>
 
@@ -105,16 +106,24 @@ PYBIND11_MODULE(whiskertracker, m) {
                 wt.setFaceMask(mask_cpp);
             })
             .def("load_and_align_whiskers", [](whisker::WhiskerTracker &wt, const std::string &filepath) {
-                auto data_map = whisker::load_line_csv(filepath);
-                std::cout << "Loaded " << data_map.size() << " frames from " << filepath << std::endl;
-                for (auto & [frame_num, lines] : data_map) {
+                auto data = whisker::load_line_csv(filepath, true);
+                std::cout << "Loaded " << data.size() << " frames from " << filepath << std::endl;
+
+                auto t1 = std::chrono::high_resolution_clock::now();
+                const auto whisker_pad = wt.getWhiskerPad();
+                
+                for (auto & [frame_num, lines] : data) {
                     for (auto & line : lines) {
-                        whisker::align_whisker_to_follicle(line, wt.getWhiskerPad());
+                        whisker::align_whisker_to_follicle(line, whisker_pad);
                     }
                 }
+                auto t2 = std::chrono::high_resolution_clock::now();
+
+                auto duration = std::chrono::duration<double>(t2 - t1).count();
+                std::cout << "Aligned " << data.size() << " frames in " << duration << "s" << std::endl;
 
                 std::string output_filepath = filepath.substr(0, filepath.find_last_of('.')) + "_aligned.csv";
-                whisker::save_lines_csv(data_map,output_filepath);
+                whisker::save_lines_csv(data,output_filepath);
             })
             .def("frechet_distance", [](whisker::WhiskerTracker &wt, const py::array_t<float>& whisker1, const py::array_t<float>& whisker2) {
                 

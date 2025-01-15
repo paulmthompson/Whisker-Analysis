@@ -205,16 +205,16 @@ std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float
 }
 
 
-void align_whisker_to_follicle(Line2D & whisker, whisker::Point2D<float> whisker_pad) {
+void align_whisker_to_follicle(Line2D & whisker, whisker::Point2D<float> const whisker_pad) {
 
     //Check if whisker is empty
     if (whisker.empty()) {
         return;
     }
 
-    auto start_distance = distance(whisker[0], whisker_pad);
+    auto start_distance = distance2(whisker[0], whisker_pad);
 
-    auto end_distance = distance(whisker.back(), whisker_pad);
+    auto end_distance = distance2(whisker.back(), whisker_pad);
 
     if (start_distance > end_distance) {
         std::ranges::reverse(whisker);

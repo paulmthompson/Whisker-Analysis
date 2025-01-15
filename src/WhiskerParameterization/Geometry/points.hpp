@@ -11,6 +11,22 @@ struct Point2D {
     T x;
     T y;
 
+    Point2D() = default;
+
+    Point2D(T _x, T _y) : x(_x), y(_y) {}
+
+    // Copy constructor
+    Point2D(const Point2D<T> &p) : x(p.x), y(p.y) {}
+
+    // Move constructor (noexcept)
+    Point2D(Point2D<T> &&p) noexcept : x(std::move(p.x)), y(std::move(p.y)) {}
+
+    // Copy assignment operator
+    Point2D& operator=(const Point2D& other) = default;
+
+    // Move assignment operator (noexcept)
+    Point2D& operator=(Point2D&& other) noexcept = default;
+
     friend bool operator< (Point2D<T> const & p1, Point2D<T> const & p2)
     {
         if (p1.x != p2.x) {
@@ -26,6 +42,12 @@ inline float distance(Point2D<T> const p1, Point2D<T> const p2)
 {
     return static_cast<float>(std::sqrt(std::pow(p1.x - p2.x,2) + std::pow(p1.y - p2.y,2)));
 };
+
+template <typename T>
+inline float distance2(Point2D<T> const p1, Point2D<T> const p2)
+{
+    return static_cast<float>((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+}
 
 /**
  * @brief Calculates a point along the path between two points.

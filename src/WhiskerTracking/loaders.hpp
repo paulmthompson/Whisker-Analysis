@@ -1,6 +1,7 @@
 
 #include "Geometry/lines.hpp"
 
+#include <charconv>
 #include <chrono>
 #include <fstream>
 #include <iomanip>
@@ -8,10 +9,12 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace whisker {
 
+/*
 inline std::vector<float> parse_string_to_float_vector(const std::string& str) {
     std::vector<float> result;
 
@@ -23,11 +26,96 @@ inline std::vector<float> parse_string_to_float_vector(const std::string& str) {
     }
     return result;
 }
+*/
 
-inline std::map<int, std::vector<Line2D>> load_line_csv(const std::string& filepath)
+// Tokenize function using std::string_view
+std::string_view stringview_getline(
+    std::string_view str, 
+    char delimiter,
+    size_t & start) 
+{
+    size_t end = str.find(delimiter, start);
+
+    auto sub_str = str.substr(start, end - start);
+    start = end + 1;
+    return sub_str;
+}
+
+template <typename T>
+inline std::vector<float> parse_string_to_float_vector(const T& str) {
+    std::vector<float> result;
+    const char* start = str.data();
+    const char* end = str.data() + str.size();
+
+    while (start < end) {
+        float value;
+        auto [ptr, ec] = std::from_chars(start, end, value);
+        if (ec == std::errc()) {
+            result.push_back(value);
+            start = ptr;
+            if (start < end && *start == ',') {
+                ++start; // Skip the comma
+            }
+        } else {
+            // Handle error if needed
+            break;
+        }
+    }
+    return result;
+}
+
+template <typename T>
+inline Line2D parse_string_to_line(const T& xstr, const T& ystr) {
+    Line2D line;
+
+    const char* startx = xstr.data();
+    const char* endx = xstr.data() + xstr.size();
+
+    while (startx < endx) {
+        float value;
+        auto [ptr, ec] = std::from_chars(startx, endx, value);
+        if (ec == std::errc()) {
+            line.emplace_back(Point2D<float>{value,0.0});
+            startx = ptr;
+            if (startx < endx && *startx == ',') {
+                ++startx; // Skip the comma
+            }
+        } else {
+            // Handle error if needed
+            break;
+        }
+    }
+
+    const char* starty = ystr.data();
+    const char* endy = ystr.data() + ystr.size();
+
+    int i = 0;
+    while (starty < endy) {
+        float value;
+        auto [ptr, ec] = std::from_chars(starty, endy, value);
+        if (ec == std::errc()) {
+            line[i].y = value;
+            ++i;
+            starty = ptr;
+            if (starty < endy && *starty == ',') {
+                ++starty; // Skip the comma
+            }
+        } else {
+            // Handle error if needed
+            break;
+        }
+    }
+    
+    return line;
+}
+
+inline std::vector<std::pair<int, std::vector<Line2D>>> load_line_csv(const std::string& filepath, bool verbose = false)
 {
     auto t1 = std::chrono::high_resolution_clock::now();
-    std::map<int, std::vector<Line2D>> data_map;
+
+    std::vector<std::pair<int, std::vector<Line2D>>> data;
+    std::vector<int> frame_nums;
+
     std::ifstream file(filepath);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file: " + filepath);
@@ -36,40 +124,38 @@ inline std::map<int, std::vector<Line2D>> load_line_csv(const std::string& filep
     std::string line;
 
     int loaded_lines = 0;
+    int current_frame = -1;
     while (std::getline(file, line)) {
-        std::istringstream ss(line);
-        std::string frame_num_str, x_str, y_str;
+        
+        std::string_view line_view(line);
 
-        std::getline(ss, frame_num_str, ',');
+        size_t pos = 0;
+
+        auto frame_num_str = stringview_getline(line_view, ',', pos);
 
         if (frame_num_str.find_first_not_of("0123456789") != std::string::npos) {
-            continue;
-            // Skip the header line
+            continue; // Skip the header line
         }
 
-        std::getline(ss, x_str, '"');
-        //std::vector<float> x_values = parse_stream_to_float_vector(ss);
-        std::getline(ss, x_str, '"');
+        auto x_str = stringview_getline(line_view, '"', pos);
+        x_str = stringview_getline(line_view, '"', pos);
+        auto y_str = stringview_getline(line_view, '"', pos);
+        y_str = stringview_getline(line_view, '"', pos);
 
+        int frame_num;
+        auto result = std::from_chars(frame_num_str.data(), frame_num_str.data() + frame_num_str.size(), frame_num);
 
-        std::getline(ss, y_str, '"');
-        std::getline(ss, y_str, '"');
+        auto line_float = parse_string_to_line(x_str, y_str);
 
-        int frame_num = std::stoi(frame_num_str);
-
-        std::vector<float> x_values = parse_string_to_float_vector(x_str);
-        std::vector<float> y_values = parse_string_to_float_vector(y_str);
-
-        if (x_values.size() != y_values.size()) {
-            std::cerr << "Mismatched x and y values at frame: " << frame_num << std::endl;
-            continue;
+        if (frame_num > current_frame) {
+            data.push_back(std::make_pair(frame_num,std::vector<Line2D>()));
+            current_frame = frame_num;
+        } else if (frame_num < current_frame) {
+            throw std::runtime_error("Frame numbers are not in increasing order");
         }
 
-        if (data_map.find(frame_num) == data_map.end()) {
-            data_map[frame_num] = std::vector<Line2D>();
-        }
-
-        data_map[frame_num].emplace_back(create_line(x_values, y_values));
+        frame_nums.push_back(frame_num);
+        std::get<1>(data.back()).emplace_back(std::move(line_float));
         loaded_lines += 1;
        
     }
@@ -78,13 +164,15 @@ inline std::map<int, std::vector<Line2D>> load_line_csv(const std::string& filep
     auto t2 = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration<double>( t2 - t1 ).count();
-    std::cout << "Loaded " << loaded_lines << " lines from " << filepath << " in " << duration << "ms" << std::endl;
+    if (verbose) {
+        std::cout << "Loaded " << loaded_lines << " lines from " << filepath << " in " << duration << "s" << std::endl;
+    }
 
-    return data_map;
+    return data;
 }
 
 inline void save_lines_csv(
-        const std::map<int,std::vector<Line2D>>& data,
+        const std::vector<std::pair<int,std::vector<Line2D>>>& data,
         const std::string& filename,
         const std::string& header = "Frame,X,Y")
 {
@@ -97,24 +185,31 @@ inline void save_lines_csv(
     // Write the header
     file << header << "\n";
 
+    char buffer[64];
+
     // Write the data
     for (const auto& [frame, lines] : data) {
         for (const auto& line : lines) {
-            std::ostringstream x_values;
-            std::ostringstream y_values;
+            //std::ostringstream x_values;
+            //std::ostringstream y_values;
+            std::string x_values;
+            std::string y_values;
 
             for (const auto& point : line) {
-                x_values << std::fixed << std::setprecision(1) << point.x << ",";
-                y_values << std::fixed << std::setprecision(1) << point.y << ",";
+                //x_values << std::fixed << std::setprecision(1) << point.x << ",";
+                //y_values << std::fixed << std::setprecision(1) << point.y << ",";
+                int x_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", point.x);
+                x_values.append(buffer, x_len);
+
+                int y_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", point.y);
+                y_values.append(buffer, y_len);
             }
 
             // Remove the trailing comma
-            std::string x_str = x_values.str();
-            std::string y_str = y_values.str();
-            if (!x_str.empty()) x_str.pop_back();
-            if (!y_str.empty()) y_str.pop_back();
+            if (!x_values.empty()) x_values.pop_back();
+            if (!y_values.empty()) y_values.pop_back();
 
-            file << frame << ",\"" << x_str << "\",\"" << y_str << "\"\n";
+            file << frame << ",\"" << x_values << "\",\"" << y_values << "\"\n";
         }
     }
 
