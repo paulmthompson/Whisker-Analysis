@@ -8,7 +8,7 @@
 
 #include <string>
 
-#include "test_constants.hpp"
+#include "../test_constants.hpp"
 
 
 TEST_CASE("Benchmark Length Calculation ", "[BENCHMARK]") {
