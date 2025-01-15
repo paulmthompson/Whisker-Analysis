@@ -58,7 +58,7 @@ jobs:
         run: cmake --build --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
       - name: Benchmark
-        run:  ${{ github.workspace }}/out/build/GCC/Release/bin/benchmark | tee benchmark_result.txt
+        run:  ${{ github.workspace }}/out/build/GCC/Release/tests/benchmark | tee benchmark_result.txt
         working-directory: ${{ github.workspace }}
 
       - name: Store benchmark result
