@@ -43,6 +43,8 @@ target_link_libraries(Whisker-Analysis PUBLIC janelia OpenMP::OpenMP_CXX)
 
 target_link_libraries(Whisker-Analysis PUBLIC fast_float)
 
+target_link_libraries(Whisker-Analysis PUBLIC spdlog::spdlog)
+
 target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerParameterization>"
