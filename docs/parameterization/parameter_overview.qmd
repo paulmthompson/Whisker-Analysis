@@ -2,25 +2,33 @@
 title: "Parameterization Overview"
 ---
 
-## Whisker Pad
+## Anatomy
+
+### Whisker Pad
 
 Rodent whiskers (vibrissa) are specialized hair follicles on the face. The position of these whiskers are organized in a highly stereotyped grid with rows and columns. The most posterior whiskers are slightly offset from the rest of the grid and are labeled with Greek letters from dorsal to ventral: alpha, beta, gamma, delta. The remaining whiskers are labeled with rows A-E, with A the most dorsal, and columns numbered starting from the most posterior.
 
 Figure: side profile of whiskers
 
-## Whisker Structure
+### Whisker Structure
 
 Whiskers are truncated cones. More posterior whiskers are generally longer and greater in diameter than more anterior whiskers.
 
 Figure: 3d structure of whisker
 
-## 2D Whisker Imaging
+## Experimental Preperation
+
+### 2D Whisker Imaging
 
 Whiskers are usually imaged in behavioral preparation with strong backlighting, such that they appear as dark shadows across a white background.
 
 Figure: Cartoon of whisker from top view
 
-A whisker is defined as a collection of points
+### 3D Whisker Imaging
+
+### Whisker Parameterization
+
+We cannot analyze pictures. Instead, we need to describe the whisker in a numerical way for further processing. For this purpose, we can define the position of the whisker in space as a collection of points
 
 $(x_1,y_1), (x_2,y_2), ... (x_n,y_n)$
 
@@ -43,6 +51,10 @@ Figure: Demonstration of problematic whisker
 :::
 
 ### Nearest Neighbors
+
+## Follicle Location
+
+The base of the follicle is important for many whisker kinematic calculations, but it can be difficult to identify with tracking reliably.
 
 ## Whisker Data Structure
 

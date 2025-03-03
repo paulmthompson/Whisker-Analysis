@@ -28,12 +28,26 @@ Curvature is well defined for a parabola at any position x according to the foll
 
 $k(x) = \frac{2a}{(1 + (2ax + b)^2)^\frac{3}{2})}$
 
+Pros:
+
+Leverages more points for calculation of curvature to reduce noise
+
+Cons:
+
+Parabola fit may be poor for some orientations of points.
+
+The part of the parabola fitting the whiskers will change as the whisker moves. While the curvature is specified for any point along the parabola, there may be position-dependent fitting noise that results.
+
 https://en.wikipedia.org/wiki/Curvature#Local_expressions
 
-### Bezier Curve
+### Alternative Strategies (Not implemented):
 
-### Radius of Curvature of Circle
+#### Bezier Curve
+
+#### Radius of Curvature of Circle
 
 ## Intrinsic Curvature and 𝝙𝛋
 
-Whiskers are not straight, and generally have some natural bending at rest. Consequently, forces and moments generated in the follicular complex occur not because of the existance of curvature, but because of changes from the inherent curvature.
+Whiskers are not straight, and generally have some natural bending at rest. Consequently, forces and moments generated in the follicular complex occur not because of the existence of curvature, but because of changes from the inherent curvature.
+
+Note that as the whisker moves during whisking in air there is some true change in curvature of the whisker from its intrinsic position, as well as noise that results from measurement error in whisker parameterization, 3D whisker rotation in the 2D plane that is not accounted for.
