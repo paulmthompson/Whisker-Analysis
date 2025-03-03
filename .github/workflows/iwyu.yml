@@ -36,6 +36,7 @@ jobs:
         run: |
           cmake --preset linux-gcc-release \
                 -DPython3_ROOT_DIR="${{ env.pythonLocation }}" \
+                -D
                 -DENABLE_IWYU=ON
       - name: Build with IWYU enabled
         run: cmake --build --preset linux-gcc-release
@@ -50,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: iwyu-report
-          path: build/iwyu_report.txt
+          path: ${{ github.workspace }}/build/iwyu_report.txt
