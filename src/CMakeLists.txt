@@ -78,7 +78,7 @@ if(BUILD_WHISKERTRACKER)
         add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
     endif()
 
-    pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
+    pybind11_add_module(whiskertracker MODULE Python/WhiskerTracking/whiskertracker_pybind.cpp)
     
     if(ENABLE_IWYU)
         set_target_properties(whiskertracker PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
