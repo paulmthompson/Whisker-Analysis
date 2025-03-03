@@ -13,11 +13,13 @@ add_executable(test_parameterization
     Geometry/test_curvature.cpp
     )
 
-target_link_libraries(test_parameterization PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
-
 if(ENABLE_IWYU)
     set_target_properties(test_parameterization PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
 endif()
+
+target_link_libraries(test_parameterization PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
+
+
 
 if (WIN32)
     catch_discover_tests(test_parameterization

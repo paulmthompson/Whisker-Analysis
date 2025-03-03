@@ -85,5 +85,10 @@ BUILD_TESTING is a cache variable that defaults to true which was defined by the
 If we wish to run testing, we should add the tests subdirectory.
 ]]
 if (BUILD_TESTING)
+
+    if (ENABLE_IWYU)
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "") #Disable for tests
+    endif()
+
     add_subdirectory(tests)
 endif()
