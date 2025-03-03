@@ -77,6 +77,11 @@ if(BUILD_WHISKERTRACKER)
     endif()
 
     pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
+    
+    if(ENABLE_IWYU)
+        set_target_properties(whiskertracker PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+    endif()
+    
     target_link_libraries(whiskertracker PRIVATE Whisker-Analysis pybind11::module)
 
     if (WIN32)
