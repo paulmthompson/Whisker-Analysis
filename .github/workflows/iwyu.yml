@@ -36,7 +36,6 @@ jobs:
         run: |
           cmake --preset linux-gcc-release \
                 -DPython3_ROOT_DIR="${{ env.pythonLocation }}" \
-                -D
                 -DENABLE_IWYU=ON
       - name: Build with IWYU enabled
         run: cmake --build --preset linux-gcc-release
