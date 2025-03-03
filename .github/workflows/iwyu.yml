@@ -1,0 +1,53 @@
+name: Linux IWYU Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  iwyu:
+    runs-on: ubuntu-latest
+    env:
+      VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Linux System Dependencies for IWYU
+        run: |
+          sudo apt-get update
+          # Install IWYU; you may need to adjust the package name or build it from source
+          sudo apt-get install -y include-what-you-use
+          sudo apt-get install -y libomp-18-dev lcov llvm gcovr
+
+      - name: Set environmental variables
+        shell: bash
+        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+      - name: Configure CMake with IWYU enabled
+        run: |
+          cmake --preset linux-gcc-release \
+                -DPython3_ROOT_DIR="${{ env.pythonLocation }}" \
+                -DENABLE_IWYU=ON
+      - name: Build with IWYU enabled
+        run: cmake --build --preset linux-gcc-release
+
+      - name: Run IWYU report (if not already run during build)
+        # This step assumes your CMake project is configured to generate an IWYU report, e.g. to a file "iwyu_report.txt"
+        run: |
+          echo "IWYU report generated at: ${{ github.workspace }}/build/iwyu_report.txt"
+          # Optionally, you can run a script here to post-process or validate the IWYU report.
+      
+      - name: Upload IWYU Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: iwyu-report
+          path: build/iwyu_report.txt
