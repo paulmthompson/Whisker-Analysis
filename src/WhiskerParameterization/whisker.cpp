@@ -194,15 +194,15 @@ std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float
         for (std::size_t i = 0; i < w.size(); i++) {
             float dx = x_p - w[i].x;
             float dy = y_p - w[i].y;
-            float current_d = sqrt(dx*dx + dy*dy);
-            if (current_d < nearest_distance) {
-                nearest_distance = current_d;
+            float current_d2 = dx*dx + dy*dy;
+            if (current_d2 < nearest_distance) {
+                nearest_distance = current_d2;
                 whisker_id = current_whisker_id;
             }
         }
         current_whisker_id += 1;
     }
-
+    nearest_distance = static_cast<float>(std::sqrt(static_cast<double>(nearest_distance)));
     return std::make_tuple(nearest_distance, whisker_id);
 }
 
