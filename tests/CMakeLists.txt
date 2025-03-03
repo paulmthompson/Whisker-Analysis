@@ -34,6 +34,10 @@ add_executable(benchmark
     WhiskerTracking/benchmark_whiskertracker.cpp
 )
 
+if(ENABLE_IWYU)
+    set_target_properties(benchmark PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
+
 target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
 
 if (WIN32)

@@ -12,8 +12,11 @@ add_executable(tests
 target_link_libraries(tests PRIVATE
         Catch2::Catch2WithMain
         Whisker-Analysis
-
 )
+
+if(ENABLE_IWYU)
+    set_target_properties(tests PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
 
 if (WIN32)
     catch_discover_tests(tests
