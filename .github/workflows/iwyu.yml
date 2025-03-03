@@ -47,7 +47,7 @@ jobs:
           # Optionally, you can run a script here to post-process or validate the IWYU report.
       
       - name: Upload IWYU Report Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: iwyu-report
           path: build/iwyu_report.txt
