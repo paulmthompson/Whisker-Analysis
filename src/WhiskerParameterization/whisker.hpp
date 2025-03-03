@@ -2,15 +2,17 @@
 #define WHISKER_ANALYSIS_WHISKER_HPP
 
 #include "Geometry/points.hpp"
-#include "Geometry/lines.hpp"
 
-#include <vector>
-#include <tuple>
+#include <cstddef>
 #include <set>
+#include <tuple>
+#include <vector>
+
+namespace whisker { struct GeomVector; }
+namespace whisker { struct Line2D; }
+namespace whisker { struct Mask2D; }
 
 namespace whisker {
-
-struct Mask2D;
 
 std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points);
 

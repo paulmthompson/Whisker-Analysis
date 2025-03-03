@@ -1,5 +1,6 @@
 #include "whisker.hpp"
 
+#include "Geometry/lines.hpp"
 #include "Geometry/mask.hpp"
 #include "Geometry/vector.hpp"
 
@@ -184,15 +185,16 @@ void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & e
 
 std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p) {
 
-    float nearest_distance = 1000.0;
+    float nearest_distance = std::numeric_limits<float>::max();
     int whisker_id = 0;
 
-    float current_d = 0.0f;
     int current_whisker_id = 0;
 
     for (auto &w: whiskers) {
-        for (int i = 0; i < w.size(); i++) {
-            current_d = sqrt(pow(x_p - w[i].x, 2) + pow(y_p - w[i].y, 2));
+        for (std::size_t i = 0; i < w.size(); i++) {
+            float dx = x_p - w[i].x;
+            float dy = y_p - w[i].y;
+            float current_d = sqrt(dx*dx + dy*dy);
             if (current_d < nearest_distance) {
                 nearest_distance = current_d;
                 whisker_id = current_whisker_id;

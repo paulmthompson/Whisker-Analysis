@@ -1,6 +1,7 @@
 #include "whiskertracker.hpp"
 
 #include "JaneliaWhiskerTracker/io.hpp"
+#include "Geometry/lines.hpp"
 
 #include <omp.h>
 
