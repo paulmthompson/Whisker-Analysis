@@ -33,11 +33,17 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/mask.hpp
         WhiskerParameterization/Geometry/curvature.hpp
 
+        WhiskerTracking/loaders.hpp
+
 )
 
 add_library(Whisker-Analysis::Whisker-Analysis ALIAS Whisker-Analysis)
 
 target_link_libraries(Whisker-Analysis PUBLIC janelia OpenMP::OpenMP_CXX)
+
+target_link_libraries(Whisker-Analysis PUBLIC fast_float)
+
+target_link_libraries(Whisker-Analysis PUBLIC spdlog::spdlog)
 
 target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
@@ -72,15 +78,23 @@ if(BUILD_WHISKERTRACKER)
         add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
     endif()
 
-    pybind11_add_module(whiskertracker MODULE WhiskerTracking/whiskertracker_pybind.cpp)
-    target_link_libraries(whiskertracker PRIVATE Whisker-Analysis pybind11::module)
+    pybind11_add_module(whisker MODULE 
+        Python/WhiskerTracking/whiskertracker_pybind.cpp
+        Python/python_main.cpp
+        Python/utils.hpp)
+    
+    if(ENABLE_IWYU)
+        set_target_properties(whisker PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+    endif()
+    
+    target_link_libraries(whisker PRIVATE Whisker-Analysis pybind11::module)
 
     if (WIN32)
-        set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
+        set_target_properties(whisker PROPERTIES SUFFIX ".pyd")
     elseif(APPLE)
-        set_target_properties(whiskertracker PROPERTIES SUFFIX ".so") #I think?
+        set_target_properties(whisker PROPERTIES SUFFIX ".so") #I think?
     else()
-        set_target_properties(whiskertracker PROPERTIES SUFFIX ".so")
+        set_target_properties(whisker PROPERTIES SUFFIX ".so")
     endif()
 endif()
 

@@ -4,7 +4,6 @@
 #include "Geometry/points.hpp"
 
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
 
 #include <string>
 
@@ -35,9 +34,6 @@ TEST_CASE("LengthTest - 4", "[Distance]") {
 
 REQUIRE(whisker::length(line100) == 1.0f);
 
-BENCHMARK("length Calculation") {
-    return whisker::length(line100);
-};
 }
 
 TEST_CASE("Nearest Preceding - 1", "[Distance]") {
@@ -67,9 +63,6 @@ auto [index, dist] = nearest_preceding_index_along_path(line100, 0.905f);
 REQUIRE(index == 90);
 REQUIRE(dist == 0.9f);
 
-BENCHMARK("Nearest Preceding Calculation") {
-    return nearest_preceding_index_along_path(line100, 0.905f);
-};
 }
 
 TEST_CASE("Nearest Interpolated - 1", "[Distance]") {
@@ -89,7 +82,4 @@ auto intermediate_point = point_at_pathlength(line100, 0.905f);
 REQUIRE(intermediate_point.x == 0.0f);
 REQUIRE(intermediate_point.y == 0.905f);
 
-BENCHMARK("Nearest Interpolated Calculation") {
-return point_at_pathlength(line100, 0.905f);
-};
 }

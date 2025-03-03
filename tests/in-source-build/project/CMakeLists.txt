@@ -21,5 +21,9 @@ add_subdirectory(${Whisker-Analysis_source}
 
 add_executable(InSourceBuild  EXCLUDE_FROM_ALL main.cpp)
 
+if(ENABLE_IWYU)
+    set_target_properties(InSourceBuild PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
+
 target_link_libraries(InSourceBuild PRIVATE Whisker-Analysis)
 

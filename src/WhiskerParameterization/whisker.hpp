@@ -2,15 +2,17 @@
 #define WHISKER_ANALYSIS_WHISKER_HPP
 
 #include "Geometry/points.hpp"
-#include "Geometry/lines.hpp"
 
-#include <vector>
-#include <tuple>
+#include <cstddef>
 #include <set>
+#include <tuple>
+#include <vector>
+
+namespace whisker { struct GeomVector; }
+namespace whisker { struct Line2D; }
+namespace whisker { struct Mask2D; }
 
 namespace whisker {
-
-struct Mask2D;
 
 std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points);
 
@@ -124,6 +126,8 @@ void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_dire
  * @param radius The radius outside of which whiskers are removed.
  */
 void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<float> whisker_pad, float radius);
+
+float fast_discrete_frechet_matrix(const Line2D& P, const Line2D& Q);
 
 } // namespace whisker
 

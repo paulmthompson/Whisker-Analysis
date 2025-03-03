@@ -6,12 +6,16 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_executable(tests
         test_whiskertracker.cpp
         test_data.hpp
+        test_loaders.cpp
 )
+
+if(ENABLE_IWYU)
+    set_target_properties(tests PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
 
 target_link_libraries(tests PRIVATE
         Catch2::Catch2WithMain
         Whisker-Analysis
-
 )
 
 if (WIN32)
@@ -40,6 +44,7 @@ set(DATA_FILES_TO_COPY
         "test_img2.bin"
         "test_img3.bin"
         "0110_1_0000000.bin"
+        "whiskers.csv"
 )
 
 copy_files(tests

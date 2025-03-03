@@ -8,6 +8,24 @@ namespace whisker {
 struct GeomVector {
     float x;
     float y;
+
+    // Default constructor
+    GeomVector() noexcept = default;
+
+    // Parameterized constructor
+    GeomVector(float _x, float _y) noexcept : x(_x), y(_y) {}
+
+    // Copy constructor
+    GeomVector(const GeomVector& other) noexcept = default;
+
+    // Move constructor
+    GeomVector(GeomVector&& other) noexcept = default;
+
+    // Copy assignment operator
+    GeomVector& operator=(const GeomVector& other) noexcept = default;
+
+    // Move assignment operator
+    GeomVector& operator=(GeomVector&& other) noexcept = default;
 };
 
 /**

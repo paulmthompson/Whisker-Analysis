@@ -13,6 +13,10 @@ FetchContent_MakeAvailable(Catch2)
 
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
+if(ENABLE_IWYU)
+    set_target_properties(Catch2WithMain PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
+
 include(Catch)
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
@@ -22,3 +26,30 @@ message(STATUS "${Python3_RUNTIME_LIBRARY_DIRS}")
 add_subdirectory(WhiskerParameterization)
 
 add_subdirectory(WhiskerTracking)
+
+
+
+
+add_executable(benchmark
+    WhiskerParameterization/benchmark_set.cpp
+    WhiskerParameterization/Geometry/benchmark_lines.cpp
+    WhiskerParameterization/Geometry/benchmark_points.cpp
+    WhiskerTracking/benchmark_loaders.cpp
+    WhiskerTracking/benchmark_whiskertracker.cpp
+)
+
+if(ENABLE_IWYU)
+    set_target_properties(benchmark PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
+
+target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain Whisker-Analysis)
+
+if (WIN32)
+    catch_discover_tests(benchmark
+            DL_PATHS
+            "$ENV{PATH}"
+            "${CMAKE_BINARY_DIR}"
+    )
+else()
+    catch_discover_tests(benchmark)
+endif()

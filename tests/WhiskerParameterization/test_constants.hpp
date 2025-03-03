@@ -2,6 +2,8 @@
 #ifndef WHISKER_ANALYSIS_TEST_CONSTANTS_HPP
 #define WHISKER_ANALYSIS_TEST_CONSTANTS_HPP
 
+#include "Geometry/points.hpp"
+#include "Geometry/lines.hpp"
 #include "whisker.hpp"
 
 inline auto p1 = whisker::Point2D<float>{0.0f, 0.0f};

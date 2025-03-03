@@ -1,3 +1,8 @@
+
+#include "Geometry/lines.hpp"
+#include "Geometry/points.hpp"
+#include "loaders.hpp"
+#include "Python/utils.hpp"
 #include "whiskertracker.hpp"
 
 #include <omp.h>
@@ -5,12 +10,16 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 
+#include <chrono>
+#include <cstddef>
 #include <iostream>
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(whiskertracker, m) {
-    py::class_<whisker::WhiskerTracker>(m, "WhiskerTracker")
+void init_whisker_tracker(py::module &m) {
+
+    auto whisker_tracker = m.def_submodule("WhiskerTracker");
+    py::class_<whisker::WhiskerTracker>(whisker_tracker, "WhiskerTracker")
             .def(py::init<>())
             .def("setWhiskerLengthThreshold", &whisker::WhiskerTracker::setWhiskerLengthThreshold)
             .def("getWhiskerPadRadius", &whisker::WhiskerTracker::getWhiskerPadRadius)
@@ -84,7 +93,31 @@ PYBIND11_MODULE(whiskertracker, m) {
                     mask_cpp.push_back(whisker::Point2D<float>{t[0].cast<float>(), t[1].cast<float>()});
                 }
                 wt.setFaceMask(mask_cpp);
+            })
+            .def("load_and_align_whiskers", [](whisker::WhiskerTracker &wt, const std::string &filepath) {
+                auto data = whisker::load_line_csv(filepath, true);
+                std::cout << "Loaded " << data.size() << " frames from " << filepath << std::endl;
+
+                auto t1 = std::chrono::high_resolution_clock::now();
+                const auto whisker_pad = wt.getWhiskerPad();
+                
+                for (auto & [frame_num, lines] : data) {
+                    for (auto & line : lines) {
+                        whisker::align_whisker_to_follicle(line, whisker_pad);
+                    }
+                }
+                auto t2 = std::chrono::high_resolution_clock::now();
+
+                auto duration = std::chrono::duration<double>(t2 - t1).count();
+                std::cout << "Aligned " << data.size() << " frames in " << duration << "s" << std::endl;
+
+                std::string output_filepath = filepath.substr(0, filepath.find_last_of('.')) + "_aligned.csv";
+                whisker::save_lines_csv(data,output_filepath);
+            })
+            .def("frechet_distance", [](whisker::WhiskerTracker &wt, const py::array_t<float>& whisker1, const py::array_t<float>& whisker2) {
+                
+                whisker::Line2D line1 = convert_np_array_to_line2d(whisker1);
+                whisker::Line2D line2 = convert_np_array_to_line2d(whisker2);
+                return whisker::fast_discrete_frechet_matrix(line1, line2);
             });
-    m.def("get_max_threads", &omp_get_max_threads);
-    m.def("set_num_threads", &omp_set_num_threads);
-};
+}

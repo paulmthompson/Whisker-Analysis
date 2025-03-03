@@ -2,7 +2,6 @@
 #include "Geometry/points.hpp"
 
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
 
 #include <string>
 
@@ -12,9 +11,6 @@ TEST_CASE("DistanceTest - 1", "[Distance]") {
 
     REQUIRE(whisker::distance(p1,p2) == 10.0f);
 
-    BENCHMARK("Distance Calculation") {
-        return whisker::distance(p1,p2);
-    };
 }
 
 TEST_CASE("DistanceTest - 2", "[Distance]") {

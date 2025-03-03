@@ -1,9 +1,7 @@
-name: Linux Build
+name: Benchmark Build
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -12,7 +10,6 @@ jobs:
       matrix:
         include:
           - {"os": ubuntu-latest, short: linux, compiler: gcc, shell: bash}
-          - {"os": ubuntu-latest, short: linux, compiler: clang, shell: bash}
 
     runs-on: ${{matrix.os}}
 
@@ -53,33 +50,28 @@ jobs:
         run: |
           echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
-      - name: Configure CMake with coverage Linux GCC
-        if: matrix.compiler == 'gcc'
-        run: |
-            cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}" -DCODE_COVERAGE=ON
-
-      - name: Configure CMake without coverage for all other runners (does not equal gcc AND Linux)
-        if: ${{ !(matrix.compiler == 'gcc') }}
+      - name: Configure CMake
         run: |
             cmake --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
       - name: Build
         run: cmake --build --preset ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
-      - name: Test
-        run: ctest --verbose --preset ${{matrix.short}}-${{matrix.compiler}}-release -C ${{matrix.short}}-${{matrix.compiler}}-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
-        working-directory: ${{ github.workspace }}
+      - name: Benchmark
+        run:  ${{ github.workspace }}/out/build/GCC/Release/tests/benchmark | tee ${{ github.workspace }}/benchmark_result.txt
+        working-directory: ${{ github.workspace }}/out/build/GCC/Release/tests
 
-      - name: Capture coverage info
-        if: matrix.compiler == 'gcc'
-        run: |
-          lcov --directory /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/GCC/Release --capture --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/out/*' '*/opt/*' --output-file coverage.info
-          lcov --list coverage.info
-
-      - name: Upload coverage to Coveralls
-        if: matrix.compiler == 'gcc'
-        uses: coverallsapp/github-action@v2
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
         with:
-          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          path-to-lcov: coverage.info
+          name: Benchmark
+          tool: 'catch2'
+          output-file-path: benchmark_result.txt
+          github-token: ${{ secrets.PAGES_TOKEN }}
+          auto-push: true
+          gh-pages-branch: gh-pages
+          benchmark-data-dir-path: docs/dev/bench
+
+      
+
+

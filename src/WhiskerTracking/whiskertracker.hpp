@@ -2,6 +2,7 @@
 #define WHISKERTRACKER_HPP
 
 #include "Geometry/mask.hpp"
+#include "Geometry/vector.hpp"
 #include "JaneliaWhiskerTracker/janelia.hpp"
 #include "whisker.hpp"
 
@@ -12,6 +13,7 @@
 #include <unordered_map>
 #include <vector>
 
+namespace whisker { struct Line2D; }
 
 namespace whisker {
 

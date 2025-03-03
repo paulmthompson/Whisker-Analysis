@@ -1,5 +1,5 @@
 
-from whiskertracker import *
+from whisker import *
 
 
 def pure_python_function():

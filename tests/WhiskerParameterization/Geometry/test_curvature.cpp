@@ -3,7 +3,6 @@
 #include "Geometry/curvature.hpp"
 
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <string>
@@ -39,12 +38,14 @@ TEST_CASE("FiniteDifferences - 1", "[Curvature]") {
 
     auto fd = whisker::central_difference_first_derivative(line, index, 1);
 
-    CHECK_THAT(fd, Catch::Matchers::WithinAbs(0.0f, 1e-6f));
+    REQUIRE(fd.has_value());
+    CHECK_THAT(fd.value(), Catch::Matchers::WithinAbs(0.0f, 1e-6f));
 
     // Check that this still works when the window size is increased
     fd = whisker::central_difference_first_derivative(line, index, 2);
 
-    CHECK_THAT(fd, Catch::Matchers::WithinAbs(0.0f, 1e-6f));
+    REQUIRE(fd.has_value());
+    CHECK_THAT(fd.value(), Catch::Matchers::WithinAbs(0.0f, 1e-6f));
 
     // Create new line with index 51 deleted so that it is asymmetric
     x.erase(x.begin() + 51);
@@ -58,7 +59,8 @@ TEST_CASE("FiniteDifferences - 1", "[Curvature]") {
 
     fd = whisker::central_difference_first_derivative(line, index, 1);
 
-    CHECK_THAT(fd, Catch::Matchers::WithinRel(0.2f, 1e-3f));
+    REQUIRE(fd.has_value());
+    CHECK_THAT(fd.value(), Catch::Matchers::WithinRel(0.2f, 1e-3f));
 }
 
 TEST_CASE("Curvature - 1", "[Curvature]") {

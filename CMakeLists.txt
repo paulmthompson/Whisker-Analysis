@@ -30,8 +30,8 @@ include(iwyu)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     option(CODE_COVERAGE "Enable coverage reporting" OFF)
     if(CODE_COVERAGE)
-        add_compile_options(--coverage -O0 -g)
-        add_link_options(--coverage)
+        add_compile_options(--coverage -O2 -g -fprofile-update=atomic)
+        add_link_options(--coverage -fprofile-update=atomic)
     endif()
 endif()
 
@@ -85,5 +85,10 @@ BUILD_TESTING is a cache variable that defaults to true which was defined by the
 If we wish to run testing, we should add the tests subdirectory.
 ]]
 if (BUILD_TESTING)
+
+    if (ENABLE_IWYU)
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "") #Disable for tests
+    endif()
+
     add_subdirectory(tests)
 endif()
