@@ -78,22 +78,23 @@ if(BUILD_WHISKERTRACKER)
         add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
     endif()
 
-    pybind11_add_module(whiskertracker MODULE 
+    pybind11_add_module(whisker MODULE 
         Python/WhiskerTracking/whiskertracker_pybind.cpp
+        Python/python_main.cpp
         Python/utils.hpp)
     
     if(ENABLE_IWYU)
-        set_target_properties(whiskertracker PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+        set_target_properties(whisker PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
     endif()
     
-    target_link_libraries(whiskertracker PRIVATE Whisker-Analysis pybind11::module)
+    target_link_libraries(whisker PRIVATE Whisker-Analysis pybind11::module)
 
     if (WIN32)
-        set_target_properties(whiskertracker PROPERTIES SUFFIX ".pyd")
+        set_target_properties(whisker PROPERTIES SUFFIX ".pyd")
     elseif(APPLE)
-        set_target_properties(whiskertracker PROPERTIES SUFFIX ".so") #I think?
+        set_target_properties(whisker PROPERTIES SUFFIX ".so") #I think?
     else()
-        set_target_properties(whiskertracker PROPERTIES SUFFIX ".so")
+        set_target_properties(whisker PROPERTIES SUFFIX ".so")
     endif()
 endif()
 

@@ -16,8 +16,10 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(whiskertracker, m) {
-    py::class_<whisker::WhiskerTracker>(m, "WhiskerTracker")
+void init_whisker_tracker(py::module &m) {
+
+    auto whisker_tracker = m.def_submodule("WhiskerTracker");
+    py::class_<whisker::WhiskerTracker>(whisker_tracker, "WhiskerTracker")
             .def(py::init<>())
             .def("setWhiskerLengthThreshold", &whisker::WhiskerTracker::setWhiskerLengthThreshold)
             .def("getWhiskerPadRadius", &whisker::WhiskerTracker::getWhiskerPadRadius)
@@ -118,6 +120,4 @@ PYBIND11_MODULE(whiskertracker, m) {
                 whisker::Line2D line2 = convert_np_array_to_line2d(whisker2);
                 return whisker::fast_discrete_frechet_matrix(line1, line2);
             });
-    m.def("get_max_threads", &omp_get_max_threads);
-    m.def("set_num_threads", &omp_set_num_threads);
-};
+}
