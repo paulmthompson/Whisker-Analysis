@@ -13,6 +13,10 @@ FetchContent_MakeAvailable(Catch2)
 
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
+if(ENABLE_IWYU)
+    set_target_properties(Catch2::Catch2WithMain PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "")
+endif()
+
 include(Catch)
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
