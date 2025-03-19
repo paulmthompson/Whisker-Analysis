@@ -51,8 +51,11 @@ jobs:
       - name: Capture coverage info
         if: matrix.compiler == 'gcc'
         run: |
-          lcov --directory /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/GCC/Release --capture --ignore-errors empty --ignore-errors mismatch --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/out/*' '*/opt/*' --output-file coverage.info
+          lcov --directory /home/runner/work/Whisker-Analysis/Whisker-Analysis/out/build/GCC/Release \
+          --capture \
+          --ignore-errors empty --ignore-errors mismatch \
+          --exclude '/usr/*' '*/tests/*' '*/out/*' '*/opt/*' \
+          --output-file coverage.info
           lcov --list coverage.info
 
       - name: Upload coverage to Coveralls
