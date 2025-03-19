@@ -14,23 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: seanmiddleditch/gha-setup-ninja@master
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Common Setup
+        uses: ./.github/actions/linux-setup
         with:
-          python-version: '3.10'
+          compiler: gcc
 
-      - name: Install Linux System Dependencies for IWYU
+      - name: Install IWYU
         run: |
           sudo apt-get update
-          # Install IWYU; you may need to adjust the package name or build it from source
           sudo apt-get install -y iwyu
-          sudo apt-get install -y libomp-18-dev lcov llvm gcovr
-
-      - name: Set environmental variables
-        shell: bash
-        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
 
       - name: Configure CMake with IWYU enabled
         run: |
