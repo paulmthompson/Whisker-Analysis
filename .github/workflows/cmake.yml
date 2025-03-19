@@ -55,6 +55,7 @@ jobs:
           --capture \
           --ignore-errors empty --ignore-errors mismatch \
           --exclude '*/tests/*' \
+          --exclude '*/catch2/*' \
           --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/out/*' '*/opt/*' --output-file coverage.info
           lcov --list coverage.info
