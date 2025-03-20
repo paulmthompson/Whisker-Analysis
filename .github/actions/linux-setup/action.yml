@@ -7,8 +7,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v4
-
     - uses: seanmiddleditch/gha-setup-ninja@master
 
     - uses: actions/setup-python@v5
