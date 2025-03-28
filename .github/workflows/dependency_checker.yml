@@ -1,0 +1,98 @@
+name: Check C++ Dependency Updates
+
+# Trigger the workflow weekly on Sunday at midnight UTC, and allow manual runs
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch: 
+
+# Define environment variables accessible to all jobs
+env:
+  # --- USER CONFIGURATION: START ---
+  # List your dependencies here.
+  # Format: 'NAME;REPO;CURRENT_VERSION;CHECK_METHOD'
+  DEPENDENCIES: |
+    fast_float;fastfloat/fast_float;v7.0.0;github-release
+    spdlog;gabime/spdlog;v1.15.1;github-release
+  # --- USER CONFIGURATION: END ---
+
+jobs:
+  check-dependencies:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code # Optional: Only needed if CURRENT_VERSION is read from a file
+        uses: actions/checkout@v4
+
+      - name: Check for updates
+        id: check
+        run: |
+          echo "Checking for dependency updates..."
+          UPDATES_FOUND="" # Accumulator for update messages
+
+          # Read the multiline DEPENDENCIES env var line by line
+          echo "${{ env.DEPENDENCIES }}" | while IFS=';' read -r NAME REPO CURRENT_VERSION CHECK_METHOD; do
+            # Skip empty lines or lines starting with #
+            [[ -z "$NAME" || "$NAME" == \#* ]] && continue
+
+            echo "--- Checking $NAME ($REPO) ---"
+            echo "Current version used: $CURRENT_VERSION"
+
+            LATEST_VERSION=""
+            API_URL=""
+            JQ_PATH=""
+
+            if [[ "$CHECK_METHOD" == "github-release" ]]; then
+              API_URL="https://api.github.com/repos/$REPO/releases/latest"
+              JQ_PATH='.tag_name' # Assumes the release tag IS the version
+            else
+              echo "Unsupported CHECK_METHOD: $CHECK_METHOD for $NAME. Skipping."
+              continue
+            fi
+
+            # Fetch latest version info using GitHub API
+            API_RESPONSE=$(curl -s -L --fail -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                               -H "Accept: application/vnd.github.v3+json" \
+                               "$API_URL")
+
+            if [[ $? -ne 0 ]]; then
+               echo "Error fetching latest release info for $REPO. Skipping."
+               continue
+            fi
+
+            LATEST_VERSION=$(echo "$API_RESPONSE" | jq -r "$JQ_PATH")
+
+            if [[ -z "$LATEST_VERSION" || "$LATEST_VERSION" == "null" ]]; then
+              echo "Could not parse latest version tag from API response for $REPO. Skipping."
+              continue
+            fi
+
+            echo "Latest version found: $LATEST_VERSION"
+
+            # --- Version Comparison ---
+            if [[ "$CURRENT_VERSION" != "$LATEST_VERSION" ]] && \
+               [[ "$(printf '%s\n' "$CURRENT_VERSION" "$LATEST_VERSION" | sort -V | tail -n1)" == "$LATEST_VERSION" ]]; then
+              echo "Update available for $NAME: $CURRENT_VERSION -> $LATEST_VERSION"
+              UPDATES_FOUND+=$(printf "* **%s** (%s): \`%s\` → \`%s\`\n" "$NAME" "$REPO" "$CURRENT_VERSION" "$LATEST_VERSION")
+            else
+              echo "$NAME is up-to-date."
+            fi
+            echo "-------------------------"
+          done
+
+          # Make the accumulated updates available to subsequent steps
+          echo "updates<<EOF" >> $GITHUB_OUTPUT
+          echo "$UPDATES_FOUND" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create or Update Issue if updates found
+        if: steps.check.outputs.updates != ''
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Dependency Updates Available"
+          content-filepath: <(echo -e "The following dependency updates were detected:\n\n${{ steps.check.outputs.updates }}\n\nPlease review and update them in the CMake configuration manually.")
+          labels: dependencies, enhancement
+          # assignees: your-github-username
