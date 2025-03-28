@@ -130,5 +130,3 @@ jobs:
         with:
           title: "Dependency Updates Available"
           content-filepath: updates.md
-          labels: dependencies, enhancement
-          assignees: paulmthompson
