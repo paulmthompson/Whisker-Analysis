@@ -19,6 +19,9 @@ env:
 jobs:
   check-dependencies:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
