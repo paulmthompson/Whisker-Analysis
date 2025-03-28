@@ -95,7 +95,7 @@ jobs:
             if [[ "$CURRENT_VERSION" != "$LATEST_VERSION" ]] && \
                [[ "$(printf '%s\n' "$CURRENT_VERSION" "$LATEST_VERSION" | sort -V | tail -n1)" == "$LATEST_VERSION" ]]; then
               echo "Update available for $NAME: $CURRENT_VERSION -> $LATEST_VERSION"
-              UPDATES_FOUND+=$(printf "* **%s** (%s): \`%s\` → \`%s\`\\n" "$NAME" "$REPO" "$CURRENT_VERSION" "$LATEST_VERSION") # Ensure newline is literal '\n' for printf
+              UPDATES_FOUND+=$(printf "* **%s** (%s): %s → %s\\n" "$NAME" "$REPO" "$CURRENT_VERSION" "$LATEST_VERSION") # Ensure newline is literal '\n' for printf
             else
               echo "$NAME is up-to-date."
             fi
