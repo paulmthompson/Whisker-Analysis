@@ -24,19 +24,24 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - name: Checkout code # Optional: Only needed if CURRENT_VERSION is read from a file
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Check for updates
         id: check
+        # Use bash explicitly for process substitution '< <()'
+        shell: bash
         run: |
           echo "Checking for dependency updates..."
           UPDATES_FOUND="" # Accumulator for update messages
 
-          # Read the multiline DEPENDENCIES env var line by line
-          echo "${{ env.DEPENDENCIES }}" | while IFS=';' read -r NAME REPO CURRENT_VERSION CHECK_METHOD; do
-            # Skip empty lines or lines starting with #
+          # --- MODIFIED LINE: Use process substitution instead of pipe ---
+          # This ensures the loop runs in the current shell, so UPDATES_FOUND modification persists.
+          while IFS=';' read -r NAME REPO CURRENT_VERSION CHECK_METHOD || [[ -n "$NAME" ]]; do
+            # Skip empty lines or lines starting with # (reading from multiline string might not need this anymore, but safe to keep)
             [[ -z "$NAME" || "$NAME" == \#* ]] && continue
+
+            # Handle the last line if it doesn't end with a newline (added || [[ -n "$NAME" ]] to the while condition)
 
             echo "--- Checking $NAME ($REPO) ---"
             echo "Current version used: $CURRENT_VERSION"
@@ -47,26 +52,40 @@ jobs:
 
             if [[ "$CHECK_METHOD" == "github-release" ]]; then
               API_URL="https://api.github.com/repos/$REPO/releases/latest"
-              JQ_PATH='.tag_name' # Assumes the release tag IS the version
+              JQ_PATH='.tag_name'
             else
               echo "Unsupported CHECK_METHOD: $CHECK_METHOD for $NAME. Skipping."
               continue
             fi
 
             # Fetch latest version info using GitHub API
-            API_RESPONSE=$(curl -s -L --fail -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            # Added error handling in case curl fails but doesn't exit script immediately
+            API_RESPONSE=$(curl -s -L -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                                -H "Accept: application/vnd.github.v3+json" \
                                "$API_URL")
+            CURL_EXIT_CODE=$? # Capture curl exit code
 
-            if [[ $? -ne 0 ]]; then
-               echo "Error fetching latest release info for $REPO. Skipping."
+            if [[ $CURL_EXIT_CODE -ne 0 ]]; then
+               echo "Error fetching latest release info for $REPO (curl exit code: $CURL_EXIT_CODE). Skipping."
                continue
             fi
 
+            # Check if response is empty or not valid JSON before parsing
+            if [[ -z "$API_RESPONSE" ]]; then
+              echo "Empty API response received for $REPO. Skipping."
+              continue
+            fi
+
             LATEST_VERSION=$(echo "$API_RESPONSE" | jq -r "$JQ_PATH")
+            JQ_EXIT_CODE=$? # Capture jq exit code
+
+            if [[ $JQ_EXIT_CODE -ne 0 ]]; then
+                echo "Error parsing JSON response with jq for $REPO (jq exit code: $JQ_EXIT_CODE). Response was: $API_RESPONSE Skipping."
+                continue
+            fi
 
             if [[ -z "$LATEST_VERSION" || "$LATEST_VERSION" == "null" ]]; then
-              echo "Could not parse latest version tag from API response for $REPO. Skipping."
+              echo "Could not extract latest version tag using jq path '$JQ_PATH' for $REPO. Skipping."
               continue
             fi
 
@@ -76,12 +95,18 @@ jobs:
             if [[ "$CURRENT_VERSION" != "$LATEST_VERSION" ]] && \
                [[ "$(printf '%s\n' "$CURRENT_VERSION" "$LATEST_VERSION" | sort -V | tail -n1)" == "$LATEST_VERSION" ]]; then
               echo "Update available for $NAME: $CURRENT_VERSION -> $LATEST_VERSION"
-              UPDATES_FOUND+=$(printf "* **%s** (%s): \`%s\` → \`%s\`\n" "$NAME" "$REPO" "$CURRENT_VERSION" "$LATEST_VERSION")
+              UPDATES_FOUND+=$(printf "* **%s** (%s): \`%s\` → \`%s\`\\n" "$NAME" "$REPO" "$CURRENT_VERSION" "$LATEST_VERSION") # Ensure newline is literal '\n' for printf
             else
               echo "$NAME is up-to-date."
             fi
             echo "-------------------------"
-          done
+          # --- MODIFIED LINE: Input redirection using process substitution ---
+          done < <(echo "${{ env.DEPENDENCIES }}")
+
+          # Debugging: Check the content right before outputting
+          echo "--- Final UPDATES_FOUND content ---"
+          echo "$UPDATES_FOUND"
+          echo "---------------------------------"
 
           # Make the accumulated updates available to subsequent steps
           echo "updates<<EOF" >> $GITHUB_OUTPUT
@@ -95,4 +120,4 @@ jobs:
           title: "Dependency Updates Available"
           content-filepath: <(echo -e "The following dependency updates were detected:\n\n${{ steps.check.outputs.updates }}\n\nPlease review and update them in the CMake configuration manually.")
           labels: dependencies, enhancement
-          # assignees: your-github-username
+          assignees: paulmthompson
