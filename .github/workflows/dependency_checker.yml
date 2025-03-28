@@ -113,11 +113,22 @@ jobs:
           echo "$UPDATES_FOUND" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: create issue markdown file if updates found
+        if: steps.check.outputs.updates != ''
+        run: |
+          echo "Creating issue markdown file..."
+          echo "## Dependency Updates Available" > updates.md
+          echo "The following dependency updates were detected:" >> updates.md
+          echo "" >> updates.md
+          echo "${{ steps.check.outputs.updates }}" >> updates.md
+          echo "" >> updates.md
+          echo "Please review and update them in the CMake configuration manually." >> updates.md
+
       - name: Create or Update Issue if updates found
         if: steps.check.outputs.updates != ''
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: "Dependency Updates Available"
-          content-filepath: <(echo -e "The following dependency updates were detected:\n\n${{ steps.check.outputs.updates }}\n\nPlease review and update them in the CMake configuration manually.")
+          content-filepath: updates.md
           labels: dependencies, enhancement
           assignees: paulmthompson
