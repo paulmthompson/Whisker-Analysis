@@ -14,6 +14,8 @@ env:
   DEPENDENCIES: |
     fast_float;fastfloat/fast_float;v7.0.0;github-release
     spdlog;gabime/spdlog;v1.15.1;github-release
+    pybind11;pybind/pybind11;v2.12.0;github-release
+    Catch2;catchorg/Catch2;v3.5.4;github-release
   # --- USER CONFIGURATION: END ---
 
 jobs:
