@@ -1,4 +1,4 @@
-name: Clang-Tidy Check
+name: Optimization Report
 
 on:
   push:
@@ -25,14 +25,12 @@ jobs:
         with:
           compiler: clang
 
-      - name: "Install Linux System Dependencies"
+      - name: optview2 dependencies
         shell: bash
         run: |
             sudo apt-get update
             sudo apt-get install -y libyaml-dev
-
-      - name: Install python dependencies Windows
-        run: ppip --no-cache-dir install --verbose --force-reinstall -I pyyaml
+            pip --no-cache-dir install --verbose --force-reinstall -I pyyaml
 
       - name: Configure CMake without coverage
         run: |
