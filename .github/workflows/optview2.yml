@@ -40,7 +40,7 @@ jobs:
         run: cmake --build --preset linux-clang-release -DPython3_ROOT_DIR="${{ env.pythonLocation }}"
 
       - name: Download optview2
-        run: git clone https://github/OfekShilon/optview2.git
+        run: git clone https://github.com/OfekShilon/optview2.git
         shell: bash
 
       - name: Run Optview2
