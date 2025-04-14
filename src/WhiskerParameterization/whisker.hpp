@@ -8,9 +8,15 @@
 #include <tuple>
 #include <vector>
 
-namespace whisker { struct GeomVector; }
-namespace whisker { struct Line2D; }
-namespace whisker { struct Mask2D; }
+namespace whisker {
+struct GeomVector;
+}
+namespace whisker {
+struct Line2D;
+}
+namespace whisker {
+struct Mask2D;
+}
 
 namespace whisker {
 
@@ -18,10 +24,10 @@ std::set<Point2D<int>> create_set(std::vector<Point2D<int>> const & points);
 
 std::set<Point2D<int>> create_set(std::vector<Point2D<float>> const & points);
 
-float calculate_overlap_iou(Line2D const& line, Line2D const& line2);
+float calculate_overlap_iou(Line2D const & line, Line2D const & line2);
 float calculate_overlap_iou(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set);
 
-float calculate_overlap_iou_relative(Line2D const& line, Line2D const& line2);
+float calculate_overlap_iou_relative(Line2D const & line, Line2D const & line2);
 float calculate_overlap_iou_relative(std::set<Point2D<int>> const & l1_set, std::set<Point2D<int>> const & l2_set);
 
 /**
@@ -34,7 +40,7 @@ float calculate_overlap_iou_relative(std::set<Point2D<int>> const & l1_set, std:
  * @param mask The mask to check for intersection with the point.
  * @return Returns true if the point intersects with the mask, false otherwise.
  */
-bool intersect(Point2D<float> const p1, Mask2D const & mask);
+bool intersect(Point2D<float> p1, Mask2D const & mask);
 
 /**
  * @brief Checks if a given point intersects with a set of points.
@@ -46,7 +52,7 @@ bool intersect(Point2D<float> const p1, Mask2D const & mask);
  * @param mask_set The set of points to check for intersection with the point.
  * @return Returns true if the point is in the set of points, false otherwise.
  */
-bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set);
+bool intersect(Point2D<float> p1, std::set<Point2D<int>> const & mask_set);
 
 /**
  * @brief Extends a 2D line to intersect with a mask.
@@ -59,7 +65,7 @@ bool intersect(Point2D<float> const p1, std::set<Point2D<int>> const & mask_set)
  * @param x_bound The maximum x-coordinate of the mask.
  * @param y_bound The maximum y-coordinate of the mask.
  */
-void extend_line_to_mask(Line2D & line, std::set<Point2D<int>> const & mask, int const x_bound, int const y_bound);
+void extend_line_to_mask(Line2D & line, std::set<Point2D<int>> const & mask, int x_bound, int y_bound);
 
 /**
  * @brief Removes duplicate whiskers from a vector of whiskers.
@@ -82,7 +88,7 @@ void remove_duplicates(std::vector<Line2D> & whiskers);
  * @param whiskers A vector of whiskers to be modified.
  * @param erase_inds A vector of indices of the whiskers to be erased.
  */
-void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> &erase_inds);
+void erase_whiskers(std::vector<Line2D> & whiskers, std::vector<std::size_t> & erase_inds);
 
 std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float x_p, float y_p);
 
@@ -96,7 +102,7 @@ std::tuple<float, int> get_nearest_whisker(std::vector<Line2D> & whiskers, float
  *
  * @param whisker whisker to be checked
  */
-void align_whisker_to_follicle(Line2D &whisker, whisker::Point2D<float> whisker_pad);
+void align_whisker_to_follicle(Line2D & whisker, whisker::Point2D<float> whisker_pad);
 
 /**
  * @brief Orders the whiskers based on their position.
@@ -127,8 +133,8 @@ void order_whiskers(std::vector<Line2D> & whiskers, GeomVector const & head_dire
  */
 void remove_whiskers_outside_radius(std::vector<Line2D> & whiskers, Point2D<float> whisker_pad, float radius);
 
-float fast_discrete_frechet_matrix(const Line2D& P, const Line2D& Q);
+float fast_discrete_frechet_matrix(Line2D const & P, Line2D const & Q);
 
-} // namespace whisker
+}// namespace whisker
 
-#endif //WHISKER_ANALYSIS_WHISKER_HPP
+#endif//WHISKER_ANALYSIS_WHISKER_HPP
