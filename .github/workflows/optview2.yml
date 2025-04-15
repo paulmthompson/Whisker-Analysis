@@ -54,5 +54,5 @@ jobs:
       - name: Upload Optimization Report Artifact
         uses: actions/upload-artifact@v4
         with:
-            name: iwyu-report
+            name: optview2-report
             path: ${{ github.workspace }}/opt_output.zip
