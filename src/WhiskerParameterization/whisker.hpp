@@ -52,7 +52,7 @@ bool intersect(Point2D<float> p1, Mask2D const & mask);
  * @param mask_set The set of points to check for intersection with the point.
  * @return Returns true if the point is in the set of points, false otherwise.
  */
-bool intersect(Point2D<float> p1, std::set<Point2D<int>> const & mask_set);
+bool intersect(const const Point2D<float>&& p1, std::set<Point2D<int>> const & mask_set);
 
 /**
  * @brief Extends a 2D line to intersect with a mask.

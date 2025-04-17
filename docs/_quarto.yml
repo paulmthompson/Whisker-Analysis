@@ -5,47 +5,61 @@ project:
 
 website: 
   title: "Whisker Analysis"
+  navbar:
+    collapse-below: lg
+    pinned: true
+    right:
+      - id: intro
+        text: "Introduction"
+        href: index.qmd
+        
+      - text: "Tutorials"
+      
+      - text: "How-to Guides"
+      
+      - text: "Reference Guides"
+        menu:
+          - text: "User Guide"
+            href: user_guide/index.qmd
+          - text: "Developer Guide"
+            href: developer/index.qmd
+      
+      - text: "Background and Concepts"
+        href: concepts/index.qmd
+
   sidebar:
-    style: docked
-    contents: 
-      - section: "Introduction"
-        contents:
-        - index.qmd
-        
-      - section: "Tutorials"
-      
-      - section: "How-to Guides"
-      
-      - section: "Reference Guides"
-      
-      - section: "Background and Concepts"
-        contents:
-        
+    - title: "Background and Concepts"
+      style: "docked"
+      collapse-level: 1
+      contents:
+        - text: "Introduction"
+          href: concepts/index.qmd
         - section: "Whisker Parameterization"
           contents:
-          - parameterization/parameter_overview.qmd
-          - parameterization/discretization.qmd
-          - parameterization/mask.qmd
-          - parameterization/follicle.qmd
-          - parameterization/point.qmd
-          - parameterization/quality_parameters.qmd
-          - parameterization/beam_parameters.qmd
-        
+          - concepts/parameterization/parameter_overview.qmd
+          - concepts/parameterization/discretization.qmd
+          - concepts/parameterization/mask.qmd
+          - concepts/parameterization/follicle.qmd
+          - concepts/parameterization/point.qmd
+          - concepts/parameterization/quality_parameters.qmd
+          - concepts/parameterization/beam_parameters.qmd
+          
         - section: "Kinematics"
           contents:
-          - kinematics/kinematics_overview.qmd
-          - kinematics/angle.qmd
-          - kinematics/curvature.qmd
-          - kinematics/phase.qmd
-          - kinematics/velocity.qmd
+          - concepts/kinematics/kinematics_overview.qmd
+          - concepts/kinematics/angle.qmd
+          - concepts/kinematics/curvature.qmd
+          - concepts/kinematics/phase.qmd
+          - concepts/kinematics/velocity.qmd
         
         - section: "Mechanics"
           contents: 
-          - mechanics/mechanics_overview.qmd
+          - concepts/mechanics/mechanics_overview.qmd
      
 format:
   html:
-    theme: cosmo
+    theme: github-dark
+    smooth-scroll: true
     css: styles.css
     toc: true
 
