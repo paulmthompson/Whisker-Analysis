@@ -313,15 +313,12 @@ window.Quarto = {
   </ul></li>
   <li><a href="#converting-whisker-masks-to-paths" id="toc-converting-whisker-masks-to-paths" class="nav-link" data-scroll-target="#converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</a>
   <ul class="collapse">
-  <li><a href="#regression-fit" id="toc-regression-fit" class="nav-link" data-scroll-target="#regression-fit">Regression Fit</a></li>
-  <li><a href="#nearest-neighbors" id="toc-nearest-neighbors" class="nav-link" data-scroll-target="#nearest-neighbors">Nearest Neighbors</a></li>
-  </ul></li>
-  <li><a href="#follicle-location" id="toc-follicle-location" class="nav-link" data-scroll-target="#follicle-location">Follicle Location</a></li>
-  <li><a href="#whisker-data-structure" id="toc-whisker-data-structure" class="nav-link" data-scroll-target="#whisker-data-structure">Whisker Data Structure</a>
-  <ul class="collapse">
-  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a></li>
-  <li><a href="#julia" id="toc-julia" class="nav-link" data-scroll-target="#julia">Julia</a></li>
-  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c">C++</a></li>
+  <li><a href="#ordering-points" id="toc-ordering-points" class="nav-link" data-scroll-target="#ordering-points">Ordering Points</a></li>
+  <li><a href="#analyzing-whisker-shape-from-noisy-pixel-data" id="toc-analyzing-whisker-shape-from-noisy-pixel-data" class="nav-link" data-scroll-target="#analyzing-whisker-shape-from-noisy-pixel-data">Analyzing Whisker Shape from Noisy Pixel Data</a></li>
+  <li><a href="#challenges-of-noisy-data" id="toc-challenges-of-noisy-data" class="nav-link" data-scroll-target="#challenges-of-noisy-data">Challenges of Noisy Data</a></li>
+  <li><a href="#the-need-for-parameterization" id="toc-the-need-for-parameterization" class="nav-link" data-scroll-target="#the-need-for-parameterization">The Need for Parameterization</a></li>
+  <li><a href="#parameterization-strategy-using-an-independent-variable" id="toc-parameterization-strategy-using-an-independent-variable" class="nav-link" data-scroll-target="#parameterization-strategy-using-an-independent-variable">Parameterization Strategy: Using an Independent Variable</a></li>
+  <li><a href="#benefits-of-parameterization" id="toc-benefits-of-parameterization" class="nav-link" data-scroll-target="#benefits-of-parameterization">Benefits of Parameterization</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -382,45 +379,61 @@ window.Quarto = {
 </section>
 <section id="converting-whisker-masks-to-paths" class="level2">
 <h2 class="anchored" data-anchor-id="converting-whisker-masks-to-paths">Converting Whisker Masks to Paths</h2>
+<section id="ordering-points" class="level3">
+<h3 class="anchored" data-anchor-id="ordering-points">Ordering Points</h3>
 <p>Traditional whisker tracing algorithms will result in a path of points, where increasing indices correspond to either increasing or decreasing distance along the whisker. However, some image processing algorithms, including deep learning, will result in a collection of pixels corresponding to the pixels likely to correspond to a whisker in a picture. <em>These will not be ordered as a path</em>. Consequently,</p>
-<section id="regression-fit" class="level3">
-<h3 class="anchored" data-anchor-id="regression-fit">Regression Fit</h3>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+</section>
+<section id="analyzing-whisker-shape-from-noisy-pixel-data" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-whisker-shape-from-noisy-pixel-data">Analyzing Whisker Shape from Noisy Pixel Data</h3>
+<p>We have a list of pixels corresponding to whisker points in an image, potentially numbering in the hundreds for a standard camera resolution. The goal is to calculate meaningful quantities about the whisker, such as its angle in space, its curvature at various points, the angle of its tip, and potentially the forces and moments present at its base.</p>
+</section>
+<section id="challenges-of-noisy-data" class="level3">
+<h3 class="anchored" data-anchor-id="challenges-of-noisy-data">Challenges of Noisy Data</h3>
+<p>A primary consideration is that the point estimates for the whisker’s position are noisy. The algorithm used to generate these estimates is imperfect, introducing errors from the segmentation process. Additionally, noise arises from the imaging process itself. The camera might not resolve the whisker’s finer structure, or visualization could be hindered by obstructions like fur. Therefore, we are dealing with noisy points, subject to both random and correlated errors along the whisker’s length.</p>
+<p>Directly using single points from this noisy collection for calculations can lead to error-prone estimates. For example, calculating the angle at the whisker base by selecting the base point and another point further along (e.g., at index 10 or 20) makes the calculation highly susceptible to the noise present at those specific positions. The base point is often one of the noisiest estimates due to its proximity to the fur.</p>
+</section>
+<section id="the-need-for-parameterization" class="level3">
+<h3 class="anchored" data-anchor-id="the-need-for-parameterization">The Need for Parameterization</h3>
+<p>Despite the noise in individual points, a user looking at the image can often clearly discern the whisker’s angle because the overall shape is defined by many points. By parameterizing the whisker—using all points to create a reduced estimate or fit—we can average out the random variations in pixel positions and obtain better measurements.</p>
+</section>
+<section id="parameterization-strategy-using-an-independent-variable" class="level3">
+<h3 class="anchored" data-anchor-id="parameterization-strategy-using-an-independent-variable">Parameterization Strategy: Using an Independent Variable</h3>
+<p>How can we effectively parameterize the whisker? A simple approach for a 2D shape might be fitting a function like <span class="math inline">\(y=f(x)\)</span>, perhaps using a polynomial. However, this method is prone to errors. Consider a simple parabola: it’s well-fit by a second-order polynomial. But if this parabola rotates 90 degrees, a single <span class="math inline">\(x\)</span> value might correspond to two <span class="math inline">\(y\)</span> values, making such a fit perform poorly.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-parabola-plots" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-parabola-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter_overview_files/figure-html/fig-parabola-plots-1.png" class="img-fluid figure-img" width="672">
 </div>
-<div class="callout-title-container flex-fill">
-Beware when paths are not monotonically increasing in x/y
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parabola-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Original and rotated parabola fits.
+</figcaption>
+</figure>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>Figure: Demonstration of problematic whisker</p>
+</div>
+<p>To overcome this, we can leverage the fact that the whisker points are ordered from base to tip. Let’s introduce a third variable, <span class="math inline">\(t\)</span>, representing the position along the whisker’s length. Instead of defining the whisker just as <span class="math inline">\((x,y)\)</span> points, we define how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> change independently as functions of <span class="math inline">\(t\)</span>: <span class="math inline">\(x(t)\)</span> and <span class="math inline">\(y(t)\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-parameterization-with-t" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-parameterization-with-t-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="parameter_overview_files/figure-html/fig-parameterization-with-t-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parameterization-with-t-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Figure 2 shows the parameterized fits.
+</figcaption>
+</figure>
 </div>
 </div>
+</div>
+<p>Revisiting the parabola example, regardless of its rotation in 2D space, the <span class="math inline">\(x\)</span>value as a function of <span class="math inline">\(t\)</span> and the <span class="math inline">\(y\)</span> value as a function of <span class="math inline">\(t\)</span> remain smooth and well-defined.</p>
 </section>
-<section id="nearest-neighbors" class="level3">
-<h3 class="anchored" data-anchor-id="nearest-neighbors">Nearest Neighbors</h3>
-</section>
-</section>
-<section id="follicle-location" class="level2">
-<h2 class="anchored" data-anchor-id="follicle-location">Follicle Location</h2>
-<p>The base of the follicle is important for many whisker kinematic calculations, but it can be difficult to identify with tracking reliably.</p>
-</section>
-<section id="whisker-data-structure" class="level2">
-<h2 class="anchored" data-anchor-id="whisker-data-structure">Whisker Data Structure</h2>
-<p>Whiskers are an array of 2D points</p>
-<p>Whiskers can correspond to to whisker IDs</p>
-<p>Whiskers can correspond to certain frames</p>
-<p>HDF5 for saving / loading</p>
-<section id="python" class="level3">
-<h3 class="anchored" data-anchor-id="python">Python</h3>
-</section>
-<section id="julia" class="level3">
-<h3 class="anchored" data-anchor-id="julia">Julia</h3>
-</section>
-<section id="c" class="level3">
-<h3 class="anchored" data-anchor-id="c">C++</h3>
+<section id="benefits-of-parameterization" class="level3">
+<h3 class="anchored" data-anchor-id="benefits-of-parameterization">Benefits of Parameterization</h3>
+<p>This lower-dimensional parameterization ensures that quantities like angle and curvature between subsequent points are well-defined and change smoothly. This significantly reduces the error encountered when selecting specific raw data points for calculations.</p>
+<p>Furthermore, once the parameterization functions (<span class="math inline">\(x(t)\)</span> and <span class="math inline">\(y(t)\)</span>) are determined, we can easily calculate the whisker’s position at any point along its length (<span class="math inline">\(t\)</span>) without needing to store a high resolution of points, making subsequent calculations efficient. Various strategies exist for parameterizing whisker functions, and generally, they are not overly complex for the typical shapes observed.</p>
 
 
 </section>

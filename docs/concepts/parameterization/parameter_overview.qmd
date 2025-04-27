@@ -40,34 +40,178 @@ The spacing between these points may not be uniform, and segments of the whisker
 
 ## Converting Whisker Masks to Paths
 
+### Ordering Points
+
 Traditional whisker tracing algorithms will result in a path of points, where increasing indices correspond to either increasing or decreasing distance along the whisker. However, some image processing algorithms, including deep learning, will result in a collection of pixels corresponding to the pixels likely to correspond to a whisker in a picture. *These will not be ordered as a path*. Consequently,
 
-### Regression Fit
+### Analyzing Whisker Shape from Noisy Pixel Data
 
-::: callout-caution
-## Beware when paths are not monotonically increasing in x/y
+We have a list of pixels corresponding to whisker points in an image, potentially numbering in the hundreds for a standard camera resolution. The goal is to calculate meaningful quantities about the whisker, such as its angle in space, its curvature at various points, the angle of its tip, and potentially the forces and moments present at its base.
 
-Figure: Demonstration of problematic whisker
-:::
+### Challenges of Noisy Data
 
-### Nearest Neighbors
+A primary consideration is that the point estimates for the whisker's position are noisy. The algorithm used to generate these estimates is imperfect, introducing errors from the segmentation process. Additionally, noise arises from the imaging process itself. The camera might not resolve the whisker's finer structure, or visualization could be hindered by obstructions like fur. Therefore, we are dealing with noisy points, subject to both random and correlated errors along the whisker's length.
 
-## Follicle Location
+Directly using single points from this noisy collection for calculations can lead to error-prone estimates. For example, calculating the angle at the whisker base by selecting the base point and another point further along (e.g., at index 10 or 20) makes the calculation highly susceptible to the noise present at those specific positions. The base point is often one of the noisiest estimates due to its proximity to the fur.
 
-The base of the follicle is important for many whisker kinematic calculations, but it can be difficult to identify with tracking reliably.
+### The Need for Parameterization
 
-## Whisker Data Structure
+Despite the noise in individual points, a user looking at the image can often clearly discern the whisker's angle because the overall shape is defined by many points. By parameterizing the whisker—using all points to create a reduced estimate or fit—we can average out the random variations in pixel positions and obtain better measurements.
 
-Whiskers are an array of 2D points
+### Parameterization Strategy: Using an Independent Variable
 
-Whiskers can correspond to to whisker IDs
+How can we effectively parameterize the whisker? A simple approach for a 2D shape might be fitting a function like $y=f(x)$, perhaps using a polynomial. However, this method is prone to errors. Consider a simple parabola: it's well-fit by a second-order polynomial. But if this parabola rotates 90 degrees, a single $x$ value might correspond to two $y$ values, making such a fit perform poorly.
 
-Whiskers can correspond to certain frames
+```{r}
+#| label: fig-parabola-plots
+#| echo: false
+#| fig-cap: "Original and rotated parabola fits."
 
-HDF5 for saving / loading
+# Set seed for reproducibility
+set.seed(123)
 
-### Python
+# Number of points
+n_points <- 40
 
-### Julia
+# Generate x values
+x <- seq(-5, 5, length.out = n_points)
 
-### C++
+# Define the true parabola equation (e.g., y = 0.5*x^2)
+true_y <- 0.5 * x^2
+
+# Add random noise (normally distributed)
+noise_sd <- 3 # Standard deviation of the noise
+y_noisy <- true_y + rnorm(n_points, mean = 0, sd = noise_sd)
+
+# Create a data frame (ensure points are ordered by x for parameterization)
+parabola_data <- data.frame(x = x, y = y_noisy)
+
+# --- 2. Fit Quadratic Model to Original Data (y vs x) ---
+
+# Fit a polynomial model (degree 2 for parabola)
+fit_original <- lm(y ~ poly(x, 2, raw = TRUE), data = parabola_data)
+
+# Generate points for the fitted line
+x_fit_orig <- seq(min(x), max(x), length.out = 100) # Smoother curve
+y_fit_orig <- predict(fit_original, newdata = data.frame(x = x_fit_orig))
+fit_line_original <- data.frame(x = x_fit_orig, y = y_fit_orig)
+
+# --- 3. Rotate Points by 90 Degrees Clockwise ---
+
+# Rotation matrix for 90 degrees clockwise: [[0, 1], [-1, 0]]
+# New x' = y
+# New y' = -x
+x_rotated <- y_noisy
+y_rotated <- -x
+
+# Create a data frame for rotated points
+rotated_data <- data.frame(x_rot = x_rotated, y_rot = y_rotated)
+
+# --- 4. Fit Quadratic Model to Rotated Data (y' vs x') ---
+
+# Fit a polynomial model (degree 2) - Modeling y_rot as a function of x_rot
+# This is expected to provide a poor fit for the rotated shape
+fit_rotated_incorrect <- lm(y_rot ~ poly(x_rot, 2, raw = TRUE), data = rotated_data)
+
+# Generate points for the (incorrectly oriented) fitted line
+x_rot_fit_inc <- seq(min(x_rotated), max(x_rotated), length.out = 100) # Use range of rotated x
+y_rot_fit_inc <- predict(fit_rotated_incorrect, newdata = data.frame(x_rot = x_rot_fit_inc))
+fit_line_rotated_inc <- data.frame(x_rot = x_rot_fit_inc, y_rot = y_rot_fit_inc)
+
+# --- 5. Parameterize Original Data and Fit x(t), y(t) ---
+
+# Create parameter t (normalized 0 to 1 based on index/x order)
+t_param <- seq(0, 1, length.out = n_points)
+parabola_data$t <- t_param
+
+# Fit x as a function of t (quadratic)
+fit_x_t <- lm(x ~ poly(t, 2, raw = TRUE), data = parabola_data)
+
+# Fit y as a function of t (quadratic)
+fit_y_t <- lm(y ~ poly(t, 2, raw = TRUE), data = parabola_data)
+
+# Generate points for the fitted lines x(t) and y(t)
+t_fit <- seq(0, 1, length.out = 100)
+x_fit_t <- predict(fit_x_t, newdata = data.frame(t = t_fit))
+y_fit_t <- predict(fit_y_t, newdata = data.frame(t = t_fit))
+
+fit_line_x_t <- data.frame(t = t_fit, x = x_fit_t)
+fit_line_y_t <- data.frame(t = t_fit, y = y_fit_t)
+
+
+# --- 6. Plotting (Black and White Scheme, Square Aspect, Separate Figures) ---
+
+# Set up plot layout (1 row, 2 columns), square aspect ratio
+par(mfrow = c(1, 2), pty = "s", mar = c(4, 4, 3, 1), oma = c(0, 0, 3, 0))
+
+# Plot 1.1: Original Data and Fit (y vs x)
+plot(parabola_data$x, parabola_data$y,
+     main = "Original Parabola (y vs x)",
+     xlab = "x", ylab = "y",
+     pch = 16, col = "black", # Black solid circles
+     cex = 1.2)
+lines(fit_line_original$x, fit_line_original$y,
+      col = "black", lwd = 2, lty = 2) # Black dashed line
+grid()
+# legend() removed
+
+# Plot 1.2: Rotated Data and (Incorrect) Fit (y' vs x')
+plot(rotated_data$x_rot, rotated_data$y_rot,
+     main = "Rotated Parabola (y' vs x')",
+     xlab = "x' (Original y)", ylab = "y' (Original -x)",
+     pch = 16, col = "black", # Black solid circles
+     cex = 1.2)
+lines(fit_line_rotated_inc$x_rot, fit_line_rotated_inc$y_rot,
+      col = "black", lwd = 2, lty = 2) # Black dashed line
+grid()
+# legend() removed
+
+# Add an overall title for Figure 1
+mtext("Parabola Fitting: Original vs. Rotated", outer = TRUE, cex = 1.5, line = 1)
+```
+
+To overcome this, we can leverage the fact that the whisker points are ordered from base to tip. Let's introduce a third variable, $t$, representing the position along the whisker's length. Instead of defining the whisker just as $(x,y)$ points, we define how $x$ and $y$ change independently as functions of $t$: $x(t)$ and $y(t)$.
+
+```{r}
+#| label: fig-parameterization-with-t
+#| echo: false
+#| fig-cap: "Figure 2 shows the parameterized fits."
+
+# To keep both, you might need to open a new graphics device (e.g., using dev.new())
+# or save the first plot to a file before creating the second.
+par(mfrow = c(1, 2), pty = "s", mar = c(4, 4, 3, 1), oma = c(0, 0, 3, 0))
+
+# Plot 2.1: Parameterized x vs t
+plot(parabola_data$t, parabola_data$x,
+     main = "Parameterized x vs t",
+     xlab = "t (Parameter)", ylab = "x",
+     pch = 16, col = "black",
+     cex = 1.2)
+lines(fit_line_x_t$t, fit_line_x_t$x,
+      col = "black", lwd = 2, lty = 2)
+grid()
+# legend() removed
+
+# Plot 2.2: Parameterized y vs t
+plot(parabola_data$t, parabola_data$y,
+     main = "Parameterized y vs t",
+     xlab = "t (Parameter)", ylab = "y",
+     pch = 16, col = "black",
+     cex = 1.2)
+lines(fit_line_y_t$t, fit_line_y_t$y,
+      col = "black", lwd = 2, lty = 2)
+grid()
+# legend() removed
+
+# Add an overall title for Figure 2
+mtext("Parameterized Fits: x(t) and y(t)", outer = TRUE, cex = 1.5, line = 1)
+
+
+```
+Revisiting the parabola example, regardless of its rotation in 2D space, the $x$value as a function of $t$ and the $y$ value as a function of $t$ remain smooth and well-defined.
+
+### Benefits of Parameterization
+
+This lower-dimensional parameterization ensures that quantities like angle and curvature between subsequent points are well-defined and change smoothly. This significantly reduces the error encountered when selecting specific raw data points for calculations.
+
+Furthermore, once the parameterization functions ($x(t)$ and $y(t)$) are determined, we can easily calculate the whisker's position at any point along its length ($t$) without needing to store a high resolution of points, making subsequent calculations efficient. Various strategies exist for parameterizing whisker functions, and generally, they are not overly complex for the typical shapes observed.
