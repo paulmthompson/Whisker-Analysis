@@ -21,3 +21,7 @@ FetchContent_MakeAvailable(fast_float spdlog)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endif()
