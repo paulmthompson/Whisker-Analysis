@@ -40,6 +40,7 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/curvature.cpp
 
         WhiskerTracking/loaders.hpp
+        WhiskerTracking/loaders.cpp
 
 )
 
