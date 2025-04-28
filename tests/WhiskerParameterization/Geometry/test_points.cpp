@@ -2,43 +2,66 @@
 #include "Geometry/points.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-#include <string>
+TEST_CASE("Point distance calculations", "[points][distance]") {
 
-#include "test_constants.hpp"
+    auto p1 = whisker::Point2D<float>{0.0f, 0.0f};
+    auto p2 = whisker::Point2D<float>{0.0f, 10.0f};
+    auto p3 = whisker::Point2D<float>{10.0f, 10.0f};
 
-TEST_CASE("DistanceTest - 1", "[Distance]") {
+    SECTION("Distance between two points") {
+        REQUIRE(whisker::distance(p1, p2) == 10.0f);
+    }
 
-    REQUIRE(whisker::distance(p1,p2) == 10.0f);
+    SECTION("Distance between different points") {
+        REQUIRE_THAT(whisker::distance(p1, p3), Catch::Matchers::WithinRel(14.142f, 1e-3f));
+    }
 
+    SECTION("Distance from point to itself") {
+        REQUIRE(whisker::distance(p1, p1) == 0.0f);
+    }
 }
 
-TEST_CASE("DistanceTest - 2", "[Distance]") {
+TEST_CASE("Finding intermediate points along a path", "[points][interpolation]") {
 
-REQUIRE_FALSE(whisker::distance(p1,p2) == 9.0f);
+    auto p1 = whisker::Point2D<float>{0.0f, 0.0f};
+    auto p2 = whisker::Point2D<float>{0.0f, 10.0f};
+    auto p4 = whisker::Point2D<float>{6.0f, 8.0f};
+
+    SECTION("Point halfway along vertical line") {
+        auto intermediate_point = point_along_path(p1, p2, 5.0f);
+        REQUIRE(intermediate_point.x == 0.0f);
+        REQUIRE(intermediate_point.y == 5.0f);
+    }
+
+    SECTION("Point along diagonal line") {
+        auto intermediate_point = point_along_path(p1, p4, 5.0f);
+        REQUIRE(intermediate_point.x == 3.0f);
+        REQUIRE(intermediate_point.y == 4.0f);
+    }
 }
 
-TEST_CASE("Intermediate Point - 1", "[Points]") {
+TEST_CASE("Edge cases for point operations", "[points][edge_cases]") {
 
-auto intermediate_point = point_along_path(p1, p2, 5.0f);
+    auto p1 = whisker::Point2D<float>{0.0f, 0.0f};
+    auto p2 = whisker::Point2D<float>{0.0f, 10.0f};
 
-REQUIRE(intermediate_point.x == 0.0f);
-REQUIRE(intermediate_point.y == 5.0f);
-}
+    SECTION("Distance beyond the end point") {
+        auto intermediate_point = point_along_path(p1, p2, 15.0f);
+        REQUIRE(intermediate_point.x == 0.0f);
+        REQUIRE(intermediate_point.y == 0.0f);
+    }
 
-TEST_CASE("Intermediate Point - 2", "[Points]") {
+    SECTION("Distance with negative value") {
+        auto intermediate_point = point_along_path(p1, p2, -5.0f);
+        REQUIRE(intermediate_point.x == 0.0f);
+        REQUIRE(intermediate_point.y == 0.0f);
+    }
 
-auto intermediate_point = point_along_path(p1, p2, 15.0f);
-
-REQUIRE(intermediate_point.x == 0.0f);
-REQUIRE(intermediate_point.y == 0.0f);
-}
-
-TEST_CASE("Intermediate Point - 3", "[Points]") {
-
-
-auto intermediate_point = point_along_path(p1, p4, 5.0f);
-
-REQUIRE(intermediate_point.x == 3.0f);
-REQUIRE(intermediate_point.y == 4.0f);
+    SECTION("Point along path with coincident points") {
+        auto intermediate_point = point_along_path(p1, p1, 5.0f);
+        REQUIRE(intermediate_point.x == 0.0f);
+        REQUIRE(intermediate_point.y == 0.0f);
+    }
 }
