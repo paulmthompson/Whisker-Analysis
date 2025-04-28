@@ -6,6 +6,7 @@
 
 #include "spdlog/spdlog.h"
 
+#include <iostream>
 #include <optional>
 
 namespace whisker {

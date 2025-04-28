@@ -32,6 +32,7 @@ add_library(Whisker-Analysis SHARED
         WhiskerParameterization/Geometry/points.hpp
         WhiskerParameterization/Geometry/points.cpp
         WhiskerParameterization/Geometry/lines.hpp
+        WhiskerParameterization/Geometry/lines.cpp
         WhiskerParameterization/Geometry/vector.hpp
         WhiskerParameterization/Geometry/mask.hpp
         WhiskerParameterization/Geometry/curvature.hpp
