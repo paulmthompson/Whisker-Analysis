@@ -3,6 +3,8 @@
 
 #include "points.hpp"
 
+#include <cmath>
+
 namespace whisker {
 
 struct GeomVector {

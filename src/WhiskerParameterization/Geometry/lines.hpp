@@ -4,6 +4,7 @@
 #include "Geometry/points.hpp"
 #include "Geometry/vector.hpp"
 
+#include <iostream>
 #include <tuple>
 #include <vector>
 

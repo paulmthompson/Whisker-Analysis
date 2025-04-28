@@ -1,8 +1,7 @@
 #ifndef WHISKER_ANALYSIS_POINTS_HPP
 #define WHISKER_ANALYSIS_POINTS_HPP
 
-#include <cmath>
-#include <iostream>
+#include <utility>
 
 namespace whisker {
 
@@ -38,16 +37,10 @@ struct Point2D {
 };
 
 template <typename T>
-inline float distance(Point2D<T> const p1, Point2D<T> const p2)
-{
-    return static_cast<float>(std::sqrt(std::pow(p1.x - p2.x,2) + std::pow(p1.y - p2.y,2)));
-};
+float distance(Point2D<T> const p1, Point2D<T> const p2);
 
 template <typename T>
-inline float distance2(Point2D<T> const p1, Point2D<T> const p2)
-{
-    return static_cast<float>((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
-}
+float distance2(Point2D<T> const p1, Point2D<T> const p2);
 
 /**
  * @brief Calculates a point along the path between two points.
@@ -62,28 +55,14 @@ inline float distance2(Point2D<T> const p1, Point2D<T> const p2)
  * @return A Point2D<float> object representing the point along the path at the specified path length from the first point.
  */
 template <typename T>
-inline Point2D<float> point_along_path(Point2D<T> const p1, Point2D<T> const p2, float const pathlength)
-{
+Point2D<float> point_along_path(Point2D<T> const p1, Point2D<T> const p2, float const pathlength);
 
-    auto dist = distance(p1,p2);
 
-    if (dist < pathlength) {
-        std::cout << "Requested path length " << pathlength <<
-                  " is larger than distance between points" << std::endl;
-        return Point2D<float>{0.0f, 0.0f};
-    } else if (pathlength <= 0.0f)
-    {
-        std::cout << "Invalid pathlength of " << pathlength << " specified" << std::endl;
-        return Point2D<float>{0.0f, 0.0f};
-    }
+extern template struct Point2D<float>;
 
-    auto ratio = pathlength / dist;
-
-    auto p3_x = (p2.x - p1.x) * ratio + p1.x;
-    auto p3_y = (p2.y - p1.y) * ratio + p1.y;
-
-    return Point2D<float>{p3_x, p3_y};
-};
+extern template float distance(Point2D<float> const p1, Point2D<float> const p2);
+extern template float distance2(Point2D<float> const p1, Point2D<float> const p2);
+extern template Point2D<float> point_along_path(Point2D<float> const p1, Point2D<float> const p2, float const pathlength);
 
 }
 #endif //WHISKER_ANALYSIS_POINTS_HPP
