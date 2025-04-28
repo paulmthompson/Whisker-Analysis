@@ -15,5 +15,8 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endif()
 
 FetchContent_MakeAvailable(fast_float spdlog)

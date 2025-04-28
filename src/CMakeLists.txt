@@ -61,12 +61,12 @@ target_include_directories(Whisker-Analysis PUBLIC
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(Whisker-Analysis PRIVATE ${CLANG_OPTIONS})
-    set_target_properties(Whisker-Analysis PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    #set_target_properties(Whisker-Analysis PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(Whisker-Analysis PRIVATE ${GCC_WARNINGS})
-    set_target_properties(Whisker-Analysis PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    #set_target_properties(Whisker-Analysis PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 if (MSVC)
