@@ -1,0 +1,19 @@
+{
+  "name": "insourcebuild",
+  "version-string": "0.0.1",
+  "dependencies": [
+    {
+      "name": "armadillo"
+    }
+
+  ],
+  "builtin-baseline": "f176b58f35a75f9f8f54099cd9df97d2e2793a2e",
+  "$comment": "hash corresponds to 2024.08.23",
+  "overrides": [
+    {
+      "name": "armadillo",
+      "version": "12.8.4"
+    }
+  ]
+
+}
