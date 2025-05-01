@@ -116,7 +116,8 @@
       "binaryDir": "${sourceDir}/out/build/GCC/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/GCC/Release"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/GCC/Release",
+        "VCPKG_BUILD_TYPE": "release"
       }
     },
     {
@@ -146,7 +147,8 @@
       "binaryDir": "${sourceDir}/out/build/Clang/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/Clang/Release"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/Clang/Release",
+        "VCPKG_BUILD_TYPE": "release"
       }
     },
     {
@@ -180,7 +182,8 @@
       "binaryDir": "${sourceDir}/out/build/MSVC/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/MSVC/Release"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/MSVC/Release",
+        "VCPKG_BUILD_TYPE": "release"
       }
     },
     {
