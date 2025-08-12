@@ -416,7 +416,7 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
     //vertex *ipa,*ipb;
     box B = {{bigReal, bigReal},
              {-bigReal, -bigReal}};
-    double ascale;
+    float ascale;
 
     std::array<vertex, N + 1> ipa = {};
     std::array<vertex, 5> ipb = {};
@@ -449,14 +449,14 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
                             a2 = area(ipa[j + 1].ip, ipb[k].ip, ipb[k + 1].ip);
                     {
                         int o = a1 < 0;
-                        if (o == a2 < 0) //if there's a crossing...
+                        if (o == (a2 < 0)) //if there's a crossing...
                         {
                             long long a3 = area(ipb[k].ip, ipa[j].ip, ipa[j + 1].ip),
                                     a4 = -area(ipb[k + 1].ip, ipa[j].ip, ipa[j + 1].ip);
-                            if (a3 < 0 == a4 < 0)  //if still consistent with a crossing...
+                            if ((a3 < 0) == (a4 < 0))  //if still consistent with a crossing...
                             {
-                                if (o) s += cross(ipa[j], ipa[j + 1], ipb[k], ipb[k + 1], a1, a2, a3, a4);
-                                else s += cross(ipb[k], ipb[k + 1], ipa[j], ipa[j + 1], a3, a4, a1, a2);
+                                if (o) s += cross(ipa[j], ipa[j + 1], ipb[k], ipb[k + 1], static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4));
+                                else s += cross(ipb[k], ipb[k + 1], ipa[j], ipa[j + 1], static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a1), static_cast<float>(a2));
                             }
                         }
                     }
@@ -464,7 +464,7 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
         /* Add contributions from non-crossing edges */
         s += inness(ipa, ipb);
         s += inness(ipb, ipa);
-        return s / ascale;
+        return static_cast<float>(s) / ascale;
     }
 }
 
@@ -496,9 +496,9 @@ long long area(const ipoint a, const ipoint p, const ipoint q)
 }
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
-                const double a1, const double a2, const double a3,
-                const double a4) { /* Interpolate to intersection and add contributions from each half edge */
-    float r1 = a1 / ((float) a1 + a2), r2 = a3 / ((float) a3 + a4);
+                const float a1, const float a2, const float a3,
+                const float a4) { /* Interpolate to intersection and add contributions from each half edge */
+    float r1 = a1 / (a1 + a2), r2 = a3 / (a3 + a4);
 
     long long s = 0;
     {
@@ -542,7 +542,7 @@ long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q) {
 }
 
 template<size_t N, size_t M>
-double fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge)
+float fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge)
 /* Fits points to an integral lattice.
    *
    * Converts floating point coords to an integer representation.  The bottom
