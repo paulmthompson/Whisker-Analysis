@@ -496,10 +496,9 @@ long long area(const ipoint a, const ipoint p, const ipoint q)
 }
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
-                const double a1, const double a2, const double a3,
-                const double a4) { /* Interpolate to intersection and add contributions from each half edge */
-    float r1 = static_cast<float>(a1) / (static_cast<float>(a1) + static_cast<float>(a2));
-    float r2 = static_cast<float>(a3) / (static_cast<float>(a3) + static_cast<float>(a4));
+                const float a1, const float a2, const float a3,
+                const float a4) { /* Interpolate to intersection and add contributions from each half edge */
+    float r1 = a1 / (a1 + a2), r2 = a3 / (a3 + a4);
 
     long long s = 0;
     {
