@@ -43,9 +43,9 @@ struct JaneliaConfig {
 };
 
 struct Range {
-    double min;
-    double max;
-    double step;
+    float min;
+    float max;
+    float step;
 };
 
 struct point {
@@ -231,11 +231,11 @@ long long cntrib(const ipoint f, const ipoint t, const short w);
 long long area(const ipoint a, const ipoint p, const ipoint q);
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
-                const double a1, const double a2, const double a3, const double a4);
+                const float a1, const float a2, const float a3, const float a4);
 
 
 template<std::size_t N, std::size_t M>
-double fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge);
+float fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge);
 
 template<std::size_t M, std::size_t N>
 long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q);
