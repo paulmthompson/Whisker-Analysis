@@ -224,10 +224,10 @@ void save_lines_csv(
 
             for (auto const & point: line) {
 
-                int x_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", point.x);
+                int x_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", static_cast<double>(point.x));
                 x_values.append(buffer, x_len);
 
-                int y_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", point.y);
+                int y_len = std::snprintf(buffer, sizeof(buffer), "%.1f,", static_cast<double>(point.y));
                 y_values.append(buffer, y_len);
             }
 

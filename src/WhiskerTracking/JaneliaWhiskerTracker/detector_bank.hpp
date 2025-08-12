@@ -25,13 +25,13 @@ struct JaneliaConfig {
     // These are all related to the detector bank (should be in that class)?
     // The detector bank will need to be updated if any of them change.
     int _tlen {8};  // (px) half the size of the detector support.
-    float _angle_step {18.0}; // divisions of pi/4
-    float _offset_step {0.1}; // pixels
-    float _width_min {0.4}; // (pixels) must be a multiple of WIDTH_STEP
-    float _width_max {6.5}; // (pixels) must be a multiple of WIDTH_STEP
-    float _width_step {0.2}; // (pixels)
-    float _min_signal {5.0}; // minimum detector response per detector column.  Typically: (2*TLEN+1)*MIN_SIGNAL is the threshold determining when tracing stops.
-    float _half_space_assymetry {0.25}; // (between 0 and 1)  1 is completely insensitive to asymmetry
+    float _angle_step {18.0f}; // divisions of pi/4
+    float _offset_step {0.1f}; // pixels
+    float _width_min {0.4f}; // (pixels) must be a multiple of WIDTH_STEP
+    float _width_max {6.5f}; // (pixels) must be a multiple of WIDTH_STEP
+    float _width_step {0.2f}; // (pixels)
+    float _min_signal {5.0f}; // minimum detector response per detector column.  Typically: (2*TLEN+1)*MIN_SIGNAL is the threshold determining when tracing stops.
+    float _half_space_assymetry {0.25f}; // (between 0 and 1)  1 is completely insensitive to asymmetry
     float _max_delta_angle {10.1f}; // (degrees)  The detector is constrained to turns less than this value at each step.
     int _half_space_tunneling_max_moves {50}; // (pixels)  This should be the largest size of an occluding area to cross
     float _max_delta_width {6.0f}; // (pixels)   The detector width is constrained to change less than this value at each step.

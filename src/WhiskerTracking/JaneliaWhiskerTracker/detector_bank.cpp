@@ -23,8 +23,8 @@ LineDetector::LineDetector() {
 
 LineDetector::LineDetector(JaneliaConfig config) {
 
-    this->off = Range{-1.0, 1.0, config._offset_step};
-    this->ang = Range{-1 * std::numbers::pi / 4.0, std::numbers::pi / 4.0, std::numbers::pi / 4.0 / config._angle_step};
+    this->off = Range{-1.0f, 1.0f, config._offset_step};
+    this->ang = Range{-1 * std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f / config._angle_step};
     this->wid = Range{config._width_min, config._width_max, config._width_step};
     Build_Line_Detectors(config._tlen, 2 * config._tlen + 3);
 }
@@ -35,8 +35,8 @@ HalfSpaceDetector::HalfSpaceDetector() {
 
 HalfSpaceDetector::HalfSpaceDetector(JaneliaConfig config) {
     this->norm = -1;
-    this->off = Range{-1.0, 1.0, config._offset_step};
-    this->ang = Range{-std::numbers::pi / 4.0, std::numbers::pi / 4.0, std::numbers::pi / 4.0 / config._angle_step};
+    this->off = Range{-1.0f, 1.0f, config._offset_step};
+    this->ang = Range{-std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f / config._angle_step};
     this->wid = Range{config._width_min, config._width_max, config._width_step};
     Build_Half_Space_Detectors(config._tlen, 2 * config._tlen + 3);
 
@@ -96,8 +96,8 @@ void LineDetector::Render_Line_Detector(float offset,
  */
 {
     std::array<point, 4> prim = {};
-    const float thick = 0.7;
-    const float r = 1.0;
+    const float thick = 0.7f;
+    const float r = 1.0f;
     //const float area = 4*thick*length;
     //length -=2;
 
@@ -106,7 +106,7 @@ void LineDetector::Render_Line_Detector(float offset,
         Simple_Line_Primitive(prim, off, length, r * thick);
         rotate(prim, angle);
         translate(prim, anchor);
-        Sum_Pixel_Overlap(prim, -1.0 / r, image, strides);
+        Sum_Pixel_Overlap(prim, -1.0f / r, image, strides);
     }
     {
         point off = {0.0, offset + width / 2.0f - thick / 2.0f};
@@ -216,37 +216,37 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
     auto is_small_angle = [](const float angle)
             /* true iff angle is in [-pi/4,pi/4) or [3pi/4,5pi/4) */
     {
-        const float qpi = std::numbers::pi / 4.0;
-        const float hpi = std::numbers::pi / 2.0;
+        const float qpi = std::numbers::pi_v<float> / 4.0f;
+        const float hpi = std::numbers::pi_v<float> / 2.0f;
         int n = std::floor((angle - qpi) / hpi);
         return (n % 2) != 0;
     };
     if (!is_small_angle(angle))  // if large angle then transpose
     {
-        angle = 3.0 * std::numbers::pi / 2.0 - angle; //   to small ones ( <45deg )
+        angle = 3.0f * std::numbers::pi_v<float> / 2.0f - angle; //   to small ones ( <45deg )
         //offset = -offset;
     }
 
     // Make sure angle is between 0 and 2 Pi
-    while ((angle) < -std::numbers::pi)
-        (angle) += 2 * std::numbers::pi;
-    while ((angle) >= std::numbers::pi)
-        (angle) -= 2 * std::numbers::pi;
+    while ((angle) < -std::numbers::pi_v<float>)
+        (angle) += 2 * std::numbers::pi_v<float>;
+    while ((angle) >= std::numbers::pi_v<float>)
+        (angle) -= 2 * std::numbers::pi_v<float>;
 
     auto is_angle_leftward = [](const float angle)
             /* true iff angle is in left half plane */
-    { //static const float qpi = std::numbers::pi/4.0;
-        const float hpi = std::numbers::pi / 2.0;
-        int n = std::floor((angle - hpi) / std::numbers::pi);
+    { //static const float qpi = std::numbers::pi_v<float>/4.0f;
+        const float hpi = std::numbers::pi_v<float> / 2.0f;
+        int n = std::floor((angle - hpi) / std::numbers::pi_v<float>);
         return (n % 2) == 0;
     };
     //sometimes need to flip the line upside down
     if (is_angle_leftward(angle)) {
         //Wrap the angle in the appropriate half plane
-        while ((angle) < std::numbers::pi / 2.0)
-            (angle) += std::numbers::pi;
-        while ((angle) >= std::numbers::pi / 2.0)
-            (angle) -= std::numbers::pi;
+        while ((angle) < std::numbers::pi_v<float> / 2.0f)
+            (angle) += std::numbers::pi_v<float>;
+        while ((angle) >= std::numbers::pi_v<float> / 2.0f)
+            (angle) -= std::numbers::pi_v<float>;
 
         offset = -offset;
     }
@@ -260,10 +260,10 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
 
 template<size_t N>
 void Simple_Circle_Primitive(std::array<point, N> &verts, point center, float radius, int direction) {
-    float k = direction * 2 * std::numbers::pi / (float) verts.size();
+    float k = direction * 2.0f * std::numbers::pi_v<float> / (float) verts.size();
     for (int i = 0; i < verts.size(); i++) {
-        point p = {static_cast<float>(center.x + radius * cos(k * i)),
-                   static_cast<float>(center.y + radius * sin(k * i))};
+        point p = {static_cast<float>(center.x + radius * cosf(k * i)),
+                   static_cast<float>(center.y + radius * sinf(k * i))};
         verts[i] = p;
     }
 }
@@ -318,8 +318,8 @@ void Simple_Line_Primitive(std::array<point, N> &verts, const point offset, cons
 template<size_t N>
 void rotate(std::array<point, N> &pbuf, const float angle)
 {
-    float s = sin(angle);
-    float c = cos(angle);
+    float s = sinf(angle);
+    float c = cosf(angle);
     for (auto &p: pbuf) {
         float x = p.x;
         float y = p.y;
@@ -555,7 +555,7 @@ double fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge
    * http://doi.acm.org/10.1145/77635.77639
    */
 {
-    const float gamut = 500000000., mid = gamut / 2.;
+    const float gamut = 500000000.0f, mid = gamut / 2.0f;
     float rngx = B.max.x - B.min.x, sclx = gamut / rngx,
             rngy = B.max.y - B.min.y, scly = gamut / rngy;
     int c = x.size();
