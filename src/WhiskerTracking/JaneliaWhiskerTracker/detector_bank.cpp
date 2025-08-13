@@ -260,10 +260,10 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
 
 template<size_t N>
 void Simple_Circle_Primitive(std::array<point, N> &verts, point center, float radius, int direction) {
-    float k = direction * 2.0f * std::numbers::pi_v<float> / (float) verts.size();
-    for (int i = 0; i < verts.size(); i++) {
-        point p = {static_cast<float>(center.x + radius * cosf(k * i)),
-                   static_cast<float>(center.y + radius * sinf(k * i))};
+    float k = static_cast<float>(direction) * 2.0f * std::numbers::pi_v<float> / static_cast<float>(verts.size());
+    for (size_t i = 0; i < verts.size(); i++) {
+        point p = {static_cast<float>(center.x + radius * cosf(k * static_cast<float>(i))),
+                   static_cast<float>(center.y + radius * sinf(k * static_cast<float>(i)))};
         verts[i] = p;
     }
 }
@@ -405,10 +405,10 @@ std::array<int, 4> f32_min_max(std::array<point, N> &points, int *bound) {
         }
     }
 
-    return std::array<int, 4>{std::max((int) minx, 0),
-                              std::min((int) maxx, bound[1] - 1),
-                              std::max((int) miny, 0),
-                              std::min((int) maxy, bound[0] / bound[1] - 1)};
+    return std::array<int, 4>{std::max(static_cast<int>(minx), 0),
+                              std::min(static_cast<int>(maxx), bound[1] - 1),
+                              std::max(static_cast<int>(miny), 0),
+                              std::min(static_cast<int>(maxy), bound[0] / bound[1] - 1)};
 }
 
 template<size_t N>
@@ -486,13 +486,13 @@ void range(box &B, std::array<point, N> &x) {
 
 long long cntrib(const ipoint f, const ipoint t, const short w)
 {
-    return (long long) w * (t.x - f.x) * (t.y + f.y) / 2;
+    return static_cast<long long>(w) * (t.x - f.x) * (t.y + f.y) / 2;
 }
 
 long long area(const ipoint a, const ipoint p, const ipoint q)
 {
-    return (long long) p.x * q.y - (long long) p.y * q.x +
-           (long long) a.x * (p.y - q.y) + (long long) a.y * (q.x - p.x);
+    return static_cast<long long>(p.x) * q.y - static_cast<long long>(p.y) * q.x +
+           static_cast<long long>(a.x) * (p.y - q.y) + static_cast<long long>(a.y) * (q.x - p.x);
 }
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
@@ -502,14 +502,14 @@ long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
 
     long long s = 0;
     {
-        ipoint p = {static_cast<long>(a.ip.x + r1 * (b.ip.x - a.ip.x)),
-                    static_cast<long>(a.ip.y + r1 * (b.ip.y - a.ip.y))};
+        ipoint p = {static_cast<long>(static_cast<float>(a.ip.x) + r1 * static_cast<float>(b.ip.x - a.ip.x)),
+                    static_cast<long>(static_cast<float>(a.ip.y) + r1 * static_cast<float>(b.ip.y - a.ip.y))};
         s += cntrib(p, b.ip, 1);
     }
     {
         ipoint p = {
-                static_cast<long>(c.ip.x + r2 * (d.ip.x - c.ip.x)),
-                static_cast<long>(c.ip.y + r2 * (d.ip.y - c.ip.y))};
+                static_cast<long>(static_cast<float>(c.ip.x) + r2 * static_cast<float>(d.ip.x - c.ip.x)),
+                static_cast<long>(static_cast<float>(c.ip.y) + r2 * static_cast<float>(d.ip.y - c.ip.y))};
         s += cntrib(d.ip, p, 1);
     }
     ++a.in; /* Track winding numbers...these show up later in `inness` */
@@ -560,8 +560,8 @@ float fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge)
             rngy = B.max.y - B.min.y, scly = gamut / rngy;
     int c = x.size();
     while (c--) {
-        ix[c].ip.x = (long) ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
-        ix[c].ip.y = (long) ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
+        ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+        ix[c].ip.y = static_cast<long> ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
     }
     ix[0].ip.y += x.size() & 1;
     ix[x.size()] = ix[0];

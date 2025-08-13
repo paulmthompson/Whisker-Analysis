@@ -76,7 +76,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
 
         // Compute means and mask
         while (i--) {
-            float n = (float) ha[i];
+            float n = static_cast<float>(ha[i]);
             if (n > 0.0f)
                 tha[i] /= n;
         }
@@ -99,8 +99,8 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
                 if (maska[i] == 1) {
                     Seed seed = {i % stride,
                                  i / stride,
-                                 (int) std::round(100 * cos(tha[i])),
-                                 (int) std::round(100 * sin(tha[i]))};
+                                 static_cast<int>(std::round(100 * cos(tha[i]))),
+                                 static_cast<int>(std::round(100 * sin(tha[i])))};
 
                     line = line_param_from_seed(seed);
 
@@ -124,8 +124,8 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
                 if (maska[i] == 1) {
                     Seed seed = {i % stride,
                                  i / stride,
-                                 (int) std::round(100 * cos(tha[i])),
-                                 (int) std::round(100 * sin(tha[i]))};
+                                 static_cast<int>(std::round(100 * cos(tha[i]))),
+                                 static_cast<int>(std::round(100 * sin(tha[i])))};
 
                     auto w = trace_whisker(seed, image);
                     if (w.len == 0) {
@@ -413,19 +413,19 @@ JaneliaTracker::compute_seed_from_point_ex(const Image<uint8_t> &image, int p, i
         {
             float norm;
             if (lstat > rstat) {
-                _myseed.xpnt = (int) lsx / lnpoints;
-                _myseed.ypnt = (int) lsy / lnpoints;
-                _myseed.xdir = 100 * cosf(lm);
-                _myseed.ydir = (int) (100 * sinf(lm));
+                _myseed.xpnt = static_cast<int>(lsx / static_cast<float>(lnpoints));
+                _myseed.ypnt = static_cast<int>(lsy / static_cast<float>(lnpoints));
+                _myseed.xdir = static_cast<int>(100 * cosf(lm));
+                _myseed.ydir = static_cast<int>(100 * sinf(lm));
 
                 norm = 1.0; //_compute_seed_from_point_eigennorm( lm ); // weights by length of line in square
                 *out_m = lm;
                 *out_stat = lstat / (norm * norm); // normalize by length squared since the eigenvalue is variance
             } else {
-                _myseed.xpnt = (int) rsx / rnpoints;
-                _myseed.ypnt = (int) rsy / rnpoints;
-                _myseed.xdir = 100 * cosf(rm);
-                _myseed.ydir = (int) (100 * sinf(rm));
+                _myseed.xpnt = static_cast<int>(rsx / static_cast<float>(rnpoints));
+                _myseed.ypnt = static_cast<int>(rsy / static_cast<float>(rnpoints));
+                _myseed.xdir = static_cast<int>(100 * cosf(rm));
+                _myseed.ydir = static_cast<int>(100 * sinf(rm));
 
                 norm = 1.0; //_compute_seed_from_point_eigennorm( rm );
                 *out_m = rm;
@@ -510,7 +510,7 @@ std::pair<float, int> JaneliaTracker::round_anchor_and_offset(const Line_Params 
     // printf("(%3d, %3d) off: %5.5f --> (%3d, %3d) off: %5.5f\terr:%g\n",
     //			(int)px,(int)py,line->offset, (int)ppx, (int)ppy,t, err);
     //}
-    return std::make_pair(t, ((int) ppx) + stride * ((int) ppy));
+    return std::make_pair(t, static_cast<int>(ppx) + stride * static_cast<int>(ppy));
 }
 
 void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int support, const float angle, int p, int *npx)
@@ -544,7 +544,7 @@ void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int supp
 
     //pxlist is a minimum of 2*support*support.
     if (this->pxlist.size() < (2 * support * support)) {
-        this->pxlist.resize((int) std::round(1.25 * 2 * support * support + 64));
+        this->pxlist.resize(static_cast<size_t>(std::round(1.25 * 2.0 * support * support + 64.0)));
     }
 
     auto is_small_angle = [](const float angle)
@@ -895,9 +895,9 @@ int threshold_bottom_fraction_uint8(const Image<uint8_t> &im) //, float fraction
             count++;
         }
     }
-    float lm = acc / count;
+    float lm = static_cast<float>(acc) / static_cast<float>(count);
 
-    return (int) lm;
+    return static_cast<int>(lm);
 }
 
 bool JaneliaTracker::is_local_area_trusted(Line_Params *line, Image<uint8_t> &image, int p) {
@@ -979,7 +979,7 @@ int JaneliaTracker::move_line(Line_Params *line, const int p, const int stride, 
     t = drx * ex + dry * ey; // dr dot l
 
     line->offset = t;
-    return ((int) ppx) + stride * ((int) ppy);
+    return static_cast<int>(ppx) + stride * static_cast<int>(ppy);
 }
 
 int JaneliaTracker::adjust_line_start(Line_Params *line, const Image<uint8_t> &image, int *pp,
