@@ -1,10 +1,6 @@
 
 #include "janelia.hpp"
 
-//Use this include before including cmath to get M_PI
-//If c++20, can switch to std::pi in the future to remove cmath
-//https://stackoverflow.com/questions/6563810/m-pi-works-with-math-h-but-not-with-cmath-in-visual-studio
-#define _USE_MATH_DEFINES
 #include <numbers>
 #include <cmath>
 #include <algorithm>
