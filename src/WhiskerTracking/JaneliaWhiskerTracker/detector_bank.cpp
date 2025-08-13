@@ -51,9 +51,9 @@ HalfSpaceDetector::HalfSpaceDetector(JaneliaConfig config) {
 
 void LineDetector::Build_Line_Detectors(float length, int supportsize) {
 
-    int n_offset_steps = compute_number_steps(this->off);
-    int n_width_steps = compute_number_steps(this->wid);
-    int n_angle_steps = compute_number_steps(this->ang);
+    auto n_offset_steps = compute_number_steps(this->off);
+    auto n_width_steps = compute_number_steps(this->wid);
+    auto n_angle_steps = compute_number_steps(this->ang);
 
     std::array<int, 5> shape = {supportsize,
                                 supportsize,
@@ -63,17 +63,16 @@ void LineDetector::Build_Line_Detectors(float length, int supportsize) {
     this->bank = Array(shape, sizeof(float)); // This array is always size 5 for the number of dimensions
 
     {
-        int o, a, w;
-        for (o = 0; o < n_offset_steps; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
+        for (size_t o = 0; o < static_cast<size_t>(n_offset_steps); o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
-            for (a = 0; a < n_angle_steps; a++)
-                for (w = 0; w < n_width_steps; w++) {
-                    float *bank_i = this->bank.data.data() + Get_Detector(o, w, a);
+            for (size_t a = 0; a < static_cast<size_t>(n_angle_steps); a++)
+                for (size_t w = 0; w < static_cast<size_t>(n_width_steps); w++) {
+                    float *bank_i = this->bank.data.data() + Get_Detector(static_cast<int>(o), static_cast<int>(w), static_cast<int>(a));
                     Render_Line_Detector(
-                            o * off.step + off.min,                       //offset (before rotation)
+                            static_cast<float>(o) * off.step + off.min,                       //offset (before rotation)
                             length,                                     //length,
-                            a * ang.step + ang.min,                       //angle,
-                            w * wid.step + wid.min,                       //width,
+                            static_cast<float>(a) * ang.step + ang.min,                       //angle,
+                            static_cast<float>(w) * wid.step + wid.min,                       //width,
                             anchor,                                     //anchor,
                             bank_i,            //image
                             this->bank.strides_px.data() + 3);                      //strides
@@ -134,9 +133,9 @@ void LineDetector::Render_Line_Detector(float offset,
 
 void HalfSpaceDetector::Build_Half_Space_Detectors(float length, int supportsize) {
 
-    int n_offset_steps = compute_number_steps(this->off);
-    int n_width_steps = compute_number_steps(this->wid);
-    int n_angle_steps = compute_number_steps(this->ang);
+    auto n_offset_steps = compute_number_steps(this->off);
+    auto n_width_steps = compute_number_steps(this->wid);
+    auto n_angle_steps = compute_number_steps(this->ang);
 
     std::array<int, 5> shape = {supportsize,
                                 supportsize,
@@ -146,17 +145,16 @@ void HalfSpaceDetector::Build_Half_Space_Detectors(float length, int supportsize
     this->bank = Array(shape, sizeof(float));
 
     {
-        int o, a, w;
-        for (o = 0; o < n_offset_steps; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
+        for (size_t o = 0; o < static_cast<size_t>(n_offset_steps); o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
-            for (a = 0; a < n_angle_steps; a++)
-                for (w = 0; w < n_width_steps; w++) {
-                    float *bank_i = this->bank.data.data() + Get_Detector(o, w, a);
+            for (size_t a = 0; a < static_cast<size_t>(n_angle_steps); a++)
+                for (size_t w = 0; w < static_cast<size_t>(n_width_steps); w++) {
+                    float *bank_i = this->bank.data.data() + Get_Detector(static_cast<int>(o), static_cast<int>(w), static_cast<int>(a));
                     Render_Half_Space_Detector(
-                            o * off.step + off.min,                       //offset (before rotation)
+                            static_cast<float>(o) * off.step + off.min,                       //offset (before rotation)
                             length,                                     //length,
-                            a * ang.step + ang.min,                       //angle,
-                            w * wid.step + wid.min,                       //width,
+                            static_cast<float>(a) * ang.step + ang.min,                       //angle,
+                            static_cast<float>(w) * wid.step + wid.min,                       //width,
                             anchor,                                     //anchor,
                             bank_i,      //image
                             this->bank.strides_px.data() + 3);                      //strides
@@ -429,7 +427,6 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
 
     {
         long long s = 0;
-        int j, k;
 
         auto ovl = [](const rng p, const rng q)
                 /* True if intervals intersect */
@@ -440,8 +437,8 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
         /*
      * Look for crossings, add contributions from crossings and track winding
      * */
-        for (j = 0; j < a.size(); ++j)
-            for (k = 0; k < b.size(); ++k)
+        for (size_t j = 0; j < a.size(); ++j)
+            for (size_t k = 0; k < b.size(); ++k)
                 if (ovl(ipa[j].rx, ipb[k].rx) &&
                     ovl(ipa[j].ry, ipb[k].ry)) // if edges have overlapping bounding boxes...
                 {
@@ -522,10 +519,8 @@ template<size_t M, size_t N>
 long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q) {
     int s = 0;
     ipoint p = P[0].ip;
-    int j;
 
-    int c = N - 1;
-    while (c--) //Compute winding of P[0] wrt Q
+    for (size_t c = N - 1; c-- > 0;) //Compute winding of P[0] wrt Q
         if (Q[c].rx.mn < p.x && p.x < Q[c].rx.mx) //Bounds check x-interval only
         {  //use area to determine P[0] left of Q[c] edge
             int sgn = 0 < area(p, Q[c].ip, Q[c + 1].ip);   // 0 or 1. 1 if left of Q[c] and Q[c] moves right
@@ -533,7 +528,7 @@ long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q) {
             s += sgn != Q[c].ip.x < Q[c + 1].ip.x ? 0 : (sgn ? -1 : 1); //add winding
         }
     long long sarea = 0;
-    for (j = 0; j < (M - 1); ++j) {
+    for (size_t j = 0; j < (M - 1); ++j) {
         if (s)
             sarea += cntrib(P[j].ip, P[j + 1].ip, s);
         s += P[j].in;
@@ -558,16 +553,15 @@ float fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge)
     const float gamut = 500000000.0f, mid = gamut / 2.0f;
     float rngx = B.max.x - B.min.x, sclx = gamut / rngx,
             rngy = B.max.y - B.min.y, scly = gamut / rngy;
-    int c = x.size();
-    while (c--) {
+
+    for (size_t c = x.size(); c-- > 0;) {
         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
         ix[c].ip.y = static_cast<long> ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
     }
     ix[0].ip.y += x.size() & 1;
     ix[x.size()] = ix[0];
 
-    c = x.size();
-    while (c--) {
+    for (size_t c = x.size(); c-- > 0;) {
         rng xl = {ix[c].ip.x, ix[c + 1].ip.x},
                 xh = {ix[c + 1].ip.x, ix[c].ip.x},
                 yl = {ix[c].ip.y, ix[c + 1].ip.y},

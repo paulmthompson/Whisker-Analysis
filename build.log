@@ -1,0 +1,1184 @@
+[1/14] Building CXX object src/WhiskerTracking/JaneliaWhiskerTracker/CMakeFiles/janelia.dir/detector_bank.cpp.o
+In file included from /app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:2:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp: In constructor ‘janelia::Array::Array(std::array<int, 5>&, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:97:23: warning: conversion to ‘std::array<int, 6>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   97 |         strides_bytes[ndim] = bytesperpixel;
+      |                       ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:98:20: warning: conversion to ‘std::array<int, 6>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   98 |         strides_px[ndim] = 1;
+      |                    ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:100:25: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  100 |         for (size_t i = ndim; i-- > 0;) {
+      |                         ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:101:69: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  101 |             strides_bytes[i] = strides_bytes[i + 1] * shape_in[ndim - 1 - i];//   strides = (whd, wh, w, 1)
+      |                                                                ~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:105:51: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘std::array<int, 6>::value_type’ {aka ‘int’} may change the sign of the result [-Wsign-conversion]
+  105 |         data = std::vector<float>(strides_bytes[0]);
+      |                                                   ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In member function ‘int janelia::DetectorBank::compute_number_steps(janelia::Range)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:11:50: warning: conversion from ‘long int’ to ‘int’ may change value [-Wconversion]
+   11 |     return std::lround((r.max - r.min) / r.step) + 1;
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In constructor ‘janelia::LineDetector::LineDetector(janelia::JaneliaConfig)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:29:33: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+   29 |     Build_Line_Detectors(config._tlen, 2 * config._tlen + 3);
+      |                          ~~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In constructor ‘janelia::HalfSpaceDetector::HalfSpaceDetector(janelia::JaneliaConfig)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:41:39: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+   41 |     Build_Half_Space_Detectors(config._tlen, 2 * config._tlen + 3);
+      |                                ~~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In member function ‘void janelia::LineDetector::Build_Line_Detectors(float, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:67:29: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+   67 |             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
+      |                             ^~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:67:49: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+   67 |             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
+      |                                                 ^~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In member function ‘void janelia::LineDetector::Render_Line_Detector(float, float, float, float, janelia::point, float*, int*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:104:15: warning: declaration of ‘off’ shadows a member of ‘janelia::LineDetector’ [-Wshadow]
+  104 |         point off = {0.0, offset + width / 2.0f + r * thick / 2.0f};
+      |               ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:114:11: note: shadowed declaration is here
+  114 |     Range off;
+      |           ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:111:15: warning: declaration of ‘off’ shadows a member of ‘janelia::LineDetector’ [-Wshadow]
+  111 |         point off = {0.0, offset + width / 2.0f - thick / 2.0f};
+      |               ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:114:11: note: shadowed declaration is here
+  114 |     Range off;
+      |           ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:118:15: warning: declaration of ‘off’ shadows a member of ‘janelia::LineDetector’ [-Wshadow]
+  118 |         point off = {0.0, offset - width / 2.0f + thick / 2.0f};
+      |               ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:114:11: note: shadowed declaration is here
+  114 |     Range off;
+      |           ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:125:15: warning: declaration of ‘off’ shadows a member of ‘janelia::LineDetector’ [-Wshadow]
+  125 |         point off = {0.0, offset - width / 2.0f - r * thick / 2.0f};
+      |               ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:114:11: note: shadowed declaration is here
+  114 |     Range off;
+      |           ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In member function ‘void janelia::HalfSpaceDetector::Build_Half_Space_Detectors(float, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:149:29: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  149 |             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
+      |                             ^~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:149:49: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  149 |             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
+      |                                                 ^~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In member function ‘void janelia::HalfSpaceDetector::Render_Half_Space_Detector(float, float, float, float, janelia::point, float*, int*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:186:15: warning: declaration of ‘off’ shadows a member of ‘janelia::HalfSpaceDetector’ [-Wshadow]
+  186 |         point off = {0.0, offset + thick /*+ width/2.0 */   };
+      |               ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:114:11: note: shadowed declaration is here
+  114 |     Range off;
+      |           ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:203:15: warning: declaration of ‘off’ shadows a member of ‘janelia::HalfSpaceDetector’ [-Wshadow]
+  203 |         point off = {0.0, offset};
+      |               ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:114:11: note: shadowed declaration is here
+  114 |     Range off;
+      |           ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:171:58: warning: unused parameter ‘width’ [-Wunused-parameter]
+  171 |                                                    float width,
+      |                                                    ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In lambda function:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:214:42: warning: declaration of ‘const float angle’ shadows a parameter [-Wshadow]
+  214 |     auto is_small_angle = [](const float angle)
+      |                              ~~~~~~~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:213:64: note: shadowed declaration is here
+  213 | int DetectorBank::get_nearest(float offset, float width, float angle) {
+      |                                                          ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:219:27: warning: conversion from ‘float’ to ‘int’ may change value [-Wfloat-conversion]
+  219 |         int n = std::floor((angle - qpi) / hpi);
+      |                 ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In lambda function:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:234:45: warning: declaration of ‘const float angle’ shadows a parameter [-Wshadow]
+  234 |     auto is_angle_leftward = [](const float angle)
+      |                                 ~~~~~~~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:213:64: note: shadowed declaration is here
+  213 | int DetectorBank::get_nearest(float offset, float width, float angle) {
+      |                                                          ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:238:27: warning: conversion from ‘float’ to ‘int’ may change value [-Wfloat-conversion]
+  238 |         int n = std::floor((angle - hpi) / std::numbers::pi_v<float>);
+      |                 ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In member function ‘int janelia::DetectorBank::get_nearest(float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:252:24: warning: conversion from ‘long int’ to ‘int’ may change value [-Wconversion]
+  252 |     int o = std::lround((offset - this->off.min) / this->off.step);
+      |             ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:253:24: warning: conversion from ‘long int’ to ‘int’ may change value [-Wconversion]
+  253 |     int a = std::lround((angle - this->ang.min) / this->ang.step);
+      |             ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:254:24: warning: conversion from ‘long int’ to ‘int’ may change value [-Wconversion]
+  254 |     int w = std::lround((width - this->wid.min) / this->wid.step);
+      |             ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In function ‘void janelia::Simple_Circle_Primitive(std::array<point, N>&, point, float, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:263:20: warning: useless cast to type ‘float’ [-Wuseless-cast]
+  263 |         point p = {static_cast<float>(center.x + radius * cosf(k * static_cast<float>(i))),
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:264:20: warning: useless cast to type ‘float’ [-Wuseless-cast]
+  264 |                    static_cast<float>(center.y + radius * sinf(k * static_cast<float>(i)))};
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In function ‘void janelia::pixel_to_vertex_array(int, int, std::array<point, 4>&)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:378:17: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  378 |     float x = p % stride;
+      |               ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:379:17: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  379 |     float y = p / stride;
+      |               ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In instantiation of ‘float janelia::fit(box&, std::array<point, N>&, std::array<vertex, M>&, int) [with long unsigned int N = 4; long unsigned int M = 5]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:425:17:   required from ‘float janelia::inter(std::array<point, N>&, std::array<point, 4>&) [with long unsigned int N = 4]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:371:41:   required from ‘void janelia::Sum_Pixel_Overlap(std::array<point, N>&, float, float*, int*) [with long unsigned int N = 4]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:108:26:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:74: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:79: warning: conversion to ‘long unsigned int’ from ‘long int’ may change the sign of the result [-Wsign-conversion]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:91: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                                                                                         ~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:87: warning: conversion to ‘long int’ from ‘long unsigned int’ may change the sign of the result [-Wsign-conversion]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:559:74: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+  559 |         ix[c].ip.y = static_cast<long> ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:561:14: warning: conversion to ‘long unsigned int’ from ‘long int’ may change the sign of the result [-Wsign-conversion]
+  561 |     ix[0].ip.y += x.size() & 1;
+      |     ~~~~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:561:16: warning: conversion to ‘long int’ from ‘long unsigned int’ may change the sign of the result [-Wsign-conversion]
+  561 |     ix[0].ip.y += x.size() & 1;
+      |     ~~~~~~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In instantiation of ‘long long int janelia::inness(std::array<vertex, M>&, std::array<vertex, M>&) [with long unsigned int M = 5; long unsigned int N = 5]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:462:20:   required from ‘float janelia::inter(std::array<point, N>&, std::array<point, 4>&) [with long unsigned int N = 4]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:371:41:   required from ‘void janelia::Sum_Pixel_Overlap(std::array<point, N>&, float, float*, int*) [with long unsigned int N = 4]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:108:26:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:528:35: warning: suggest parentheses around comparison in operand of ‘!=’ [-Wparentheses]
+  528 |             s += sgn != Q[c].ip.x < Q[c + 1].ip.x ? 0 : (sgn ? -1 : 1); //add winding
+      |                         ~~~~~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:533:51: warning: conversion from ‘int’ to ‘short int’ may change value [-Wconversion]
+  533 |             sarea += cntrib(P[j].ip, P[j + 1].ip, s);
+      |                                                   ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In instantiation of ‘float janelia::fit(box&, std::array<point, N>&, std::array<vertex, M>&, int) [with long unsigned int N = 12; long unsigned int M = 13]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:425:17:   required from ‘float janelia::inter(std::array<point, N>&, std::array<point, 4>&) [with long unsigned int N = 12]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:290:41:   required from ‘void janelia::Multiply_Pixel_Overlap(std::array<point, N>&, float, float, float*, int*) [with long unsigned int N = 12]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:207:31:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:74: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:79: warning: conversion to ‘long unsigned int’ from ‘long int’ may change the sign of the result [-Wsign-conversion]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:91: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                                                                                         ~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:558:87: warning: conversion to ‘long int’ from ‘long unsigned int’ may change the sign of the result [-Wsign-conversion]
+  558 |         ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:559:74: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+  559 |         ix[c].ip.y = static_cast<long> ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:561:14: warning: conversion to ‘long unsigned int’ from ‘long int’ may change the sign of the result [-Wsign-conversion]
+  561 |     ix[0].ip.y += x.size() & 1;
+      |     ~~~~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:561:16: warning: conversion to ‘long int’ from ‘long unsigned int’ may change the sign of the result [-Wsign-conversion]
+  561 |     ix[0].ip.y += x.size() & 1;
+      |     ~~~~~~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In instantiation of ‘long long int janelia::inness(std::array<vertex, M>&, std::array<vertex, M>&) [with long unsigned int M = 13; long unsigned int N = 5]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:462:20:   required from ‘float janelia::inter(std::array<point, N>&, std::array<point, 4>&) [with long unsigned int N = 12]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:290:41:   required from ‘void janelia::Multiply_Pixel_Overlap(std::array<point, N>&, float, float, float*, int*) [with long unsigned int N = 12]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:207:31:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:528:35: warning: suggest parentheses around comparison in operand of ‘!=’ [-Wparentheses]
+  528 |             s += sgn != Q[c].ip.x < Q[c + 1].ip.x ? 0 : (sgn ? -1 : 1); //add winding
+      |                         ~~~~~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:533:51: warning: conversion from ‘int’ to ‘short int’ may change value [-Wconversion]
+  533 |             sarea += cntrib(P[j].ip, P[j + 1].ip, s);
+      |                                                   ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp: In instantiation of ‘long long int janelia::inness(std::array<vertex, M>&, std::array<vertex, M>&) [with long unsigned int M = 5; long unsigned int N = 13]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:463:20:   required from ‘float janelia::inter(std::array<point, N>&, std::array<point, 4>&) [with long unsigned int N = 12]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:290:41:   required from ‘void janelia::Multiply_Pixel_Overlap(std::array<point, N>&, float, float, float*, int*) [with long unsigned int N = 12]’
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:207:31:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:528:35: warning: suggest parentheses around comparison in operand of ‘!=’ [-Wparentheses]
+  528 |             s += sgn != Q[c].ip.x < Q[c + 1].ip.x ? 0 : (sgn ? -1 : 1); //add winding
+      |                         ~~~~~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.cpp:533:51: warning: conversion from ‘int’ to ‘short int’ may change value [-Wconversion]
+  533 |             sarea += cntrib(P[j].ip, P[j + 1].ip, s);
+      |                                                   ^
+[2/14] Building CXX object tests/CMakeFiles/benchmark.dir/WhiskerTracking/benchmark_whiskertracker.cpp.o
+[3/14] Building CXX object src/CMakeFiles/Whisker-Analysis.dir/WhiskerTracking/whiskertracker.cpp.o
+In file included from /app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:9,
+                 from /app/src/WhiskerTracking/whiskertracker.hpp:6,
+                 from /app/src/WhiskerTracking/whiskertracker.cpp:1:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp: In constructor ‘janelia::Array::Array(std::array<int, 5>&, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:97:23: warning: conversion to ‘std::array<int, 6>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   97 |         strides_bytes[ndim] = bytesperpixel;
+      |                       ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:98:20: warning: conversion to ‘std::array<int, 6>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   98 |         strides_px[ndim] = 1;
+      |                    ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:100:25: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  100 |         for (size_t i = ndim; i-- > 0;) {
+      |                         ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:101:69: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  101 |             strides_bytes[i] = strides_bytes[i + 1] * shape_in[ndim - 1 - i];//   strides = (whd, wh, w, 1)
+      |                                                                ~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:105:51: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘std::array<int, 6>::value_type’ {aka ‘int’} may change the sign of the result [-Wsign-conversion]
+  105 |         data = std::vector<float>(strides_bytes[0]);
+      |                                                   ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::Whisker_Seg::Whisker_Seg(int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:23: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                       ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:29: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:39: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                                       ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:50: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                                                  ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::Image<T>::Image()’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:40:24: warning: declaration of ‘array’ shadows a member of ‘janelia::Image<T>’ [-Wshadow]
+   40 |         std::vector<T> array{};
+      |                        ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:35:20: note: shadowed declaration is here
+   35 |     std::vector<T> array;
+      |                    ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::record::record(float, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:49: warning: declaration of ‘score’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                                           ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:92:11: note: shadowed declaration is here
+   92 |     float score;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:36: warning: declaration of ‘thick’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                              ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:91:11: note: shadowed declaration is here
+   91 |     float thick;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:27: warning: declaration of ‘y’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                     ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:90:11: note: shadowed declaration is here
+   90 |     float y;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:18: warning: declaration of ‘x’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |            ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:89:11: note: shadowed declaration is here
+   89 |     float x;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::record::record(float, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:49: warning: declaration of ‘score’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                                           ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:92:11: note: shadowed declaration is here
+   92 |     float score;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:36: warning: declaration of ‘thick’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                              ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:91:11: note: shadowed declaration is here
+   91 |     float thick;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:27: warning: declaration of ‘y’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                     ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:90:11: note: shadowed declaration is here
+   90 |     float y;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:18: warning: declaration of ‘x’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |            ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:89:11: note: shadowed declaration is here
+   89 |     float x;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::record::record(float, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:49: warning: declaration of ‘score’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                                           ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:92:11: note: shadowed declaration is here
+   92 |     float score;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:36: warning: declaration of ‘thick’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                              ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:91:11: note: shadowed declaration is here
+   91 |     float thick;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:27: warning: declaration of ‘y’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                     ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:90:11: note: shadowed declaration is here
+   90 |     float y;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:18: warning: declaration of ‘x’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |            ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:89:11: note: shadowed declaration is here
+   89 |     float x;
+      |           ^
+In file included from /app/src/WhiskerTracking/whiskertracker.cpp:3:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/io.hpp: In function ‘std::vector<janelia::Whisker_Seg> janelia::load_binary_data(std::string)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/io.hpp:45:97: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   45 |         whisk_stream.read(reinterpret_cast<char *>(this_seg.x.data()), sizeof(float) * this_seg.len);
+      |                                                                                        ~~~~~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/io.hpp:46:97: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   46 |         whisk_stream.read(reinterpret_cast<char *>(this_seg.y.data()), sizeof(float) * this_seg.len);
+      |                                                                                        ~~~~~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/io.hpp:47:101: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   47 |         whisk_stream.read(reinterpret_cast<char *>(this_seg.thick.data()), sizeof(float) * this_seg.len);
+      |                                                                                            ~~~~~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/io.hpp:48:102: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   48 |         whisk_stream.read(reinterpret_cast<char *>(this_seg.scores.data()), sizeof(float) * this_seg.len);
+      |                                                                                             ~~~~~~~~~^~~
+/app/src/WhiskerTracking/whiskertracker.cpp: In member function ‘std::vector<std::vector<whisker::Line2D> > whisker::WhiskerTracker::trace_multiple_images(const std::vector<std::vector<unsigned char, std::allocator<unsigned char> > >&, int, int)’:
+/app/src/WhiskerTracking/whiskertracker.cpp:42:18: warning: conversion to ‘std::vector<std::vector<whisker::Line2D> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   42 |         whiskers[i] = trace(images[i], image_height, image_width);
+      |                  ^
+/app/src/WhiskerTracking/whiskertracker.cpp:42:36: warning: conversion to ‘std::vector<std::vector<unsigned char, std::allocator<unsigned char> > >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   42 |         whiskers[i] = trace(images[i], image_height, image_width);
+      |                                    ^
+/app/src/WhiskerTracking/whiskertracker.cpp: In member function ‘void whisker::WhiskerTracker::changeJaneliaParameter(JaneliaParameter, float)’:
+/app/src/WhiskerTracking/whiskertracker.cpp:164:37: warning: conversion from ‘float’ to ‘int’ may change value [-Wfloat-conversion]
+  164 |             _janelia.config._tlen = value;
+      |                                     ^~~~~
+/app/src/WhiskerTracking/whiskertracker.cpp:219:63: warning: conversion from ‘float’ to ‘int’ may change value [-Wfloat-conversion]
+  219 |             _janelia.config._half_space_tunneling_max_moves = value;
+      |                                                               ^~~~~
+/app/src/WhiskerTracking/whiskertracker.cpp:180:33: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  180 |             _reinitializeJanelia();
+      |             ~~~~~~~~~~~~~~~~~~~~^~
+/app/src/WhiskerTracking/whiskertracker.cpp:182:9: note: here
+  182 |         case WIDTH_MIN: {
+      |         ^~~~
+[4/14] Building CXX object tests/WhiskerTracking/CMakeFiles/tests.dir/test_whiskertracker.cpp.o
+[5/14] Building CXX object tests/CMakeFiles/benchmark.dir/WhiskerTracking/benchmark_loaders.cpp.o
+[6/14] Building CXX object src/WhiskerTracking/JaneliaWhiskerTracker/CMakeFiles/janelia.dir/janelia.cpp.o
+In file included from /app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:9,
+                 from /app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:2:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp: In constructor ‘janelia::Array::Array(std::array<int, 5>&, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:97:23: warning: conversion to ‘std::array<int, 6>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   97 |         strides_bytes[ndim] = bytesperpixel;
+      |                       ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:98:20: warning: conversion to ‘std::array<int, 6>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   98 |         strides_px[ndim] = 1;
+      |                    ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:100:25: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  100 |         for (size_t i = ndim; i-- > 0;) {
+      |                         ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:101:69: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  101 |             strides_bytes[i] = strides_bytes[i + 1] * shape_in[ndim - 1 - i];//   strides = (whd, wh, w, 1)
+      |                                                                ~~~~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/detector_bank.hpp:105:51: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘std::array<int, 6>::value_type’ {aka ‘int’} may change the sign of the result [-Wsign-conversion]
+  105 |         data = std::vector<float>(strides_bytes[0]);
+      |                                                   ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::Whisker_Seg::Whisker_Seg(int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:23: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                       ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:29: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:39: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                                       ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:19:50: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   19 |             len{n}, x(n), y(n), thick(n), scores(n) {}
+      |                                                  ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::Image<T>::Image()’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:40:24: warning: declaration of ‘array’ shadows a member of ‘janelia::Image<T>’ [-Wshadow]
+   40 |         std::vector<T> array{};
+      |                        ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:35:20: note: shadowed declaration is here
+   35 |     std::vector<T> array;
+      |                    ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::record::record(float, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:49: warning: declaration of ‘score’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                                           ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:92:11: note: shadowed declaration is here
+   92 |     float score;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:36: warning: declaration of ‘thick’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                              ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:91:11: note: shadowed declaration is here
+   91 |     float thick;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:27: warning: declaration of ‘y’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                     ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:90:11: note: shadowed declaration is here
+   90 |     float y;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:18: warning: declaration of ‘x’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |            ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:89:11: note: shadowed declaration is here
+   89 |     float x;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::record::record(float, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:49: warning: declaration of ‘score’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                                           ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:92:11: note: shadowed declaration is here
+   92 |     float score;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:36: warning: declaration of ‘thick’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                              ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:91:11: note: shadowed declaration is here
+   91 |     float thick;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:27: warning: declaration of ‘y’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                     ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:90:11: note: shadowed declaration is here
+   90 |     float y;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:18: warning: declaration of ‘x’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |            ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:89:11: note: shadowed declaration is here
+   89 |     float x;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In constructor ‘janelia::record::record(float, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:49: warning: declaration of ‘score’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                                           ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:92:11: note: shadowed declaration is here
+   92 |     float score;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:36: warning: declaration of ‘thick’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                              ~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:91:11: note: shadowed declaration is here
+   91 |     float thick;
+      |           ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:27: warning: declaration of ‘y’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |                     ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:90:11: note: shadowed declaration is here
+   90 |     float y;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:87:18: warning: declaration of ‘x’ shadows a member of ‘janelia::record’ [-Wshadow]
+   87 |     record(float x, float y, float thick, float score) : x(x), y(y), thick(thick), score(score) {}
+      |            ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:89:11: note: shadowed declaration is here
+   89 |     float x;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘std::vector<janelia::Whisker_Seg> janelia::JaneliaTracker::find_segments(int, janelia::Image<unsigned char>&, const janelia::Image<unsigned char>&)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:48:52: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+   48 |     _trust_thresh = threshold_bottom_fraction_uint8(image);
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:51:25: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   51 |             image.width * image.height
+      |             ~~~~~~~~~~~~^~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:79:45: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   79 |             float n = static_cast<float>(ha[i]);
+      |                                             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:81:21: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   81 |                 tha[i] /= n;
+      |                     ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:85:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   85 |             if (sa[i] > this->config._seed_thres) {
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:86:23: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   86 |                 maska[i] = 1;
+      |                       ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:91:65: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   91 |             std::vector<seedrecord> scores(sizeof(seedrecord) * nseeds);
+      |                                                                 ^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:99:27: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   99 |                 if (maska[i] == 1) {
+      |                           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:102:76: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  102 |                                  static_cast<int>(std::round(100 * cos(tha[i]))),
+      |                                                                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:103:76: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  103 |                                  static_cast<int>(std::round(100 * sin(tha[i])))};
+      |                                                                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:107:28: warning: conversion to ‘std::vector<janelia::seedrecord>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  107 |                     scores[j].score = eval_line(&line, image, i);
+      |                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:109:28: warning: conversion to ‘std::vector<janelia::seedrecord>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  109 |                     scores[j].idx = i;
+      |                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:119:18: warning: declaration of ‘t1’ shadows a previous local [-Wshadow]
+  119 |             auto t1 = std::chrono::high_resolution_clock::now();
+      |                  ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:68:10: note: shadowed declaration is here
+   68 |     auto t1 = std::chrono::high_resolution_clock::now();
+      |          ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:123:28: warning: conversion to ‘std::vector<janelia::seedrecord>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  123 |                 i = scores[j].idx;
+      |                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:124:27: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  124 |                 if (maska[i] == 1) {
+      |                           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:127:76: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  127 |                                  static_cast<int>(std::round(100 * cos(tha[i]))),
+      |                                                                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:128:76: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  128 |                                  static_cast<int>(std::round(100 * sin(tha[i])))};
+      |                                                                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:136:27: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  136 |                     if (w.len > this->config._min_length) {
+      |                         ~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:68:10: warning: variable ‘t1’ set but not used [-Wunused-but-set-variable]
+   68 |     auto t1 = std::chrono::high_resolution_clock::now();
+      |          ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:28:113: warning: unused parameter ‘bg’ [-Wunused-parameter]
+   28 | std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t> &image, const Image<uint8_t> &bg) {
+      |                                                                                           ~~~~~~~~~~~~~~~~~~~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘void janelia::JaneliaTracker::compute_seed_from_point_field_on_grid(const janelia::Image<unsigned char>&, janelia::Image<unsigned char>&, janelia::Image<float>&, janelia::Image<float>&)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:184:19: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  184 |                 h[p]++;
+      |                   ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:185:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  185 |                 sl[p] += m;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:186:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  186 |                 st[p] += stat;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:193:13: warning: declaration of ‘x’ shadows a previous local [-Wshadow]
+  193 |         int x, y;
+      |             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:168:9: note: shadowed declaration is here
+  168 |     int x, y;
+      |         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:193:16: warning: declaration of ‘y’ shadows a previous local [-Wshadow]
+  193 |         int x, y;
+      |                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:168:12: note: shadowed declaration is here
+  168 |     int x, y;
+      |            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:194:13: warning: declaration of ‘p’ shadows a previous local [-Wshadow]
+  194 |         int p, newp, i;
+      |             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:169:9: note: shadowed declaration is here
+  169 |     int p, newp, i;
+      |         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:194:16: warning: declaration of ‘newp’ shadows a previous local [-Wshadow]
+  194 |         int p, newp, i;
+      |                ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:169:12: note: shadowed declaration is here
+  169 |     int p, newp, i;
+      |            ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:194:22: warning: declaration of ‘i’ shadows a previous local [-Wshadow]
+  194 |         int p, newp, i;
+      |                      ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:169:18: note: shadowed declaration is here
+  169 |     int p, newp, i;
+      |                  ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:202:41: warning: declaration of ‘s’ shadows a previous local [-Wshadow]
+  202 |                     std::optional<Seed> s = compute_seed_from_point_ex(image, x + y * stride, this->config._maxr, &m,
+      |                                         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:170:25: note: shadowed declaration is here
+  170 |     std::optional<Seed> s;
+      |                         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:210:23: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  210 |                     h[p]++;
+      |                       ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:211:24: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  211 |                     sl[p] += m;
+      |                        ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:212:24: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  212 |                     st[p] += stat;
+      |                        ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:159:9: warning: unused variable ‘a’ [-Wunused-variable]
+  159 |     int a = image.width * image.height;
+      |         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘std::optional<janelia::Seed> janelia::JaneliaTracker::compute_seed_from_point_ex(const janelia::Image<unsigned char>&, int, int, float*, float*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:174:29: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  174 |   uint8_t val = image.array[tp];                                   \
+      |                             ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:270:13: note: in expansion of macro ‘_COMPUTE_SEED_FROM_POINT_HELPER’
+  270 |             _COMPUTE_SEED_FROM_POINT_HELPER(abest, abp);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:174:29: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  174 |   uint8_t val = image.array[tp];                                   \
+      |                             ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:278:13: note: in expansion of macro ‘_COMPUTE_SEED_FROM_POINT_HELPER’
+  278 |             _COMPUTE_SEED_FROM_POINT_HELPER(bbest, bbp);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:174:29: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  174 |   uint8_t val = image.array[tp];                                   \
+      |                             ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:287:13: note: in expansion of macro ‘_COMPUTE_SEED_FROM_POINT_HELPER’
+  287 |             _COMPUTE_SEED_FROM_POINT_HELPER(cbest, cbp);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:174:29: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  174 |   uint8_t val = image.array[tp];                                   \
+      |                             ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:295:13: note: in expansion of macro ‘_COMPUTE_SEED_FROM_POINT_HELPER’
+  295 |             _COMPUTE_SEED_FROM_POINT_HELPER(dbest, dbp);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:313:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  313 |             lsx += tx;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:314:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  314 |             lsy += ty;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:315:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  315 |             lsxy += tx * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:316:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  316 |             lsxx += tx * tx;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:317:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  317 |             lsyy += ty * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:325:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  325 |             lsx += tx;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:326:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  326 |             lsy += ty;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:327:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  327 |             lsxy += tx * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:328:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  328 |             lsxx += tx * tx;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:329:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  329 |             lsyy += ty * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:338:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  338 |             rsx += tx;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:339:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  339 |             rsy += ty;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:340:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  340 |             rsxy += tx * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:341:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  341 |             rsxx += tx * tx;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:342:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  342 |             rsyy += ty * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:350:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  350 |             rsx += tx;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:351:20: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  351 |             rsy += ty;
+      |                    ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:352:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  352 |             rsxy += tx * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:353:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  353 |             rsxx += tx * tx;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:354:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  354 |             rsyy += ty * ty;
+      |                     ~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:260:45: warning: unused variable ‘best’ [-Wunused-variable]
+  260 |         uint8_t abest, bbest, cbest, dbest, best = 255; //best mins
+      |                                             ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:373:23: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  373 |             float n = lnpoints, n2 = lnpoints * lnpoints;
+      |                       ^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:373:47: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  373 |             float n = lnpoints, n2 = lnpoints * lnpoints;
+      |                                      ~~~~~~~~~^~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:372:64: warning: unused variable ‘stat’ [-Wunused-variable]
+  372 |             float cxx, cxy, cyy, trace, det, desc, eig0, eig1, stat;
+      |                                                                ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:396:23: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  396 |             float n = rnpoints, n2 = rnpoints * rnpoints;
+      |                       ^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:396:47: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  396 |             float n = rnpoints, n2 = rnpoints * rnpoints;
+      |                                      ~~~~~~~~~^~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:395:64: warning: unused variable ‘stat’ [-Wunused-variable]
+  395 |             float cxx, cxy, cyy, trace, det, desc, eig0, eig1, stat;
+      |                                                                ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:363:19: warning: unused variable ‘rnum’ [-Wunused-variable]
+  363 |         float rm, rnum, lm, lnum; //,rr2,lr2;
+      |                   ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:363:29: warning: unused variable ‘lnum’ [-Wunused-variable]
+  363 |         float rm, rnum, lm, lnum; //,rr2,lr2;
+      |                             ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:225:17: warning: unused variable ‘eps’ [-Wunused-variable]
+  225 |     const float eps = 1e-3f;
+      |                 ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘janelia::Line_Params janelia::JaneliaTracker::line_param_from_seed(janelia::Seed)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:448:55: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  448 |             line.angle = std::roundf(atan2f(-1.0f * s.ydir, -1.0f * s.xdir) / ain) * ain;
+      |                                                     ~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:448:71: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  448 |             line.angle = std::roundf(atan2f(-1.0f * s.ydir, -1.0f * s.xdir) / ain) * ain;
+      |                                                                     ~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:450:47: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  450 |             line.angle = std::roundf(atan2f(s.ydir, s.xdir) / ain) * ain;
+      |                                             ~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:450:55: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  450 |             line.angle = std::roundf(atan2f(s.ydir, s.xdir) / ain) * ain;
+      |                                                     ~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘float janelia::JaneliaTracker::eval_line(janelia::Line_Params*, const janelia::Image<unsigned char>&, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:474:34: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  474 |         s += parray[this->pxlist[i].image_ind] * this->bank.bank.data[bank_i + this->pxlist[i].weight_ind];
+      |                                  ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:474:37: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  474 |         s += parray[this->pxlist[i].image_ind] * this->bank.bank.data[bank_i + this->pxlist[i].weight_ind];
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:474:93: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  474 |         s += parray[this->pxlist[i].image_ind] * this->bank.bank.data[bank_i + this->pxlist[i].weight_ind];
+      |                                                                                             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:474:78: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  474 |         s += parray[this->pxlist[i].image_ind] * this->bank.bank.data[bank_i + this->pxlist[i].weight_ind];
+      |                                                                       ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘std::pair<float, int> janelia::JaneliaTracker::round_anchor_and_offset(janelia::Line_Params, int, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:493:19: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  493 |     float px = (p % stride);            // current anchor
+      |                ~~~^~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:494:19: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  494 |     float py = (p / stride);
+      |                ~~~^~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In lambda function:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:550:42: warning: declaration of ‘const float angle’ shadows a parameter [-Wshadow]
+  550 |     auto is_small_angle = [](const float angle)
+      |                              ~~~~~~~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:516:98: note: shadowed declaration is here
+  516 | void JaneliaTracker::get_offset_list(const Image<uint8_t> &image, const int support, const float angle, int p, int *npx)
+      |                                                                                      ~~~~~~~~~~~~^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:553:44: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  553 |         const float qpi = std::numbers::pi / 4.0f;
+      |                           ~~~~~~~~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:553:44: warning: conversion from ‘double’ to ‘float’ changes value from ‘7.8539816339744828e-1’ to ‘7.85398185e-1f’ [-Wfloat-conversion]
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:554:44: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  554 |         const float hpi = std::numbers::pi / 2.0f;
+      |                           ~~~~~~~~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:554:44: warning: conversion from ‘double’ to ‘float’ changes value from ‘1.5707963267948966e+0’ to ‘1.57079637e+0f’ [-Wfloat-conversion]
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:555:23: warning: conversion from ‘float’ to ‘int’ may change value [-Wfloat-conversion]
+  555 |         int n = floorf((angle - qpi) / hpi);
+      |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘void janelia::JaneliaTracker::get_offset_list(const janelia::Image<unsigned char>&, int, float, int, int*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:580:47: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  580 |                             this->pxlist[_snpx++] = std::move(
+      |                                          ~~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:591:42: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  591 |                         this->pxlist[ioob--] = std::move(
+      |                                      ~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:607:47: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  607 |                             this->pxlist[_snpx++] = std::move(offset_pair(ww * ty + tx, support * i + j));
+      |                                          ~~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:618:42: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  618 |                         this->pxlist[ioob--] = std::move(
+      |                                      ~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘janelia::Whisker_Seg janelia::JaneliaTracker::trace_whisker(janelia::Seed, janelia::Image<unsigned char>&)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:641:28: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  641 |     const double ain = hpi / this->config._angle_step;
+      |                        ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:643:51: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  643 |     const double sigmin = (2 * this->config._tlen + 1) * this->config._min_signal;// + 255.00;
+      |                           ~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:645:17: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  645 |     float x = s.xpnt;
+      |               ~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:646:17: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  646 |     float y = s.ypnt;
+      |               ~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:648:24: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  648 |         int q, p = x + cwidth * y;
+      |                        ^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:648:22: warning: conversion from ‘float’ to ‘int’ may change value [-Wfloat-conversion]
+  648 |         int q, p = x + cwidth * y;
+      |                    ~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In lambda function:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:652:69: warning: declaration of ‘dy’ shadows a previous local [-Wshadow]
+  652 |         auto compute_dxdy = [](Line_Params *line, float *dx, float *dy) {
+      |                                                              ~~~~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:634:15: note: shadowed declaration is here
+  634 |     float dx, dy, newoff;
+      |               ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:652:58: warning: declaration of ‘dx’ shadows a previous local [-Wshadow]
+  652 |         auto compute_dxdy = [](Line_Params *line, float *dx, float *dy) {
+      |                                                   ~~~~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:634:11: note: shadowed declaration is here
+  634 |     float dx, dy, newoff;
+      |           ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:652:45: warning: declaration of ‘line’ shadows a previous local [-Wshadow]
+  652 |         auto compute_dxdy = [](Line_Params *line, float *dx, float *dy) {
+      |                                ~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:637:17: note: shadowed declaration is here
+  637 |     Line_Params line, rline, oldline;
+      |                 ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In lambda function:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:659:72: warning: declaration of ‘cheight’ shadows a previous local [-Wshadow]
+  659 |         auto outofbounds = [](const int q, const int cwidth, const int cheight) {
+      |                                                              ~~~~~~~~~~^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:636:13: note: shadowed declaration is here
+  636 |             cheight = image.height;
+      |             ^~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:659:54: warning: declaration of ‘cwidth’ shadows a previous local [-Wshadow]
+  659 |         auto outofbounds = [](const int q, const int cwidth, const int cheight) {
+      |                                            ~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:635:9: note: shadowed declaration is here
+  635 |     int cwidth = image.width,
+      |         ^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:659:41: warning: declaration of ‘q’ shadows a previous local [-Wshadow]
+  659 |         auto outofbounds = [](const int q, const int cwidth, const int cheight) {
+      |                               ~~~~~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:648:13: note: shadowed declaration is here
+  648 |         int q, p = x + cwidth * y;
+      |             ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:660:17: warning: declaration of ‘x’ shadows a previous local [-Wshadow]
+  660 |             int x = q % cwidth;
+      |                 ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:645:11: note: shadowed declaration is here
+  645 |     float x = s.xpnt;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:661:17: warning: declaration of ‘y’ shadows a previous local [-Wshadow]
+  661 |             int y = q / cwidth;
+      |                 ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:646:11: note: shadowed declaration is here
+  646 |     float y = s.ypnt;
+      |           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In lambda function:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:673:108: warning: declaration of ‘rwid’ shadows a previous local [-Wshadow]
+  673 |         auto initialize_parameter_ranges = [](Line_Params *line, Interval *roff, Interval *rang, Interval *rwid) {
+      |                                                                                                  ~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:650:30: note: shadowed declaration is here
+  650 |         Interval roff, rang, rwid;
+      |                              ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:673:92: warning: declaration of ‘rang’ shadows a previous local [-Wshadow]
+  673 |         auto initialize_parameter_ranges = [](Line_Params *line, Interval *roff, Interval *rang, Interval *rwid) {
+      |                                                                                  ~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:650:24: note: shadowed declaration is here
+  650 |         Interval roff, rang, rwid;
+      |                        ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:673:76: warning: declaration of ‘roff’ shadows a previous local [-Wshadow]
+  673 |         auto initialize_parameter_ranges = [](Line_Params *line, Interval *roff, Interval *rang, Interval *rwid) {
+      |                                                                  ~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:650:18: note: shadowed declaration is here
+  650 |         Interval roff, rang, rwid;
+      |                  ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:673:60: warning: declaration of ‘line’ shadows a previous local [-Wshadow]
+  673 |         auto initialize_parameter_ranges = [](Line_Params *line, Interval *roff, Interval *rang, Interval *rwid) {
+      |                                               ~~~~~~~~~~~~~^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:637:17: note: shadowed declaration is here
+  637 |     Line_Params line, rline, oldline;
+      |                 ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘janelia::Whisker_Seg janelia::JaneliaTracker::trace_whisker(janelia::Seed, janelia::Image<unsigned char>&)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:694:21: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  694 |         _ldata[nleft++] = record(p % cwidth + dx, p / cwidth + dy, line.width, line.score);
+      |                ~~~~~^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:694:36: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  694 |         _ldata[nleft++] = record(p % cwidth + dx, p / cwidth + dy, line.width, line.score);
+      |                                  ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:694:53: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  694 |         _ldata[nleft++] = record(p % cwidth + dx, p / cwidth + dy, line.width, line.score);
+      |                                                   ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:702:27: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  702 |         while (line.score > sigmin) {
+      |                ~~~~~~~~~~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:720:47: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  720 |                     if (trusted && line.score < sigmin) { // check to see if a line can be reaquired
+      |                                    ~~~~~~~~~~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:730:40: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  730 |                             line.score < sigmin ||
+      |                             ~~~~~~~~~~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:748:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  748 |             if (nleft < _ldata.size()) {
+      |                 ~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:749:24: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  749 |                 _ldata[nleft] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+      |                        ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:749:36: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  749 |                 _ldata[nleft] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+      |                                  ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:749:53: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  749 |                 _ldata[nleft] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+      |                                                   ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:751:37: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  751 |                 _ldata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
+      |                                   ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:751:54: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  751 |                 _ldata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
+      |                                                    ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:762:27: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  762 |         while (line.score > sigmin) {
+      |                ~~~~~~~~~~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:780:47: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  780 |                     if (trusted && line.score < sigmin) { // check to see if a line can be reaquired
+      |                                    ~~~~~~~~~~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:792:40: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  792 |                             line.score < sigmin ||
+      |                             ~~~~~~~~~~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:809:24: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  809 |             if (nright < _rdata.size()) {
+      |                 ~~~~~~~^~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:810:24: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  810 |                 _rdata[nright] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+      |                        ^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:810:37: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  810 |                 _rdata[nright] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+      |                                   ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:810:54: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  810 |                 _rdata[nright] = {p % cwidth + dx, p / cwidth + dy, line.width, line.score};
+      |                                                    ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:812:37: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  812 |                 _rdata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
+      |                                   ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:812:54: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  812 |                 _rdata.push_back({p % cwidth + dx, p / cwidth + dy, line.width, line.score});
+      |                                                    ~~^~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:826:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  826 |             wseg.x[j] = _rdata[i].x;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:826:32: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  826 |             wseg.x[j] = _rdata[i].x;
+      |                                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:827:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  827 |             wseg.y[j] = _rdata[i].y;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:827:32: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  827 |             wseg.y[j] = _rdata[i].y;
+      |                                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:828:24: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  828 |             wseg.thick[j] = _rdata[i].thick;
+      |                        ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:828:36: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  828 |             wseg.thick[j] = _rdata[i].thick;
+      |                                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:829:25: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  829 |             wseg.scores[j] = _rdata[i].score;
+      |                         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:829:37: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  829 |             wseg.scores[j] = _rdata[i].score;
+      |                                     ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:833:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  833 |             wseg.x[j] = _ldata[i].x;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:833:32: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  833 |             wseg.x[j] = _ldata[i].x;
+      |                                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:834:20: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  834 |             wseg.y[j] = _ldata[i].y;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:834:32: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  834 |             wseg.y[j] = _ldata[i].y;
+      |                                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:835:24: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  835 |             wseg.thick[j] = _ldata[i].thick;
+      |                        ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:835:36: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  835 |             wseg.thick[j] = _ldata[i].thick;
+      |                                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:836:25: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  836 |             wseg.scores[j] = _ldata[i].score;
+      |                         ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:836:37: warning: conversion to ‘std::vector<janelia::record>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  836 |             wseg.scores[j] = _ldata[i].score;
+      |                                     ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:634:19: warning: unused variable ‘newoff’ [-Wunused-variable]
+  634 |     float dx, dy, newoff;
+      |                   ^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:641:18: warning: unused variable ‘ain’ [-Wunused-variable]
+  641 |     const double ain = hpi / this->config._angle_step;
+      |                  ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:642:18: warning: unused variable ‘rad’ [-Wunused-variable]
+  642 |     const double rad = 45. / hpi;
+      |                  ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In function ‘float janelia::threshold_two_means(uint8_t*, size_t)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:855:25: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  855 |         float v = hist[i];
+      |                   ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:856:16: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  856 |         num += i * v;
+      |                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:865:21: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  865 |         for (i = 0; i < thresh; i++) {
+      |                     ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:866:29: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  866 |             float v = hist[i];
+      |                       ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:867:20: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  867 |             num += i * v;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:873:29: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  873 |             float v = hist[i];
+      |                       ~~~~~~^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:874:20: warning: conversion from ‘size_t’ {aka ‘long unsigned int’} to ‘float’ may change value [-Wconversion]
+  874 |             num += i * v;
+      |                    ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In function ‘int janelia::threshold_bottom_fraction_uint8(const Image<unsigned char>&)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:887:46: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  887 |     uint8_t mean = std::floor(std::accumulate(d.begin(), d.end(), 0) / d.size());
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:887:30: warning: conversion from ‘__gnu_cxx::__enable_if<true, double>::__type’ {aka ‘double’} to ‘uint8_t’ {aka ‘unsigned char’} may change value [-Wfloat-conversion]
+  887 |     uint8_t mean = std::floor(std::accumulate(d.begin(), d.end(), 0) / d.size());
+      |                    ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:893:15: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  893 |         if (d[i] <= mean) {
+      |               ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:894:22: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  894 |             acc += d[i];
+      |                      ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘bool janelia::JaneliaTracker::is_local_area_trusted(janelia::Line_Params*, janelia::Image<unsigned char>&, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:908:18: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  908 |         (fabs(q) > this->config._half_space_assymetry)) {
+      |          ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘bool janelia::JaneliaTracker::is_local_area_trusted_conservative(janelia::Line_Params*, janelia::Image<unsigned char>&, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:920:18: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  920 |         (fabs(q) > this->config._half_space_assymetry)) {
+      |          ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘float janelia::JaneliaTracker::eval_half_space(janelia::Line_Params*, const janelia::Image<unsigned char>&, int, float*, float*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:944:34: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  944 |         l += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[lefthalf + this->pxlist[i].weight_ind];
+      |                                  ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:944:37: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  944 |         l += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[lefthalf + this->pxlist[i].weight_ind];
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:944:106: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  944 |         l += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[lefthalf + this->pxlist[i].weight_ind];
+      |                                                                                                          ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:944:91: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  944 |         l += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[lefthalf + this->pxlist[i].weight_ind];
+      |                                                                                  ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:945:34: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  945 |         r += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[righthalf +
+      |                                  ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:945:37: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  945 |         r += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[righthalf +
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:946:95: warning: conversion to ‘std::vector<janelia::offset_pair>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  946 |                                                                                  this->pxlist[i].weight_ind]; // It doesn't work if I have the a term here. Why is that?
+      |                                                                                               ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:945:92: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  945 |         r += parray[this->pxlist[i].image_ind] * this->half_space_bank.bank.data[righthalf +
+      |                                                                                  ~~~~~~~~~~^
+  946 |                                                                                  this->pxlist[i].weight_ind]; // It doesn't work if I have the a term here. Why is that?
+      |                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘int janelia::JaneliaTracker::move_line(janelia::Line_Params*, int, int, int)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:971:14: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  971 |     rx0 = (p % stride) + ex * line->offset; // current position
+      |           ~~~^~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:972:14: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  972 |     ry0 = (p / stride) + ey * line->offset;
+      |           ~~~^~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:973:17: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  973 |     rx1 = rx0 + direction * lx;        // step to next position
+      |                 ^~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:974:17: warning: conversion from ‘int’ to ‘float’ may change value [-Wconversion]
+  974 |     ry1 = ry0 + direction * ly;
+      |                 ^~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:965:34: warning: unused variable ‘ox’ [-Wunused-variable]
+  965 |     float ppx, ppy, drx, dry, t, ox, oy;
+      |                                  ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:965:38: warning: unused variable ‘oy’ [-Wunused-variable]
+  965 |     float ppx, ppy, drx, dry, t, ox, oy;
+      |                                      ^~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘int janelia::JaneliaTracker::adjust_line_start(janelia::Line_Params*, const janelia::Image<unsigned char>&, int*, janelia::Interval*, janelia::Interval*, janelia::Interval*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:988:22: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+  988 |     double ain = hpi / this->config._angle_step;
+      |                  ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1012:25: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1012 |             line->angle -= ain;
+      |             ~~~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1012:25: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1014:55: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1014 |         } while (fabs(v - last) < 1e-5 && line->angle >= rang->min);
+      |                                           ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1015:46: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1015 |         if ((v - best) > 1e-5 && line->angle >= rang->min) {
+      |                                  ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1019:27: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1019 |             line->angle = x;
+      |                           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1021:29: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1021 |                 line->angle += ain;
+      |                 ~~~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1021:29: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1023:59: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1023 |             } while (fabs(v - last) < 1e-5 && line->angle <= rang->max);
+      |                                               ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1024:50: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1024 |             if ((v - best) > 1e-5 && line->angle <= rang->max) {
+      |                                      ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1028:31: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1028 |                 line->angle = x;
+      |                               ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1039:56: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1039 |         } while (fabs(v - last) < 1e-5 && line->offset >= roff->min);
+      |                                           ~~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1040:47: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1040 |         if ((v - best) > 1e-5 && line->offset >= roff->min) {
+      |                                  ~~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1044:28: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1044 |             line->offset = x;
+      |                            ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1048:60: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1048 |             } while (fabs(v - last) < 1e-5 && line->offset <= roff->max);
+      |                                               ~~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1049:51: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1049 |             if ((v - best) > 1e-5 && line->offset <= roff->max) {
+      |                                      ~~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1053:32: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1053 |                 line->offset = x;
+      |                                ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1064:55: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1064 |         } while (fabs(v - last) < 1e-5 && line->width >= rwid->min);
+      |                                           ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1065:46: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1065 |         if ((v - best) > 1e-5 && line->width >= rwid->min) {
+      |                                  ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1069:27: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1069 |             line->width = x;
+      |                           ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1073:59: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1073 |             } while (fabs(v - last) < 1e-5 && line->width <= rwid->max);
+      |                                               ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1074:50: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1074 |             if ((v - best) > 1e-5 && line->width <= rwid->max) {
+      |                                      ~~~~~~~~~~~~^~~~~~~~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1078:31: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1078 |                 line->width = x;
+      |                               ^
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1081:23: warning: conversion from ‘double’ to ‘float’ may change value [-Wfloat-conversion]
+ 1081 |         line->score = best;
+      |                       ^~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:989:12: warning: unused variable ‘rad’ [-Wunused-variable]
+  989 |     double rad = 45. / hpi;
+      |            ^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:996:12: warning: unused variable ‘atest’ [-Wunused-variable]
+  996 |     double atest = line->angle;
+      |            ^~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘bool janelia::JaneliaTracker::is_change_too_big(janelia::Line_Params, janelia::Line_Params, float, float, float)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1101:70: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1101 |     if ((fabs((dth * 180.0f / static_cast<float>(std::numbers::pi))) > alim) ||
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1102:19: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1102 |         (fabs(dw) > wlim) ||
+      |          ~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:1103:21: warning: implicit conversion from ‘float’ to ‘double’ to match other operand of binary expression [-Wdouble-promotion]
+ 1103 |         (fabs(doff) > olim)) {
+      |          ~~~~~~~~~~~^~~~~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In instantiation of ‘janelia::Image<T>::Image(int, int) [with T = unsigned char]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:37:58:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:46:34: warning: conversion to ‘std::vector<unsigned char, std::allocator<unsigned char> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   46 |         array = std::vector<T>(h * w, 0);
+      |                                ~~^~~
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp: In instantiation of ‘janelia::Image<T>::Image(int, int) [with T = float]’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:38:53:   required from here
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.hpp:46:34: warning: conversion to ‘std::vector<float>::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp: In member function ‘std::optional<janelia::Seed> janelia::JaneliaTracker::compute_seed_from_point_ex(const janelia::Image<unsigned char>&, int, int, float*, float*)’:
+/app/src/WhiskerTracking/JaneliaWhiskerTracker/janelia.cpp:363:15: warning: ‘rm’ may be used uninitialized [-Wmaybe-uninitialized]
+  363 |         float rm, rnum, lm, lnum; //,rr2,lr2;
+      |               ^~
+[7/14] Linking CXX shared library libjanelia.so
+[8/14] Linking CXX shared library libWhisker-Analysis.so
+[9/14] Linking CXX executable bin/test_parameterization
+[10/14] Linking CXX executable tests/benchmark
+[11/14] Building CXX object tests/WhiskerTracking/CMakeFiles/tests.dir/test_loaders.cpp.o
+[12/14] Linking CXX executable bin/tests
+[13/14] Building CXX object src/CMakeFiles/whisker.dir/Python/WhiskerTracking/whiskertracker_pybind.cpp.o
+[14/14] Linking CXX shared module whisker.so
+lto-wrapper: warning: using serial compilation of 3 LTRANS jobs
+lto-wrapper: note: see the ‘-flto’ option documentation for more information
