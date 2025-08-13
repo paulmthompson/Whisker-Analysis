@@ -89,7 +89,6 @@ struct Array {
 
     // ndim_in is always 5
     Array(std::array<int, 5> &shape_in, int bytesperpixel) {
-        int i = 5;
         ndim = 5;
         shape = {};
         strides_bytes = {};
@@ -98,8 +97,7 @@ struct Array {
         strides_bytes[ndim] = bytesperpixel;
         strides_px[ndim] = 1;
 
-        while (i--)                                            // For shape = (w,h,d):
-        {
+        for (size_t i = ndim; i-- > 0;) {
             strides_bytes[i] = strides_bytes[i + 1] * shape_in[ndim - 1 - i];//   strides = (whd, wh, w, 1)
             strides_px[i] = strides_bytes[i] / bytesperpixel;
             shape[i] = shape_in[i];
