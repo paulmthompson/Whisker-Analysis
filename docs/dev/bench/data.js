@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1755040081651,
+  "lastUpdate": 1755046094638,
   "repoUrl": "https://github.com/paulmthompson/Whisker-Analysis",
   "entries": {
     "Benchmark": [
@@ -7051,6 +7051,100 @@ window.BENCHMARK_DATA = {
             "name": "Trace",
             "value": 69.1283,
             "range": "± 333.812",
+            "unit": "ms",
+            "extra": "100 samples\n1 iterations"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pmt10@case.edu",
+            "name": "Paul Thompson",
+            "username": "paulmthompson"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "aaf7e40b1e0a1dbecb465f8e7e32eb4b3daad5e9",
+          "message": "Merge pull request #35 from paulmthompson/fix/c-style-casts\n\nRefactor: Replace C-style casts with static_cast",
+          "timestamp": "2025-08-12T20:38:32-04:00",
+          "tree_id": "ac8cc6db875876b63ce3747051bf6c4efa539296",
+          "url": "https://github.com/paulmthompson/Whisker-Analysis/commit/aaf7e40b1e0a1dbecb465f8e7e32eb4b3daad5e9"
+        },
+        "date": 1755046093902,
+        "tool": "catch2",
+        "benches": [
+          {
+            "name": "IoU Calculation",
+            "value": 7.83841,
+            "range": "± 640.866",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "IoU Relative Calculation",
+            "value": 7.12197,
+            "range": "± 467.377",
+            "unit": "us",
+            "extra": "100 samples\n5 iterations"
+          },
+          {
+            "name": "Mask Intersection",
+            "value": 26.9335,
+            "range": "± 1.93201",
+            "unit": "ns",
+            "extra": "100 samples\n1140 iterations"
+          },
+          {
+            "name": "length Calculation",
+            "value": 373.057,
+            "range": "± 18.2095",
+            "unit": "ns",
+            "extra": "100 samples\n81 iterations"
+          },
+          {
+            "name": "Nearest Preceding Calculation",
+            "value": 715.338,
+            "range": "± 27.8476",
+            "unit": "ns",
+            "extra": "100 samples\n42 iterations"
+          },
+          {
+            "name": "Nearest Interpolated Calculation",
+            "value": 1.09979,
+            "range": "± 50.4",
+            "unit": "us",
+            "extra": "100 samples\n28 iterations"
+          },
+          {
+            "name": "Distance Calculation",
+            "value": 3.41868,
+            "range": "± 0.129803",
+            "unit": "ns",
+            "extra": "100 samples\n8700 iterations"
+          },
+          {
+            "name": "CSV Load",
+            "value": 70.8508,
+            "range": "± 5.8999",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "CSV Write",
+            "value": 289.86,
+            "range": "± 59.2201",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "Trace",
+            "value": 68.7686,
+            "range": "± 218.904",
             "unit": "ms",
             "extra": "100 samples\n1 iterations"
           }
