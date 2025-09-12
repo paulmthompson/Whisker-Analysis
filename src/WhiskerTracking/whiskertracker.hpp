@@ -1,6 +1,7 @@
 #ifndef WHISKERTRACKER_HPP
 #define WHISKERTRACKER_HPP
 
+#include "Geometry/lines.hpp"
 #include "Geometry/mask.hpp"
 #include "Geometry/vector.hpp"
 #include "JaneliaWhiskerTracker/janelia.hpp"
@@ -14,10 +15,6 @@
 #include <vector>
 
 namespace whisker {
-struct Line2D;
-}
-
-namespace whisker {
 
 class WhiskerTracker {
 
@@ -27,6 +24,10 @@ public:
     std::vector<Line2D> trace(std::vector<uint8_t> const & image, int image_height, int image_width);
     std::vector<Line2D> trace_with_mask(std::vector<uint8_t> const & image, std::vector<uint8_t> const & mask, int image_height, int image_width);
     std::vector<std::vector<Line2D>> trace_multiple_images(std::vector<std::vector<uint8_t>> const & images, int image_height, int image_width);
+    std::vector<std::vector<Line2D>> trace_multiple_images_with_masks(std::vector<std::vector<uint8_t>> const & images,
+                                                                      std::vector<std::vector<uint8_t>> const & masks,
+                                                                      int image_height,
+                                                                      int image_width);
 
     [[nodiscard]] float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 

@@ -45,6 +45,34 @@ std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images(const std
     return whiskers;
 }
 
+std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images_with_masks(const std::vector<std::vector<uint8_t>> & images,
+                                                                                  const std::vector<std::vector<uint8_t>> & masks,
+                                                                                  const int image_height,
+                                                                                  const int image_width) {
+
+    if (images.size() != masks.size()) {
+        throw std::runtime_error("Number of images and masks must be the same");
+    }
+
+    std::vector<std::vector<Line2D>> whiskers(images.size());
+
+    #ifndef _MSC_VER
+    #pragma omp parallel
+    {
+        _reinitializeJanelia();
+    }
+    #endif
+
+    #ifndef _MSC_VER
+    #pragma omp parallel for
+    #endif
+    for (int i = 0; i < static_cast<int>(images.size()); i++) {
+        whiskers[i] = trace_with_mask(images[i], masks[i], image_height, image_width);
+    }
+
+    return whiskers;
+}
+
 std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, const int image_height, const int image_width) {
 
     _reinitializeJanelia();
