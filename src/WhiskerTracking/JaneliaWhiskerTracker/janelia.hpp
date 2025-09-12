@@ -112,6 +112,8 @@ public:
     JaneliaTracker();
 
     std::vector<Whisker_Seg> find_segments(int iFrame, Image<uint8_t> &image, const Image<uint8_t> &bg);
+    
+    std::vector<Whisker_Seg> find_segments_from_mask(int iFrame, Image<uint8_t> &image, const Image<uint8_t> &mask);
 
     JaneliaConfig config;
     LineDetector bank;
@@ -134,6 +136,8 @@ private:
 
     void compute_seed_from_point_field_on_grid(const Image<uint8_t> &image, Image<uint8_t> &h, Image<float> &th,
                                                Image<float> &s);
+
+    void compute_theta_from_mask(const Image<uint8_t> &mask, Image<float> &theta, int window_size = 5);
 
     std::optional<Seed> compute_seed_from_point(const Image<uint8_t> &image, int p, int maxr);
 

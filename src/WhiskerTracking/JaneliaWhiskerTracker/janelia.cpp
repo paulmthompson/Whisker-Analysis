@@ -29,6 +29,8 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
     std::vector<Whisker_Seg> wsegs = {};
     int n_segs = 0;
 
+    const uint8_t MASK_VALUE = 255;
+
     // Prepare
     _histogram = Image<uint8_t>(image.width, image.height);
     _slopes = Image<float>(image.width, image.height);
@@ -79,7 +81,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
         i = area;
         while (i--) {
             if (sa[i] > this->config._seed_thres) {
-                maska[i] = 1;
+                maska[i] = MASK_VALUE;
                 nseeds++;
             }
         }
@@ -92,7 +94,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
             auto start = std::chrono::high_resolution_clock::now();
             i = area;
             while (i--) {
-                if (maska[i] == 1) {
+                if (maska[i] == MASK_VALUE) {
                     Seed seed = {i % stride,
                                  i / stride,
                                  static_cast<int>(std::round(100 * cos(tha[i]))),
@@ -117,7 +119,7 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
             j = nseeds;
             while (j--) {
                 i = scores[j].idx;
-                if (maska[i] == 1) {
+                if (maska[i] == MASK_VALUE) {
                     Seed seed = {i % stride,
                                  i / stride,
                                  static_cast<int>(std::round(100 * cos(tha[i]))),
@@ -132,6 +134,13 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
                     if (w.len > this->config._min_length) {
                         w.time = iFrame;
                         w.id = n_segs++;
+                        for (int i = 0; i < w.len; i++) {
+                            int xp = static_cast<int>(std::round(w.x[i]));
+                            int yp = static_cast<int>(std::round(w.y[i]));
+                            if (xp >= 0 && xp < image.width && yp >= 0 && yp < image.height) {
+                                maska[xp + yp * stride] = 0; // mask out this whisker so we don't double count
+                            }
+                        }
                         wsegs.push_back(std::move(w));
                     } // ... if w
                 } // ... if maska[i]
@@ -145,6 +154,124 @@ std::vector<Whisker_Seg> JaneliaTracker::find_segments(int iFrame, Image<uint8_t
             //std::cout << "Num seeds: " << nseeds << std::endl;
 
         }
+    }
+
+    return wsegs;
+}
+
+std::vector<Whisker_Seg> JaneliaTracker::find_segments_from_mask(int iFrame, Image<uint8_t> &image, const Image<uint8_t> &mask) {
+    int area = image.width * image.height;
+    std::vector<Whisker_Seg> wsegs = {};
+    int n_segs = 0;
+
+    const uint8_t MASK_VALUE = 255;
+
+    // Prepare
+    _histogram = Image<uint8_t>(image.width, image.height);
+    _slopes = Image<float>(image.width, image.height);
+    _stats = Image<float>(image.width, image.height);
+    _mask = Image<uint8_t>(image.width, image.height);
+
+    //Reset arrays to zero
+    std::fill(_histogram.array.begin(), _histogram.array.end(), 0x0);
+    std::fill(_slopes.array.begin(), _slopes.array.end(), 0.0f);
+    std::fill(_stats.array.begin(), _stats.array.end(), 0.0f);
+    std::fill(_mask.array.begin(), _mask.array.end(), 0x0);
+
+    _trust_thresh = threshold_bottom_fraction_uint8(image);
+    _trust_thresh_conservative = threshold_two_means(
+            image.array.data(),
+            image.width * image.height
+            );
+
+    // Compute theta values from the provided mask
+    compute_theta_from_mask(mask, _slopes);
+    
+    // Copy the mask and set stats to 1.0 for all mask pixels
+    auto &sa = _stats.array;
+    auto &tha = _slopes.array;
+    auto &ha = _histogram.array;
+    auto &maska = _mask.array;
+    
+    int nseeds = 0;
+    for (int i = 0; i < area; i++) {
+        if (mask.array[i] > 0) {
+            maska[i] = MASK_VALUE;
+            sa[i] = 1.0f; // Set stats to 1.0 for all mask pixels
+            nseeds++;
+        }
+    }
+
+    // Process seeds similar to the original implementation
+    {
+        std::vector<seedrecord> scores(nseeds);
+        int stride = image.width;
+        Line_Params line;
+        int j = 0;
+
+        auto start = std::chrono::high_resolution_clock::now();
+        int i = area;
+        while (i--) {
+            if (maska[i] == MASK_VALUE) {
+                Seed seed = {i % stride,
+                             i / stride,
+                             static_cast<int>(std::round(100 * cos(tha[i]))),
+                             static_cast<int>(std::round(100 * sin(tha[i])))};
+
+                line = line_param_from_seed(seed);
+                scores[j].score = eval_line(&line, image, i);
+                scores[j].idx = i;
+                j++;
+            }
+        }
+
+        std::sort(scores.begin(), scores.end(),
+                  [](const seedrecord &a, const seedrecord &b) {
+                      return a.score < b.score;
+                  });
+
+        auto t1 = std::chrono::high_resolution_clock::now();
+
+        j = nseeds;
+        while (j--) {
+            i = scores[j].idx;
+            if (maska[i] == MASK_VALUE) {
+                Seed seed = {i % stride,
+                             i / stride,
+                             static_cast<int>(std::round(100 * cos(tha[i]))),
+                             static_cast<int>(std::round(100 * sin(tha[i])))};
+
+                auto w = trace_whisker(seed, image);
+                if (w.len == 0) {
+                    std::swap(seed.xdir, seed.ydir);
+                    w = trace_whisker(seed,
+                                      image); // try again at a right angle...sometimes when we're off by one the slope estimate is perpendicular to the whisker.
+                }
+                if (w.len > this->config._min_length) {
+                    w.time = iFrame;
+                    w.id = n_segs++;
+                    for (int i = 0; i < w.len; i++) {
+                        int xp = static_cast<int>(std::round(w.x[i]));
+                        int yp = static_cast<int>(std::round(w.y[i]));
+                        int const mask_win = 10;
+                        for (int mask_x_i = -mask_win; mask_x_i <= mask_win; mask_x_i++) {
+                            for (int mask_y_i = -mask_win; mask_y_i <= mask_win; mask_y_i++) {
+                                int mxp = xp + mask_x_i;
+                                int myp = yp + mask_y_i;
+                                if (mxp >= 0 && mxp < image.width && myp >= 0 && myp < image.height) {
+                                    maska[mxp + myp * stride] = 0; // mask out this whisker so we don't double count
+                                }
+                            }
+                        }
+                    }
+                    wsegs.push_back(std::move(w));
+                } // ... if w
+            } // ... if maska[i]
+        }
+        scores.clear();
+        auto t2 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed1 = t1 - start;
+        std::chrono::duration<double> elapsed2 = t2 - t1;
     }
 
     return wsegs;
@@ -211,6 +338,111 @@ void JaneliaTracker::compute_seed_from_point_field_on_grid(const Image<uint8_t> 
         }
     }
 
+}
+
+void JaneliaTracker::compute_theta_from_mask(const Image<uint8_t> &mask, Image<float> &theta, int window_size) {
+    int stride = mask.width;
+    int height = mask.height;
+    int half_window = window_size / 2;
+    
+    // Initialize theta array
+    std::fill(theta.array.begin(), theta.array.end(), 0.0f);
+    
+    // For each pixel in the mask
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < stride; x++) {
+            int idx = x + y * stride;
+            
+            // Only compute theta for mask pixels
+            if (mask.array[idx] == 0) {
+                continue;
+            }
+            
+            // Collect mask pixels in a local window
+            std::vector<std::pair<int, int>> local_points;
+            
+            for (int dy = -half_window; dy <= half_window; dy++) {
+                for (int dx = -half_window; dx <= half_window; dx++) {
+                    int nx = x + dx;
+                    int ny = y + dy;
+                    
+                    // Check bounds
+                    if (nx >= 0 && nx < stride && ny >= 0 && ny < height) {
+                        int nidx = nx + ny * stride;
+                        if (mask.array[nidx] > 0) {
+                            local_points.emplace_back(dx, dy);
+                        }
+                    }
+                }
+            }
+            
+            // Need at least 3 points to compute principal direction
+            if (local_points.size() < 3) {
+                theta.array[idx] = 0.0f;
+                continue;
+            }
+            
+            // Compute center of mass
+            float cx = 0.0f, cy = 0.0f;
+            for (const auto& point : local_points) {
+                cx += point.first;
+                cy += point.second;
+            }
+            cx /= static_cast<float>(local_points.size());
+            cy /= static_cast<float>(local_points.size());
+            
+            // Compute covariance matrix elements
+            float cxx = 0.0f, cxy = 0.0f, cyy = 0.0f;
+            for (const auto& point : local_points) {
+                float dx = point.first - cx;
+                float dy = point.second - cy;
+                cxx += dx * dx;
+                cxy += dx * dy;
+                cyy += dy * dy;
+            }
+            
+            // Normalize by number of points
+            float n = static_cast<float>(local_points.size());
+            cxx /= n;
+            cxy /= n;
+            cyy /= n;
+            
+            // Compute principal direction (direction of maximum variance)
+            // This is the eigenvector corresponding to the largest eigenvalue
+            // For a 2x2 symmetric matrix, we can compute this analytically
+            
+            float trace = cxx + cyy;
+            float det = cxx * cyy - cxy * cxy;
+            float discriminant = trace * trace - 4.0f * det;
+            
+            if (discriminant < 0.0f) {
+                theta.array[idx] = 0.0f;
+                continue;
+            }
+            
+            float lambda1 = (trace + std::sqrt(discriminant)) / 2.0f;
+            float lambda2 = (trace - std::sqrt(discriminant)) / 2.0f;
+            
+            // Choose the eigenvector for the larger eigenvalue
+            float angle;
+            if (std::abs(lambda1) > std::abs(lambda2)) {
+                // Eigenvector for lambda1
+                if (std::abs(cxy) > 1e-6f) {
+                    //angle = std::atan2(lambda1 - cxx, cxy);
+                    angle = std::atan2(cxx - lambda1, -cxy);
+                } else if (std::abs(cxx - cyy) > 1e-6f) {
+                    angle = (cxx > cyy) ? 0.0f : static_cast<float>(std::numbers::pi) / 2.0f;
+                } else {
+                    angle = 0.0f; // Isotropic case
+                }
+            } else {
+                // Use horizontal direction as default if eigenvalues are similar
+                angle = 0.0f;
+            }
+            
+            theta.array[idx] = angle;
+        }
+    }
 }
 
 /* Specific for uint8 */

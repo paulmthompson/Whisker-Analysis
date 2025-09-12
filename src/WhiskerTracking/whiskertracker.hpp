@@ -25,6 +25,7 @@ public:
     WhiskerTracker();
 
     std::vector<Line2D> trace(std::vector<uint8_t> const & image, int image_height, int image_width);
+    std::vector<Line2D> trace_with_mask(std::vector<uint8_t> const & image, std::vector<uint8_t> const & mask, int image_height, int image_width);
     std::vector<std::vector<Line2D>> trace_multiple_images(std::vector<std::vector<uint8_t>> const & images, int image_height, int image_width);
 
     [[nodiscard]] float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
