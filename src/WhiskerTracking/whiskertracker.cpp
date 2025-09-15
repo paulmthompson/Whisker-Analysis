@@ -11,8 +11,8 @@
 #include <iostream>
 #include <numeric>
 
-janelia::JaneliaTracker whisker::WhiskerTracker::_janelia;
-bool whisker::WhiskerTracker::_janelia_init;
+thread_local janelia::JaneliaTracker whisker::WhiskerTracker::_janelia;
+thread_local bool whisker::WhiskerTracker::_janelia_init;
 
 namespace whisker {
 
@@ -28,16 +28,16 @@ std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images(const std
 
     std::vector<std::vector<Line2D>> whiskers(images.size());
 
-    #ifndef _MSC_VER
+    //#ifndef _MSC_VER
     #pragma omp parallel
     {
         _reinitializeJanelia();
     }
-    #endif
+    //#endif
 
-    #ifndef _MSC_VER
+    //#ifndef _MSC_VER
     #pragma omp parallel for
-    #endif
+    //#endif
     for (int i = 0; i < static_cast<int>(images.size()); i++) {
         whiskers[i] = trace(images[i], image_height, image_width);
     }
@@ -56,16 +56,16 @@ std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images_with_mask
 
     std::vector<std::vector<Line2D>> whiskers(images.size());
 
-    #ifndef _MSC_VER
+    //#ifndef _MSC_VER
     #pragma omp parallel
     {
         _reinitializeJanelia();
     }
-    #endif
+   // #endif
 
-    #ifndef _MSC_VER
+    //#ifndef _MSC_VER
     #pragma omp parallel for
-    #endif
+   // #endif
     for (int i = 0; i < static_cast<int>(images.size()); i++) {
         whiskers[i] = trace_with_mask(images[i], masks[i], image_height, image_width);
     }
