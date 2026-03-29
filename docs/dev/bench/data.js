@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1757953581126,
+  "lastUpdate": 1774808634296,
   "repoUrl": "https://github.com/paulmthompson/Whisker-Analysis",
   "entries": {
     "Benchmark": [
@@ -7615,6 +7615,100 @@ window.BENCHMARK_DATA = {
             "name": "Trace",
             "value": 70.048,
             "range": "± 263.579",
+            "unit": "ms",
+            "extra": "100 samples\n1 iterations"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pmt10@case.edu",
+            "name": "Paul Thompson",
+            "username": "paulmthompson"
+          },
+          "committer": {
+            "email": "pmt10@case.edu",
+            "name": "Paul Thompson",
+            "username": "paulmthompson"
+          },
+          "distinct": true,
+          "id": "06b5ef03a2e79c85e6ccb4c786091058eafadae2",
+          "message": "Merge branch 'main' of https://github.com/paulmthompson/Whisker-Analysis",
+          "timestamp": "2026-03-29T14:13:56-04:00",
+          "tree_id": "414912919cc8e10ecf21c618c38cbcdead4e9a69",
+          "url": "https://github.com/paulmthompson/Whisker-Analysis/commit/06b5ef03a2e79c85e6ccb4c786091058eafadae2"
+        },
+        "date": 1774808633561,
+        "tool": "catch2",
+        "benches": [
+          {
+            "name": "IoU Calculation",
+            "value": 7.98612,
+            "range": "± 1.00363",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "IoU Relative Calculation",
+            "value": 7.28116,
+            "range": "± 650.739",
+            "unit": "us",
+            "extra": "100 samples\n5 iterations"
+          },
+          {
+            "name": "Mask Intersection",
+            "value": 27.6268,
+            "range": "± 2.10292",
+            "unit": "ns",
+            "extra": "100 samples\n1097 iterations"
+          },
+          {
+            "name": "length Calculation",
+            "value": 371.317,
+            "range": "± 16.6501",
+            "unit": "ns",
+            "extra": "100 samples\n81 iterations"
+          },
+          {
+            "name": "Nearest Preceding Calculation",
+            "value": 715.819,
+            "range": "± 33.5641",
+            "unit": "ns",
+            "extra": "100 samples\n42 iterations"
+          },
+          {
+            "name": "Nearest Interpolated Calculation",
+            "value": 1.10618,
+            "range": "± 76.1954",
+            "unit": "us",
+            "extra": "100 samples\n28 iterations"
+          },
+          {
+            "name": "Distance Calculation",
+            "value": 3.11311,
+            "range": "± 0.142374",
+            "unit": "ns",
+            "extra": "100 samples\n9539 iterations"
+          },
+          {
+            "name": "CSV Load",
+            "value": 73.7397,
+            "range": "± 6.72258",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "CSV Write",
+            "value": 263.092,
+            "range": "± 39.0815",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "Trace",
+            "value": 70.0496,
+            "range": "± 1.10239",
             "unit": "ms",
             "extra": "100 samples\n1 iterations"
           }
