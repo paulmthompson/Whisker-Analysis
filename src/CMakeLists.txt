@@ -18,7 +18,7 @@ if(MSVC)
 endif()
 message(STATUS "OpenMP_CXX_FLAGS: ${OpenMP_CXX_FLAGS}")
 
-find_package(Armadillo REQUIRED)
+#find_package(Armadillo REQUIRED)
 
 add_subdirectory(WhiskerTracking/JaneliaWhiskerTracker)
 
@@ -50,9 +50,9 @@ target_link_libraries(Whisker-Analysis PUBLIC janelia OpenMP::OpenMP_CXX)
 
 target_link_libraries(Whisker-Analysis PUBLIC fast_float)
 
-target_link_libraries(Whisker-Analysis PUBLIC spdlog::spdlog)
+target_link_libraries(Whisker-Analysis PRIVATE spdlog::spdlog_header_only)
 
-target_link_libraries(Whisker-Analysis PRIVATE armadillo )
+#target_link_libraries(Whisker-Analysis PRIVATE armadillo )
 
 target_include_directories(Whisker-Analysis PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/WhiskerTracking>"
