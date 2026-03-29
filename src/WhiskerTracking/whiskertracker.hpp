@@ -1,6 +1,7 @@
 #ifndef WHISKERTRACKER_HPP
 #define WHISKERTRACKER_HPP
 
+#include "Geometry/lines.hpp"
 #include "Geometry/mask.hpp"
 #include "Geometry/vector.hpp"
 #include "JaneliaWhiskerTracker/janelia.hpp"
@@ -14,10 +15,6 @@
 #include <vector>
 
 namespace whisker {
-struct Line2D;
-}
-
-namespace whisker {
 
 class WhiskerTracker {
 
@@ -25,7 +22,12 @@ public:
     WhiskerTracker();
 
     std::vector<Line2D> trace(std::vector<uint8_t> const & image, int image_height, int image_width);
+    std::vector<Line2D> trace_with_mask(std::vector<uint8_t> const & image, std::vector<uint8_t> const & mask, int image_height, int image_width);
     std::vector<std::vector<Line2D>> trace_multiple_images(std::vector<std::vector<uint8_t>> const & images, int image_height, int image_width);
+    std::vector<std::vector<Line2D>> trace_multiple_images_with_masks(std::vector<std::vector<uint8_t>> const & images,
+                                                                      std::vector<std::vector<uint8_t>> const & masks,
+                                                                      int image_height,
+                                                                      int image_width);
 
     [[nodiscard]] float getWhiskerLengthThreshold() const { return _whisker_length_threshold; };
 
@@ -49,6 +51,8 @@ public:
     void setImageWidth(int const width) { _image_width = width; };
 
     void setHeadDirection(float x, float y);
+
+    void setVerbose(bool verbose) { _verbose = verbose; };
 
     enum JaneliaParameter {
         SEED_ON_GRID_LATTICE_SPACING,
@@ -76,18 +80,19 @@ public:
 
     void changeJaneliaParameter(JaneliaParameter parameter, float value);
 
+    static thread_local janelia::JaneliaTracker _janelia;
+
+//#ifndef _MSC_VER
+//#pragma omp threadprivate(_janelia)
+//#endif
+
+    static thread_local bool _janelia_init;
+
+//#ifndef _MSC_VER
+//#pragma omp threadprivate(_janelia_init)
+//#endif
+
 private:
-    static janelia::JaneliaTracker _janelia;
-
-#ifndef _MSC_VER
-#pragma omp threadprivate(_janelia)
-#endif
-
-    static bool _janelia_init;
-
-#ifndef _MSC_VER
-#pragma omp threadprivate(_janelia_init)
-#endif
 
     float _whisker_length_threshold{75.0};
     float _whisker_pad_radius{150.0f};

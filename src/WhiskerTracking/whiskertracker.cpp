@@ -11,8 +11,8 @@
 #include <iostream>
 #include <numeric>
 
-janelia::JaneliaTracker whisker::WhiskerTracker::_janelia;
-bool whisker::WhiskerTracker::_janelia_init;
+thread_local janelia::JaneliaTracker whisker::WhiskerTracker::_janelia;
+thread_local bool whisker::WhiskerTracker::_janelia_init;
 
 namespace whisker {
 
@@ -28,18 +28,46 @@ std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images(const std
 
     std::vector<std::vector<Line2D>> whiskers(images.size());
 
-    #ifndef _MSC_VER
+    //#ifndef _MSC_VER
     #pragma omp parallel
     {
         _reinitializeJanelia();
     }
-    #endif
+    //#endif
 
-    #ifndef _MSC_VER
+    //#ifndef _MSC_VER
     #pragma omp parallel for
-    #endif
+    //#endif
     for (int i = 0; i < static_cast<int>(images.size()); i++) {
         whiskers[i] = trace(images[i], image_height, image_width);
+    }
+
+    return whiskers;
+}
+
+std::vector<std::vector<Line2D>> WhiskerTracker::trace_multiple_images_with_masks(const std::vector<std::vector<uint8_t>> & images,
+                                                                                  const std::vector<std::vector<uint8_t>> & masks,
+                                                                                  const int image_height,
+                                                                                  const int image_width) {
+
+    if (images.size() != masks.size()) {
+        throw std::runtime_error("Number of images and masks must be the same");
+    }
+
+    std::vector<std::vector<Line2D>> whiskers(images.size());
+
+    //#ifndef _MSC_VER
+    #pragma omp parallel
+    {
+        _reinitializeJanelia();
+    }
+   // #endif
+
+    //#ifndef _MSC_VER
+    #pragma omp parallel for
+   // #endif
+    for (int i = 0; i < static_cast<int>(images.size()); i++) {
+        whiskers[i] = trace_with_mask(images[i], masks[i], image_height, image_width);
     }
 
     return whiskers;
@@ -91,6 +119,63 @@ std::vector<Line2D> WhiskerTracker::trace(const std::vector<uint8_t> & image, co
     if (_verbose) {
         std::cout << "Image conversion: " << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count() << "ms" << std::endl;
         std::cout << "Janelia find segments: " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms" << std::endl;
+        std::cout << "Create whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count() << "ms" << std::endl;
+        std::cout << "Remove duplicates: " << std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count() << "ms" << std::endl;
+        std::cout << "Connect to face mask: " << std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count() << "ms" << std::endl;
+        std::cout << "Remove whiskers by whisker pad radius: " << std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count() << "ms" << std::endl;
+        std::cout << "Order whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count() << "ms" << std::endl;
+    }
+
+    return whiskers;
+}
+
+std::vector<Line2D> WhiskerTracker::trace_with_mask(const std::vector<uint8_t> & image, const std::vector<uint8_t> & mask, const int image_height, const int image_width) {
+
+    _reinitializeJanelia();
+
+    std::vector<Line2D> whiskers{};
+
+    auto t0 = std::chrono::high_resolution_clock::now();
+
+    auto img = janelia::Image<uint8_t>(image_width, image_height, image);
+    auto mask_img = janelia::Image<uint8_t>(image_width, image_height, mask);
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+
+    auto j_segs = _janelia.find_segments_from_mask(1, img, mask_img);
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    for (auto &w_seg: j_segs) {
+        auto whisker = create_line(w_seg.x, w_seg.y);
+        if (length(whisker) > _whisker_length_threshold) {
+            whiskers.push_back(std::move(whisker));
+        }
+    }
+
+    auto t3 = std::chrono::high_resolution_clock::now();
+
+    remove_duplicates(whiskers);
+    std::ranges::for_each(whiskers, [wp=_whisker_pad](Line2D & w)
+    {align_whisker_to_follicle(w, wp);});
+
+    auto t4 = std::chrono::high_resolution_clock::now();
+
+    _connectToFaceMask(whiskers);
+
+    auto t5 = std::chrono::high_resolution_clock::now();
+
+    remove_whiskers_outside_radius(whiskers, _whisker_pad, _whisker_pad_radius);
+
+    auto t6 = std::chrono::high_resolution_clock::now();
+
+    order_whiskers(whiskers, _head_direction_vector);
+
+    auto t7 = std::chrono::high_resolution_clock::now();
+
+    if (_verbose) {
+        std::cout << "Image conversion: " << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count() << "ms" << std::endl;
+        std::cout << "Janelia find segments from mask: " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms" << std::endl;
         std::cout << "Create whiskers: " << std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count() << "ms" << std::endl;
         std::cout << "Remove duplicates: " << std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count() << "ms" << std::endl;
         std::cout << "Connect to face mask: " << std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count() << "ms" << std::endl;

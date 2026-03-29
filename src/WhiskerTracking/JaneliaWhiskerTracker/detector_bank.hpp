@@ -25,13 +25,13 @@ struct JaneliaConfig {
     // These are all related to the detector bank (should be in that class)?
     // The detector bank will need to be updated if any of them change.
     int _tlen {8};  // (px) half the size of the detector support.
-    float _angle_step {18.0}; // divisions of pi/4
-    float _offset_step {0.1}; // pixels
-    float _width_min {0.4}; // (pixels) must be a multiple of WIDTH_STEP
-    float _width_max {6.5}; // (pixels) must be a multiple of WIDTH_STEP
-    float _width_step {0.2}; // (pixels)
-    float _min_signal {5.0}; // minimum detector response per detector column.  Typically: (2*TLEN+1)*MIN_SIGNAL is the threshold determining when tracing stops.
-    float _half_space_assymetry {0.25}; // (between 0 and 1)  1 is completely insensitive to asymmetry
+    float _angle_step {18.0f}; // divisions of pi/4
+    float _offset_step {0.1f}; // pixels
+    float _width_min {0.4f}; // (pixels) must be a multiple of WIDTH_STEP
+    float _width_max {6.5f}; // (pixels) must be a multiple of WIDTH_STEP
+    float _width_step {0.2f}; // (pixels)
+    float _min_signal {5.0f}; // minimum detector response per detector column.  Typically: (2*TLEN+1)*MIN_SIGNAL is the threshold determining when tracing stops.
+    float _half_space_assymetry {0.25f}; // (between 0 and 1)  1 is completely insensitive to asymmetry
     float _max_delta_angle {10.1f}; // (degrees)  The detector is constrained to turns less than this value at each step.
     int _half_space_tunneling_max_moves {50}; // (pixels)  This should be the largest size of an occluding area to cross
     float _max_delta_width {6.0f}; // (pixels)   The detector width is constrained to change less than this value at each step.
@@ -43,9 +43,9 @@ struct JaneliaConfig {
 };
 
 struct Range {
-    double min;
-    double max;
-    double step;
+    float min;
+    float max;
+    float step;
 };
 
 struct point {
@@ -89,7 +89,6 @@ struct Array {
 
     // ndim_in is always 5
     Array(std::array<int, 5> &shape_in, int bytesperpixel) {
-        int i = 5;
         ndim = 5;
         shape = {};
         strides_bytes = {};
@@ -98,8 +97,7 @@ struct Array {
         strides_bytes[ndim] = bytesperpixel;
         strides_px[ndim] = 1;
 
-        while (i--)                                            // For shape = (w,h,d):
-        {
+        for (size_t i = ndim; i-- > 0;) {
             strides_bytes[i] = strides_bytes[i + 1] * shape_in[ndim - 1 - i];//   strides = (whd, wh, w, 1)
             strides_px[i] = strides_bytes[i] / bytesperpixel;
             shape[i] = shape_in[i];
@@ -231,11 +229,11 @@ long long cntrib(const ipoint f, const ipoint t, const short w);
 long long area(const ipoint a, const ipoint p, const ipoint q);
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
-                const double a1, const double a2, const double a3, const double a4);
+                const float a1, const float a2, const float a3, const float a4);
 
 
 template<std::size_t N, std::size_t M>
-double fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge);
+float fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge);
 
 template<std::size_t M, std::size_t N>
 long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q);

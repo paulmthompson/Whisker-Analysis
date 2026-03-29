@@ -23,8 +23,8 @@ LineDetector::LineDetector() {
 
 LineDetector::LineDetector(JaneliaConfig config) {
 
-    this->off = Range{-1.0, 1.0, config._offset_step};
-    this->ang = Range{-1 * std::numbers::pi / 4.0, std::numbers::pi / 4.0, std::numbers::pi / 4.0 / config._angle_step};
+    this->off = Range{-1.0f, 1.0f, config._offset_step};
+    this->ang = Range{-1 * std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f / config._angle_step};
     this->wid = Range{config._width_min, config._width_max, config._width_step};
     Build_Line_Detectors(config._tlen, 2 * config._tlen + 3);
 }
@@ -35,8 +35,8 @@ HalfSpaceDetector::HalfSpaceDetector() {
 
 HalfSpaceDetector::HalfSpaceDetector(JaneliaConfig config) {
     this->norm = -1;
-    this->off = Range{-1.0, 1.0, config._offset_step};
-    this->ang = Range{-std::numbers::pi / 4.0, std::numbers::pi / 4.0, std::numbers::pi / 4.0 / config._angle_step};
+    this->off = Range{-1.0f, 1.0f, config._offset_step};
+    this->ang = Range{-std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f, std::numbers::pi_v<float> / 4.0f / config._angle_step};
     this->wid = Range{config._width_min, config._width_max, config._width_step};
     Build_Half_Space_Detectors(config._tlen, 2 * config._tlen + 3);
 
@@ -51,9 +51,9 @@ HalfSpaceDetector::HalfSpaceDetector(JaneliaConfig config) {
 
 void LineDetector::Build_Line_Detectors(float length, int supportsize) {
 
-    int n_offset_steps = compute_number_steps(this->off);
-    int n_width_steps = compute_number_steps(this->wid);
-    int n_angle_steps = compute_number_steps(this->ang);
+    auto n_offset_steps = compute_number_steps(this->off);
+    auto n_width_steps = compute_number_steps(this->wid);
+    auto n_angle_steps = compute_number_steps(this->ang);
 
     std::array<int, 5> shape = {supportsize,
                                 supportsize,
@@ -63,17 +63,16 @@ void LineDetector::Build_Line_Detectors(float length, int supportsize) {
     this->bank = Array(shape, sizeof(float)); // This array is always size 5 for the number of dimensions
 
     {
-        int o, a, w;
-        for (o = 0; o < n_offset_steps; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
+        for (size_t o = 0; o < static_cast<size_t>(n_offset_steps); o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
-            for (a = 0; a < n_angle_steps; a++)
-                for (w = 0; w < n_width_steps; w++) {
-                    float *bank_i = this->bank.data.data() + Get_Detector(o, w, a);
+            for (size_t a = 0; a < static_cast<size_t>(n_angle_steps); a++)
+                for (size_t w = 0; w < static_cast<size_t>(n_width_steps); w++) {
+                    float *bank_i = this->bank.data.data() + Get_Detector(static_cast<int>(o), static_cast<int>(w), static_cast<int>(a));
                     Render_Line_Detector(
-                            o * off.step + off.min,                       //offset (before rotation)
+                            static_cast<float>(o) * off.step + off.min,                       //offset (before rotation)
                             length,                                     //length,
-                            a * ang.step + ang.min,                       //angle,
-                            w * wid.step + wid.min,                       //width,
+                            static_cast<float>(a) * ang.step + ang.min,                       //angle,
+                            static_cast<float>(w) * wid.step + wid.min,                       //width,
                             anchor,                                     //anchor,
                             bank_i,            //image
                             this->bank.strides_px.data() + 3);                      //strides
@@ -96,8 +95,8 @@ void LineDetector::Render_Line_Detector(float offset,
  */
 {
     std::array<point, 4> prim = {};
-    const float thick = 0.7;
-    const float r = 1.0;
+    const float thick = 0.7f;
+    const float r = 1.0f;
     //const float area = 4*thick*length;
     //length -=2;
 
@@ -106,7 +105,7 @@ void LineDetector::Render_Line_Detector(float offset,
         Simple_Line_Primitive(prim, off, length, r * thick);
         rotate(prim, angle);
         translate(prim, anchor);
-        Sum_Pixel_Overlap(prim, -1.0 / r, image, strides);
+        Sum_Pixel_Overlap(prim, -1.0f / r, image, strides);
     }
     {
         point off = {0.0, offset + width / 2.0f - thick / 2.0f};
@@ -134,9 +133,9 @@ void LineDetector::Render_Line_Detector(float offset,
 
 void HalfSpaceDetector::Build_Half_Space_Detectors(float length, int supportsize) {
 
-    int n_offset_steps = compute_number_steps(this->off);
-    int n_width_steps = compute_number_steps(this->wid);
-    int n_angle_steps = compute_number_steps(this->ang);
+    auto n_offset_steps = compute_number_steps(this->off);
+    auto n_width_steps = compute_number_steps(this->wid);
+    auto n_angle_steps = compute_number_steps(this->ang);
 
     std::array<int, 5> shape = {supportsize,
                                 supportsize,
@@ -146,17 +145,16 @@ void HalfSpaceDetector::Build_Half_Space_Detectors(float length, int supportsize
     this->bank = Array(shape, sizeof(float));
 
     {
-        int o, a, w;
-        for (o = 0; o < n_offset_steps; o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
+        for (size_t o = 0; o < static_cast<size_t>(n_offset_steps); o++) { //point anchor = {supportsize/2.0, o*off.step + off.min + supportsize/2.0};
             point anchor = {supportsize / 2.0f, supportsize / 2.0f};
-            for (a = 0; a < n_angle_steps; a++)
-                for (w = 0; w < n_width_steps; w++) {
-                    float *bank_i = this->bank.data.data() + Get_Detector(o, w, a);
+            for (size_t a = 0; a < static_cast<size_t>(n_angle_steps); a++)
+                for (size_t w = 0; w < static_cast<size_t>(n_width_steps); w++) {
+                    float *bank_i = this->bank.data.data() + Get_Detector(static_cast<int>(o), static_cast<int>(w), static_cast<int>(a));
                     Render_Half_Space_Detector(
-                            o * off.step + off.min,                       //offset (before rotation)
+                            static_cast<float>(o) * off.step + off.min,                       //offset (before rotation)
                             length,                                     //length,
-                            a * ang.step + ang.min,                       //angle,
-                            w * wid.step + wid.min,                       //width,
+                            static_cast<float>(a) * ang.step + ang.min,                       //angle,
+                            static_cast<float>(w) * wid.step + wid.min,                       //width,
                             anchor,                                     //anchor,
                             bank_i,      //image
                             this->bank.strides_px.data() + 3);                      //strides
@@ -216,37 +214,37 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
     auto is_small_angle = [](const float angle)
             /* true iff angle is in [-pi/4,pi/4) or [3pi/4,5pi/4) */
     {
-        const float qpi = std::numbers::pi / 4.0;
-        const float hpi = std::numbers::pi / 2.0;
+        const float qpi = std::numbers::pi_v<float> / 4.0f;
+        const float hpi = std::numbers::pi_v<float> / 2.0f;
         int n = std::floor((angle - qpi) / hpi);
         return (n % 2) != 0;
     };
     if (!is_small_angle(angle))  // if large angle then transpose
     {
-        angle = 3.0 * std::numbers::pi / 2.0 - angle; //   to small ones ( <45deg )
+        angle = 3.0f * std::numbers::pi_v<float> / 2.0f - angle; //   to small ones ( <45deg )
         //offset = -offset;
     }
 
     // Make sure angle is between 0 and 2 Pi
-    while ((angle) < -std::numbers::pi)
-        (angle) += 2 * std::numbers::pi;
-    while ((angle) >= std::numbers::pi)
-        (angle) -= 2 * std::numbers::pi;
+    while ((angle) < -std::numbers::pi_v<float>)
+        (angle) += 2 * std::numbers::pi_v<float>;
+    while ((angle) >= std::numbers::pi_v<float>)
+        (angle) -= 2 * std::numbers::pi_v<float>;
 
     auto is_angle_leftward = [](const float angle)
             /* true iff angle is in left half plane */
-    { //static const float qpi = std::numbers::pi/4.0;
-        const float hpi = std::numbers::pi / 2.0;
-        int n = std::floor((angle - hpi) / std::numbers::pi);
+    { //static const float qpi = std::numbers::pi_v<float>/4.0f;
+        const float hpi = std::numbers::pi_v<float> / 2.0f;
+        int n = std::floor((angle - hpi) / std::numbers::pi_v<float>);
         return (n % 2) == 0;
     };
     //sometimes need to flip the line upside down
     if (is_angle_leftward(angle)) {
         //Wrap the angle in the appropriate half plane
-        while ((angle) < std::numbers::pi / 2.0)
-            (angle) += std::numbers::pi;
-        while ((angle) >= std::numbers::pi / 2.0)
-            (angle) -= std::numbers::pi;
+        while ((angle) < std::numbers::pi_v<float> / 2.0f)
+            (angle) += std::numbers::pi_v<float>;
+        while ((angle) >= std::numbers::pi_v<float> / 2.0f)
+            (angle) -= std::numbers::pi_v<float>;
 
         offset = -offset;
     }
@@ -260,10 +258,10 @@ int DetectorBank::get_nearest(float offset, float width, float angle) {
 
 template<size_t N>
 void Simple_Circle_Primitive(std::array<point, N> &verts, point center, float radius, int direction) {
-    float k = direction * 2 * std::numbers::pi / (float) verts.size();
-    for (int i = 0; i < verts.size(); i++) {
-        point p = {static_cast<float>(center.x + radius * cos(k * i)),
-                   static_cast<float>(center.y + radius * sin(k * i))};
+    float k = static_cast<float>(direction) * 2.0f * std::numbers::pi_v<float> / static_cast<float>(verts.size());
+    for (size_t i = 0; i < verts.size(); i++) {
+        point p = {static_cast<float>(center.x + radius * cosf(k * static_cast<float>(i))),
+                   static_cast<float>(center.y + radius * sinf(k * static_cast<float>(i)))};
         verts[i] = p;
     }
 }
@@ -318,8 +316,8 @@ void Simple_Line_Primitive(std::array<point, N> &verts, const point offset, cons
 template<size_t N>
 void rotate(std::array<point, N> &pbuf, const float angle)
 {
-    float s = sin(angle);
-    float c = cos(angle);
+    float s = sinf(angle);
+    float c = cosf(angle);
     for (auto &p: pbuf) {
         float x = p.x;
         float y = p.y;
@@ -405,10 +403,10 @@ std::array<int, 4> f32_min_max(std::array<point, N> &points, int *bound) {
         }
     }
 
-    return std::array<int, 4>{std::max((int) minx, 0),
-                              std::min((int) maxx, bound[1] - 1),
-                              std::max((int) miny, 0),
-                              std::min((int) maxy, bound[0] / bound[1] - 1)};
+    return std::array<int, 4>{std::max(static_cast<int>(minx), 0),
+                              std::min(static_cast<int>(maxx), bound[1] - 1),
+                              std::max(static_cast<int>(miny), 0),
+                              std::min(static_cast<int>(maxy), bound[0] / bound[1] - 1)};
 }
 
 template<size_t N>
@@ -416,7 +414,7 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
     //vertex *ipa,*ipb;
     box B = {{bigReal, bigReal},
              {-bigReal, -bigReal}};
-    double ascale;
+    float ascale;
 
     std::array<vertex, N + 1> ipa = {};
     std::array<vertex, 5> ipb = {};
@@ -429,7 +427,6 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
 
     {
         long long s = 0;
-        int j, k;
 
         auto ovl = [](const rng p, const rng q)
                 /* True if intervals intersect */
@@ -440,8 +437,8 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
         /*
      * Look for crossings, add contributions from crossings and track winding
      * */
-        for (j = 0; j < a.size(); ++j)
-            for (k = 0; k < b.size(); ++k)
+        for (size_t j = 0; j < a.size(); ++j)
+            for (size_t k = 0; k < b.size(); ++k)
                 if (ovl(ipa[j].rx, ipb[k].rx) &&
                     ovl(ipa[j].ry, ipb[k].ry)) // if edges have overlapping bounding boxes...
                 {
@@ -449,14 +446,14 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
                             a2 = area(ipa[j + 1].ip, ipb[k].ip, ipb[k + 1].ip);
                     {
                         int o = a1 < 0;
-                        if (o == a2 < 0) //if there's a crossing...
+                        if (o == (a2 < 0)) //if there's a crossing...
                         {
                             long long a3 = area(ipb[k].ip, ipa[j].ip, ipa[j + 1].ip),
                                     a4 = -area(ipb[k + 1].ip, ipa[j].ip, ipa[j + 1].ip);
-                            if (a3 < 0 == a4 < 0)  //if still consistent with a crossing...
+                            if ((a3 < 0) == (a4 < 0))  //if still consistent with a crossing...
                             {
-                                if (o) s += cross(ipa[j], ipa[j + 1], ipb[k], ipb[k + 1], a1, a2, a3, a4);
-                                else s += cross(ipb[k], ipb[k + 1], ipa[j], ipa[j + 1], a3, a4, a1, a2);
+                                if (o) s += cross(ipa[j], ipa[j + 1], ipb[k], ipb[k + 1], static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4));
+                                else s += cross(ipb[k], ipb[k + 1], ipa[j], ipa[j + 1], static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a1), static_cast<float>(a2));
                             }
                         }
                     }
@@ -464,7 +461,7 @@ float inter(std::array<point, N> &a, std::array<point, 4> &b) { //vertex ipa[na+
         /* Add contributions from non-crossing edges */
         s += inness(ipa, ipb);
         s += inness(ipb, ipa);
-        return s / ascale;
+        return static_cast<float>(s) / ascale;
     }
 }
 
@@ -486,30 +483,30 @@ void range(box &B, std::array<point, N> &x) {
 
 long long cntrib(const ipoint f, const ipoint t, const short w)
 {
-    return (long long) w * (t.x - f.x) * (t.y + f.y) / 2;
+    return static_cast<long long>(w) * (t.x - f.x) * (t.y + f.y) / 2;
 }
 
 long long area(const ipoint a, const ipoint p, const ipoint q)
 {
-    return (long long) p.x * q.y - (long long) p.y * q.x +
-           (long long) a.x * (p.y - q.y) + (long long) a.y * (q.x - p.x);
+    return static_cast<long long>(p.x) * q.y - static_cast<long long>(p.y) * q.x +
+           static_cast<long long>(a.x) * (p.y - q.y) + static_cast<long long>(a.y) * (q.x - p.x);
 }
 
 long long cross(vertex &a, vertex &b, vertex &c, vertex &d,
-                const double a1, const double a2, const double a3,
-                const double a4) { /* Interpolate to intersection and add contributions from each half edge */
-    float r1 = a1 / ((float) a1 + a2), r2 = a3 / ((float) a3 + a4);
+                const float a1, const float a2, const float a3,
+                const float a4) { /* Interpolate to intersection and add contributions from each half edge */
+    float r1 = a1 / (a1 + a2), r2 = a3 / (a3 + a4);
 
     long long s = 0;
     {
-        ipoint p = {static_cast<long>(a.ip.x + r1 * (b.ip.x - a.ip.x)),
-                    static_cast<long>(a.ip.y + r1 * (b.ip.y - a.ip.y))};
+        ipoint p = {static_cast<long>(static_cast<float>(a.ip.x) + r1 * static_cast<float>(b.ip.x - a.ip.x)),
+                    static_cast<long>(static_cast<float>(a.ip.y) + r1 * static_cast<float>(b.ip.y - a.ip.y))};
         s += cntrib(p, b.ip, 1);
     }
     {
         ipoint p = {
-                static_cast<long>(c.ip.x + r2 * (d.ip.x - c.ip.x)),
-                static_cast<long>(c.ip.y + r2 * (d.ip.y - c.ip.y))};
+                static_cast<long>(static_cast<float>(c.ip.x) + r2 * static_cast<float>(d.ip.x - c.ip.x)),
+                static_cast<long>(static_cast<float>(c.ip.y) + r2 * static_cast<float>(d.ip.y - c.ip.y))};
         s += cntrib(d.ip, p, 1);
     }
     ++a.in; /* Track winding numbers...these show up later in `inness` */
@@ -522,10 +519,8 @@ template<size_t M, size_t N>
 long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q) {
     int s = 0;
     ipoint p = P[0].ip;
-    int j;
 
-    int c = N - 1;
-    while (c--) //Compute winding of P[0] wrt Q
+    for (size_t c = N - 1; c-- > 0;) //Compute winding of P[0] wrt Q
         if (Q[c].rx.mn < p.x && p.x < Q[c].rx.mx) //Bounds check x-interval only
         {  //use area to determine P[0] left of Q[c] edge
             int sgn = 0 < area(p, Q[c].ip, Q[c + 1].ip);   // 0 or 1. 1 if left of Q[c] and Q[c] moves right
@@ -533,7 +528,7 @@ long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q) {
             s += sgn != Q[c].ip.x < Q[c + 1].ip.x ? 0 : (sgn ? -1 : 1); //add winding
         }
     long long sarea = 0;
-    for (j = 0; j < (M - 1); ++j) {
+    for (size_t j = 0; j < (M - 1); ++j) {
         if (s)
             sarea += cntrib(P[j].ip, P[j + 1].ip, s);
         s += P[j].in;
@@ -542,7 +537,7 @@ long long inness(std::array<vertex, M> &P, std::array<vertex, N> &Q) {
 }
 
 template<size_t N, size_t M>
-double fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge)
+float fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge)
 /* Fits points to an integral lattice.
    *
    * Converts floating point coords to an integer representation.  The bottom
@@ -555,19 +550,18 @@ double fit(box &B, std::array<point, N> &x, std::array<vertex, M> &ix, int fudge
    * http://doi.acm.org/10.1145/77635.77639
    */
 {
-    const float gamut = 500000000., mid = gamut / 2.;
+    const float gamut = 500000000.0f, mid = gamut / 2.0f;
     float rngx = B.max.x - B.min.x, sclx = gamut / rngx,
             rngy = B.max.y - B.min.y, scly = gamut / rngy;
-    int c = x.size();
-    while (c--) {
-        ix[c].ip.x = (long) ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
-        ix[c].ip.y = (long) ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
+
+    for (size_t c = x.size(); c-- > 0;) {
+        ix[c].ip.x = static_cast<long> ((x[c].x - B.min.x) * sclx - mid) & ~7 | fudge | c & 1;
+        ix[c].ip.y = static_cast<long> ((x[c].y - B.min.y) * scly - mid) & ~7 | fudge;
     }
     ix[0].ip.y += x.size() & 1;
     ix[x.size()] = ix[0];
 
-    c = x.size();
-    while (c--) {
+    for (size_t c = x.size(); c-- > 0;) {
         rng xl = {ix[c].ip.x, ix[c + 1].ip.x},
                 xh = {ix[c + 1].ip.x, ix[c].ip.x},
                 yl = {ix[c].ip.y, ix[c + 1].ip.y},

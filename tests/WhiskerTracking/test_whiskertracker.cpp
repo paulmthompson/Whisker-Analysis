@@ -6,6 +6,19 @@
 
 #include "test_data.hpp"
 
+TEST_CASE("Test Trace With Mask", "[Trace]") {
+
+    static auto test_img = load_img("data/0110_1_0000000.bin");
+    static auto test_mask = load_img("data/0110_1_0000000_mask.bin");
+    static auto wt = create_warmed_up_wt(test_img);
+
+    wt.setWhiskerPad(577.0f, 202.0f);
+    auto whiskers = wt.trace_with_mask(test_img, test_mask, img_height, img_width);
+
+    CHECK(whiskers.size() == 5);
+
+}
+
 TEST_CASE("Test Trace", "[Trace]") {
 
     static auto test_img = load_img("data/0110_1_0000000.bin");
@@ -50,4 +63,5 @@ TEST_CASE("Test Trace Multi", "[Trace]") {
     CHECK(whiskers2[0].size() == 5);
 
 }
+
 

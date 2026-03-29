@@ -44,6 +44,7 @@ set(DATA_FILES_TO_COPY
         "test_img2.bin"
         "test_img3.bin"
         "0110_1_0000000.bin"
+        "0110_1_0000000_mask.bin"
         "whiskers.csv"
 )
 
